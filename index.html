@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <base href="/">
+        <meta charset="utf-8">
+        <title>Angular 2 LastFM</title>
+        <meta name="description" content="Simple last.fm app using Angular2">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="app/css/foundation-flex.min.css">
+        <link rel="stylesheet" href="app/css/app.css">
+    </head>
+
+    <body>
+
+        <lastfm-app>Loading...</lastfm-app>
+
+        <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+        <script src="node_modules/systemjs/dist/system.src.js"></script>
+
+        <script src="node_modules/rxjs/bundles/Rx.js"></script>
+        <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+        <script src="node_modules/angular2/bundles/http.dev.js"></script>
+        <script src="node_modules/angular2/bundles/router.dev.js"></script>
+
+        <script>
+            System.config({
+                packages: {
+                    app: {
+                        format: 'register',
+                        defaultExtension: 'js'
+                    }
+                }
+            });
+
+            System.import('app/js/boot')
+                .then(null, console.error.bind(console));
+        </script>
+
+    </body>
+
+</html>
