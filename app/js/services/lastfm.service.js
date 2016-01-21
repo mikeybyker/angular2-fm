@@ -37,7 +37,7 @@ System.register(['angular2/http', 'angular2/core', 'rxjs/Observable', '../models
                 }
                 LastFmService.prototype.createUrl = function (options) {
                     if (options === void 0) { options = {}; }
-                    var url = constants_1.LASTFM.baseurl + "?format=" + constants_1.LASTFM.format + "&api_key=" + constants_1.LASTFM.api_key;
+                    var url = constants_1.LASTFM.apiEndpoint + "?format=" + constants_1.LASTFM.format + "&api_key=" + constants_1.LASTFM.api_key;
                     // yuk
                     // url += '&' + Object.keys(options).reduce(function(a, k) { a.push(k + '=' + encodeURIComponent(options[k])); return a }, []).join('&');
                     url += '&' + Object.keys(options).reduce(function (a, k) { a.push(k + '=' + (options[k])); return a; }, []).join('&');

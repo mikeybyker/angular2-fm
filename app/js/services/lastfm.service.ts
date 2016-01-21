@@ -14,7 +14,7 @@ export class LastFmService {
     }
 
     createUrl(options:any = {}) :string{
-        let url: string = `${LASTFM.baseurl}?format=${LASTFM.format}&api_key=${LASTFM.api_key}`;
+        let url: string = `${LASTFM.apiEndpoint}?format=${LASTFM.format}&api_key=${LASTFM.api_key}`;
         // yuk
         // url += '&' + Object.keys(options).reduce(function(a, k) { a.push(k + '=' + encodeURIComponent(options[k])); return a }, []).join('&');
         url += '&' + Object.keys(options).reduce(function(a, k) { a.push(k + '=' + (options[k])); return a }, []).join('&');
