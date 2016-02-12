@@ -1,3 +1,6 @@
 node_modules
 .tmp
 keys.txt
+constants.ts
+constants.js
+constants.js.map

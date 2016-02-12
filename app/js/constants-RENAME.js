@@ -5,10 +5,10 @@ System.register([], function(exports_1) {
         execute: function() {
             exports_1("LASTFM", LASTFM = {
                 apiEndpoint: 'http://ws.audioscrobbler.com/2.0/',
-                api_key: '636d81e5364ebc98a99d202c57268f18',
+                api_key: 'YOUR_API_KEY',
                 format: 'json'
             });
         }
     }
 });
-//# sourceMappingURL=constants.js.map
+//# sourceMappingURL=constants-RENAME.js.map
