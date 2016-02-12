@@ -1,0 +1,60 @@
+<breadcrumbs [links]="links"></breadcrumbs>
+<div class="row align-center" *ngIf="error">
+    <div class="medium-6 large-4 column">
+        <div class="callout alert">
+            <h5>{{error.title}}</h5>
+            <p>
+                {{error.message}}
+            </p>
+        </div>
+    </div>
+</div>
+<div class="row" *ngIf="artist">
+    <div class="small-12 medium-6 columns">
+        <img class="thumbnail main-artist" [src]="artist.images.mega">
+    </div>
+    <div class="small-12 medium-6 columns">
+        <h3>{{artist?.name}}</h3>
+        <!-- ang2 version of bind-as-html... -->
+        <p [innerHTML]="artist?.bio?.summary | externalhref"></p>
+        <dl *ngIf="artist">
+            <dt>Listeners</dt>
+            <dd>{{artist.stats.listeners}}</dd>
+            <dt>Play Count</dt>
+            <dd>{{artist.stats.playcount}}</dd>
+        </dl>
+    </div>
+</div>
+<div *ngIf="artist">
+    <div class="row">
+        <div class="columns">
+            <h3>Popular Albums</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="columns small-6 medium-4 large-2" *ngFor="#album of albums">
+            <a *ngIf="album.images.extralarge" [routerLink]="['/Album', {name: album.artist.name, mbid: album.mbid}]"><img class="thumbnail" [src]="album.images.extralarge"></a>
+        </div>
+    </div>
+    <div *ngIf="artist.similar.length">
+        <div class="row">
+            <div class="columns">
+                <h3>Similar Artists</h3>
+            </div>
+        </div>
+        <div class="row align-spaced">
+            <div class="column small-5 medium-4" *ngFor="#similar of artist.similar | limit:4">
+               <div class="artist" >
+                    <a [routerLink]="['Artist', {name: similar.name}]">
+                        <img class="thumbnail" [src]="similar.images.large">
+                    </a>
+                    <div class="artist-caption">
+                        <div class="artist-name">
+                            <h4>{{ similar.name }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
