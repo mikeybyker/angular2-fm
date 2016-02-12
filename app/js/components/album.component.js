@@ -47,22 +47,17 @@ System.register(['angular2/core', 'angular2/router', './breadcrumbs.component', 
                         return;
                     }
                     this.error = null;
-                    this.lastFmService.getAlbumInfo(this.mbid, {})
-                        .subscribe(function (res) {
-                        console.log('getAlbumInfo > result ::: ', res);
-                        if (res.error) {
-                            _this.error = new error_message_1.ErrorMessage('Error', res.message);
+                    this.lastFmService
+                        .getAlbumInfo(this.mbid, {})
+                        .subscribe(function (data) {
+                        if (data.error) {
+                            _this.error = new error_message_1.ErrorMessage('Error', data.error);
                             return;
                         }
-                        _this.album = res;
-                        if (!_this.album) {
-                            _this.error = new error_message_1.ErrorMessage('Error', 'Nothing found...');
-                            return;
-                        }
+                        _this.album = data;
                         _this.links.push({ title: _this.album.name, url: '' });
                     }, function (error) {
-                        var err = error.json ? error.json() : error;
-                        _this.error = new error_message_1.ErrorMessage('Error', err.message);
+                        _this.error = new error_message_1.ErrorMessage('Error', error);
                     });
                 };
                 AlbumComponent = __decorate([
@@ -72,7 +67,7 @@ System.register(['angular2/core', 'angular2/router', './breadcrumbs.component', 
                         providers: [lastfm_service_1.LastFmService],
                         pipes: [duration_pipe_1.TrackDurationPipe],
                         directives: [router_1.ROUTER_DIRECTIVES, breadcrumbs_component_1.BreadcrumbsComponent],
-                        template: "\n        <breadcrumbs [links]=\"links\"></breadcrumbs>\n        <div class=\"row align-center\" *ngIf=\"error\">\n            <div class=\"medium-6 large-4 column\">\n                <div class=\"callout alert\">\n                    <h5>{{error.title}}</h5>\n                    <p>\n                        {{error.message}}\n                    </p>\n                </div>\n            </div>\n        </div>\n        <div class=\"row\">\n            <div class=\"small-12 columns\">\n                <h3><a [routerLink]=\"['Artist', {name: artistName}]\">{{album?.artist}}</a></h3>\n            </div>\n            <div class=\"small-12 medium-6 columns\">\n                <a [href]=\"album?.url\" target=\"_blank\"><img *ngIf=\"album\" class=\"thumbnail main-artist\" [src]=\"album.images.mega\"></a>\n            </div>\n            <div class=\"small-12 medium-6 columns\">\n                <h4>{{album?.name}}</h4>\n                <ol *ngIf=\"album\" class=\"track-list\">\n                    <li *ngFor=\"#track of album.tracks.track\">\n                        <a [href]=\"track.url\" target=\"_blank\">{{track.name}}</a> ({{track.duration | trackduration}})\n                    </li>\n                </ol>\n            </div>\n        </div>   \n        "
+                        templateUrl: './app/views/album.component.html'
                     }), 
                     __metadata('design:paramtypes', [lastfm_service_1.LastFmService, router_1.RouteParams])
                 ], AlbumComponent);

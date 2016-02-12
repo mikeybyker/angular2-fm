@@ -53,19 +53,20 @@ System.register(['angular2/core', 'angular2/router', './breadcrumbs.component', 
                     }
                     this.error = null;
                     this.links.push({ title: this.artistName, url: "artist/" + this.artistName });
-                    this.lastFmService.getAllArtist(this.artistName, {}, { limit: 6 })
+                    this.lastFmService
+                        .getAllArtist(this.artistName, {}, { limit: 6 })
                         .subscribe(function (res) {
-                        console.log('getAllArtist > result ::: ', res);
-                        if (res[0].error || res[1].error) {
-                            var err = res[0] || res[1];
-                            _this.error = new error_message_1.ErrorMessage('Error', err.message);
+                        var artist = res[0], albums = res[1];
+                        if (artist.error || albums.error) {
+                            var err = artist.error ? artist : albums;
+                            _this.error = new error_message_1.ErrorMessage('Error', err.error);
                             return;
                         }
-                        _this.artist = res[0];
-                        _this.albums = res[1];
+                        _this.artist = artist;
+                        _this.albums = albums;
                     }, function (error) {
-                        var err = error.json ? error.json() : error;
-                        _this.error = new error_message_1.ErrorMessage('Error', err.message);
+                        // console.log('Error ::: ', error);
+                        _this.error = new error_message_1.ErrorMessage('Error', error);
                     });
                 };
                 ArtistComponent = __decorate([

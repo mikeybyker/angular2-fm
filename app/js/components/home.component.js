@@ -43,20 +43,19 @@ System.register(['angular2/core', 'angular2/router', 'angular2/http', '../servic
                     var _this = this;
                     console.log(this.model.artist);
                     this.error = null;
-                    this.lastFmService.searchArtists(this.model.artist, { limit: 5 })
-                        .subscribe(function (res) {
-                        console.log('searchArtists > result ::: ', res);
-                        if (res.error) {
-                            _this.error = new error_message_1.ErrorMessage('Error', res.message);
+                    this.lastFmService
+                        .searchArtists(this.model.artist, { limit: 5 })
+                        .subscribe(function (data) {
+                        if (data.error) {
+                            _this.error = new error_message_1.ErrorMessage('Error', data.message);
                             return;
                         }
-                        _this.potentials = res;
+                        _this.potentials = data;
                         if (!_this.potentials.length) {
                             _this.error = new error_message_1.ErrorMessage('Error', 'Nothing found...');
                         }
                     }, function (error) {
-                        var err = error.json ? error.json() : error;
-                        _this.error = new error_message_1.ErrorMessage('Error', err.message || 'Some Error...');
+                        _this.error = new error_message_1.ErrorMessage('Error', error);
                     });
                 };
                 HomeComponent = __decorate([
@@ -66,7 +65,7 @@ System.register(['angular2/core', 'angular2/router', 'angular2/http', '../servic
                         providers: [lastfm_service_1.LastFmService],
                         pipes: [results_pipe_1.ResultsPipe, limit_pipe_1.LimitPipe],
                         directives: [router_1.ROUTER_DIRECTIVES],
-                        template: "\n        <div class=\"row align-center\">\n            <div class=\"medium-6 large-4 column\">\n                <form (ngSubmit)=\"onSubmit()\" #searchForm=\"ngForm\">\n                    <h4 class=\"text-center\">Search Last.fm</h4>\n                    <label>\n                        <input #artist type=\"text\" placeholder=\"Artist\" value=\"The Cure\" required\n                        [(ngModel)]=\"model.artist\" ngControl=\"artist\"  #artist=\"ngForm\">\n                    </label>\n                    <p>\n                        <button type=\"submit\" [disabled]=\"!searchForm.form.valid\" class=\"button expanded\">Search</button>\n                    </p>\n                    <div [hidden]=\"artist.valid\" class=\"alert callout\">\n                        <p>\n                            <i class=\"fi-alert\"></i> Please enter an artist to search for...\n                        </p>\n                    </div>\n                </form>\n            </div>\n        </div>\n        <div class=\"row align-center\" *ngIf=\"error\">\n            <div class=\"medium-6 large-4 column\">\n                <div class=\"callout alert\">\n                    <h5>{{error.title}}</h5>\n                    <p>\n                        {{error.message}}\n                    </p>\n                </div>\n            </div>\n        </div>\n        <div class=\"row align-center\" *ngIf=\"potentials && potentials.length\">\n            <div class=\"column small-6 medium-4\" *ngFor=\"#artist of potentials | results : 'extralarge' | limit: 6\">\n                <div class=\"callout\">\n                    <p>{{ artist.name }}</p>\n                    <p>\n                        <a [routerLink]=\"['Artist', {name: artist.name}]\" >\n                            <img class=\"thumbnail\" [src] = \"artist.images.extralarge\">\n                        </a>\n                    </p>\n                </div>\n            </div>\n        </div>\n        "
+                        templateUrl: './app/views/home.component.html'
                     }), 
                     __metadata('design:paramtypes', [lastfm_service_1.LastFmService])
                 ], HomeComponent);

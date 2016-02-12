@@ -51,52 +51,6 @@ System.register(['angular2/http', 'angular2/core', 'rxjs/Observable', '../models
                         return new artist_1.Artist(artist.name, '', artist.image, artist.url);
                     });
                 };
-                LastFmService.prototype.getArtistInfo = function (artistName, options) {
-                    var _this = this;
-                    if (artistName === void 0) { artistName = 'The Cure'; }
-                    if (options === void 0) { options = {}; }
-                    var params = Object.assign({}, options, { method: 'artist.getInfo', artist: artistName }), req = this.createUrl(params);
-                    return this.http.get(req)
-                        .map(function (responseData) {
-                        console.log('responseData : ', responseData);
-                        // console.log('getArtistInfo responseData.json() : ', responseData.json());
-                        return responseData.json();
-                    })
-                        .map(function (data) {
-                        if (data.error) {
-                            return data;
-                        }
-                        if (data.artist) {
-                            var artist = data.artist, similar = _this.createSimilarArtists(artist.similar);
-                            return new artist_1.Artist(artist.name, artist.mbid, artist.image, artist.url, artist.bio, artist.ontour, similar, artist.stats, artist.streamable, artist.tags);
-                        }
-                        return null;
-                    });
-                };
-                LastFmService.prototype.getTopAlbums = function (artistName, options) {
-                    if (artistName === void 0) { artistName = 'The Cure'; }
-                    if (options === void 0) { options = {}; }
-                    // let params = {...options, method: 'artist.getTopAlbums', artist: artistName }; // not part of es6... :-|
-                    var params = Object.assign({}, options, { method: 'artist.getTopAlbums', artist: artistName }), req = this.createUrl(params);
-                    return this.http.get(req)
-                        .map(function (responseData) {
-                        // console.log('responseData : ', responseData);
-                        console.log('getTopAlbums responseData.json() : ', responseData.json());
-                        return responseData.json();
-                    })
-                        .map(function (data) {
-                        var albums = [];
-                        if (data.error) {
-                            return data;
-                        }
-                        if (data.topalbums) {
-                            data.topalbums.album.forEach(function (album) {
-                                albums.push(new album_1.Album(album.artist, album.image, album.mbid, album.name, album.playcount, album.url));
-                            });
-                        }
-                        return albums;
-                    });
-                };
                 /**
                 * Observable.forkJoin : along the lines of $q.all... Remember to import it!
                 */
@@ -106,23 +60,67 @@ System.register(['angular2/http', 'angular2/core', 'rxjs/Observable', '../models
                     if (optionsAlbums === void 0) { optionsAlbums = {}; }
                     return Observable_1.Observable.forkJoin(this.getArtistInfo(artist, options), this.getTopAlbums(artist, optionsAlbums));
                 };
+                LastFmService.prototype.getArtistInfo = function (artistName, options) {
+                    var _this = this;
+                    if (artistName === void 0) { artistName = 'The Cure'; }
+                    if (options === void 0) { options = {}; }
+                    var params = Object.assign({}, options, { method: 'artist.getInfo', artist: artistName }), req = this.createUrl(params);
+                    return this.http.get(req)
+                        .map(function (res) { return res.json(); })
+                        .do(function (data) { return console.log(data); })
+                        .map(function (data) {
+                        if (data.error) {
+                            return Observable_1.Observable.throw(data.message || 'Last.fm data error');
+                        }
+                        if (data.artist) {
+                            var artist = data.artist, similar = _this.createSimilarArtists(artist.similar);
+                            return new artist_1.Artist(artist.name, artist.mbid, artist.image, artist.url, artist.bio, artist.ontour, similar, artist.stats, artist.streamable, artist.tags);
+                        }
+                        return Observable_1.Observable.throw('No artists found');
+                    })
+                        .catch(this.handleError);
+                };
+                LastFmService.prototype.getTopAlbums = function (artistName, options) {
+                    if (artistName === void 0) { artistName = 'The Cure'; }
+                    if (options === void 0) { options = {}; }
+                    // let params = {...options, method: 'artist.getTopAlbums', artist: artistName }; // not part of es6... :-|
+                    var params = Object.assign({}, options, { method: 'artist.getTopAlbums', artist: artistName }), req = this.createUrl(params);
+                    return this.http.get(req)
+                        .map(function (res) { return res.json(); })
+                        .do(function (data) { return console.log(data); })
+                        .map(function (data) {
+                        var albums = [];
+                        if (data.error) {
+                            return Observable_1.Observable.throw(data.message || 'Last.fm data error');
+                        }
+                        if (data.topalbums) {
+                            data.topalbums.album.forEach(function (album) {
+                                albums.push(new album_1.Album(album.artist, album.image, album.mbid, album.name, album.playcount, album.url));
+                            });
+                        }
+                        return albums;
+                    })
+                        .catch(this.handleError);
+                };
+                LastFmService.prototype.handleError = function (error) {
+                    console.error('handleError ::: ', error);
+                    return Observable_1.Observable.throw(error.json().message || 'Server Error');
+                };
                 LastFmService.prototype.getAlbumInfo = function (mbid, options) {
                     if (options === void 0) { options = {}; }
                     var params = Object.assign({}, options, { method: 'album.getInfo', mbid: mbid }), req = this.createUrl(params);
                     return this.http.get(req)
-                        .map(function (responseData) {
-                        return responseData.json();
-                    })
+                        .map(function (res) { return res.json(); })
+                        .do(function (data) { return console.log(data); })
                         .map(function (data) {
                         if (data.error) {
-                            return data;
+                            return Observable_1.Observable.throw(data.message || 'Last.fm data error');
                         }
-                        if (data.album) {
-                            var album = data.album;
-                            return new album_1.Album(album.artist, album.image, album.mbid, album.name, album.playcount, album.url, album.listeners, album.tracks);
-                        }
-                        return null;
-                    });
+                        var album = data.album;
+                        return new album_1.Album(album.artist, album.image, album.mbid, album.name, album.playcount, album.url, album.listeners, album.tracks);
+                        return Observable_1.Observable.throw('Album not found');
+                    })
+                        .catch(this.handleError);
                 };
                 LastFmService.prototype.checkCanShow = function (results) {
                     if (!results || !results.artistmatches) {
@@ -139,14 +137,12 @@ System.register(['angular2/http', 'angular2/core', 'rxjs/Observable', '../models
                     if (options === void 0) { options = {}; }
                     var params = Object.assign({}, options, { method: 'artist.search', artist: artist }), req = this.createUrl(params);
                     return this.http.get(req)
-                        .map(function (responseData) {
-                        // console.log('responseData.json() : ', responseData.json());
-                        return responseData.json();
-                    })
+                        .map(function (res) { return res.json(); })
+                        .do(function (data) { return console.log(data); })
                         .map(function (data) {
                         var results = [];
                         if (data.error) {
-                            return data;
+                            return Observable_1.Observable.throw(data.message || 'Last.fm data error');
                         }
                         if (data.results && _this.checkCanShow(data.results)) {
                             var artists = data.results.artistmatches.artist;
@@ -155,7 +151,8 @@ System.register(['angular2/http', 'angular2/core', 'rxjs/Observable', '../models
                             });
                         }
                         return results;
-                    });
+                    })
+                        .catch(this.handleError);
                 };
                 LastFmService = __decorate([
                     core_1.Injectable(), 

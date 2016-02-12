@@ -14,35 +14,7 @@ import {ErrorMessage} from '../utils/error-message';
     providers: [LastFmService],
     pipes: [TrackDurationPipe],
     directives: [ROUTER_DIRECTIVES, BreadcrumbsComponent],
-    template: `
-        <breadcrumbs [links]="links"></breadcrumbs>
-        <div class="row align-center" *ngIf="error">
-            <div class="medium-6 large-4 column">
-                <div class="callout alert">
-                    <h5>{{error.title}}</h5>
-                    <p>
-                        {{error.message}}
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="small-12 columns">
-                <h3><a [routerLink]="['Artist', {name: artistName}]">{{album?.artist}}</a></h3>
-            </div>
-            <div class="small-12 medium-6 columns">
-                <a [href]="album?.url" target="_blank"><img *ngIf="album" class="thumbnail main-artist" [src]="album.images.mega"></a>
-            </div>
-            <div class="small-12 medium-6 columns">
-                <h4>{{album?.name}}</h4>
-                <ol *ngIf="album" class="track-list">
-                    <li *ngFor="#track of album.tracks.track">
-                        <a [href]="track.url" target="_blank">{{track.name}}</a> ({{track.duration | trackduration}})
-                    </li>
-                </ol>
-            </div>
-        </div>   
-        `
+    templateUrl: './app/views/album.component.html'
 })
 export class AlbumComponent { 
     artistName: string;
@@ -64,23 +36,18 @@ export class AlbumComponent {
             return;
         }
         this.error = null;
-        this.lastFmService.getAlbumInfo(this.mbid, {})
-            .subscribe(res => {
-                console.log('getAlbumInfo > result ::: ', res);                
-                if (res.error) {
-                    this.error = new ErrorMessage('Error', res.message);
+        this.lastFmService
+            .getAlbumInfo(this.mbid, {})
+            .subscribe((data: any) => {             
+                if (data.error) {
+                    this.error = new ErrorMessage('Error', data.error);
                     return;
                 }
-                this.album = res;
-                if (!this.album) {
-                    this.error = new ErrorMessage('Error', 'Nothing found...');
-                    return;
-                }
+                this.album = <Album>data;
                 this.links.push({ title: this.album.name, url: '' });
             },
             error => {
-                let err: any = error.json ? error.json() : error;
-                this.error = new ErrorMessage('Error', err.message);
+                this.error = new ErrorMessage('Error', <any>error);
             });
     }
 }

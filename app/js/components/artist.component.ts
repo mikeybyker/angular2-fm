@@ -48,21 +48,22 @@ export class ArtistComponent {
         this.error = null;
         this.links.push({ title: this.artistName, url: `artist/${this.artistName}` });
 
-        this.lastFmService.getAllArtist(this.artistName, {}, { limit: 6 })
+        this.lastFmService
+            .getAllArtist(this.artistName, {}, { limit: 6 })
             .subscribe(res => {
-                console.log('getAllArtist > result ::: ', res);
-                if (res[0].error || res[1].error)
-                {
-                    let err:any = res[0] || res[1];
-                    this.error = new ErrorMessage('Error', err.message);
+                let artist = res[0],
+                    albums = res[1];
+                if (artist.error || albums.error) {
+                    let err: any = artist.error ? artist : albums;
+                    this.error = new ErrorMessage('Error', err.error);
                     return;
                 }
-                this.artist = res[0];
-                this.albums = res[1];
+                this.artist = artist;
+                this.albums = albums;
             },
             error => {
-                let err: any = error.json ? error.json() : error;
-                this.error = new ErrorMessage('Error', err.message);
+                // console.log('Error ::: ', error);
+                this.error = new ErrorMessage('Error', <string>error);
             });
     }
 }

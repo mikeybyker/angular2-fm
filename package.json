@@ -1,6 +1,6 @@
 {
   "name": "angular2-fm",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A simple Angular2 app to search Last.fm",
   "repository": {
     "type": "git",
