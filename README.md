@@ -24,8 +24,8 @@ npm start
 ```
 
 ### Version
-0.0.1
+0.0.2
 
-#### Add your [Last.fm](http://www.last.fm/api/account/create) API key to the LASTFM constant in app/js/constants.ts
+#### Add your [Last.fm](http://www.last.fm/api/account/create) API key to the LASTFM constant in app/js/constants.ts (rename constants-RENAME.ts > constants.ts)
 
 Mike
