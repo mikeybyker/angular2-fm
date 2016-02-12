@@ -1,4 +1,4 @@
-System.register(['angular2/platform/browser', 'rxjs/add/operator/map', 'rxjs/add/observable/forkJoin', './components/app.component', 'angular2/http', 'angular2/router'], function(exports_1) {
+System.register(['angular2/platform/browser', 'rxjs/add/operator/map', 'rxjs/add/observable/forkJoin', 'rxjs/add/observable/throw', 'rxjs/add/operator/catch', 'rxjs/add/operator/do', './components/app.component', 'angular2/http', 'angular2/router'], function(exports_1) {
     var browser_1, app_component_1, http_1, router_1;
     return {
         setters:[
@@ -7,6 +7,9 @@ System.register(['angular2/platform/browser', 'rxjs/add/operator/map', 'rxjs/add
             },
             function (_1) {},
             function (_2) {},
+            function (_3) {},
+            function (_4) {},
+            function (_5) {},
             function (app_component_1_1) {
                 app_component_1 = app_component_1_1;
             },
