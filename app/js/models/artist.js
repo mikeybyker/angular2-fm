@@ -4,28 +4,18 @@ System.register([], function(exports_1) {
         setters:[],
         execute: function() {
             Artist = (function () {
-                function Artist(name, mbid, image, url, bio, ontour, similar, stats, streamable, tags) {
-                    if (name === void 0) { name = ''; }
-                    if (mbid === void 0) { mbid = ''; }
-                    if (image === void 0) { image = []; }
-                    if (url === void 0) { url = ''; }
-                    if (bio === void 0) { bio = {}; }
-                    if (ontour === void 0) { ontour = '0'; }
-                    if (similar === void 0) { similar = {}; }
-                    if (stats === void 0) { stats = {}; }
-                    if (streamable === void 0) { streamable = '0'; }
-                    if (tags === void 0) { tags = {}; }
-                    this.name = name;
-                    this.mbid = mbid;
-                    this.image = image;
-                    this.url = url;
-                    this.images = this.getImages(image);
-                    this.bio = bio;
-                    this.ontour = ontour;
-                    this.similar = similar;
-                    this.stats = stats;
-                    this.streamable = streamable;
-                    this.tags = tags;
+                function Artist(artist) {
+                    this.name = artist.name || '';
+                    this.mbid = artist.mbid || '';
+                    this.image = artist.image || [];
+                    this.url = artist.url || '';
+                    this.images = this.image.length ? this.getImages(this.image) : {};
+                    this.bio = artist.bio || {};
+                    this.ontour = artist.ontour || '0';
+                    this.similar = artist.similar ? this.createSimilarArtists(artist.similar) : [];
+                    this.stats = artist.stats || {};
+                    this.streamable = artist.streamable || '0';
+                    this.tags = artist.tags || {};
                 }
                 // Convert last.fm array for easier use
                 Artist.prototype.getImages = function (image) {
@@ -44,6 +34,14 @@ System.register([], function(exports_1) {
                         .filter(function (o) { return o['#text']; })
                         .forEach(function (element, index, array) { return o[element.size] = element['#text']; });
                     return o;
+                };
+                Artist.prototype.createSimilarArtists = function (similar) {
+                    if (!similar || !similar.artist) {
+                        return [];
+                    }
+                    return similar.artist.map(function (artist) {
+                        return new Artist(artist);
+                    });
                 };
                 return Artist;
             })();

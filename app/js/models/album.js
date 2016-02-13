@@ -4,20 +4,25 @@ System.register([], function(exports_1) {
         setters:[],
         execute: function() {
             Album = (function () {
-                function Album(artist, image, mbid, name, playcount, url, listeners, tracks) {
-                    if (playcount === void 0) { playcount = 0; }
-                    if (url === void 0) { url = ''; }
-                    if (listeners === void 0) { listeners = ''; }
-                    if (tracks === void 0) { tracks = {}; }
-                    this.artist = artist;
-                    this.image = image;
-                    this.images = this.getImages(image);
-                    this.mbid = mbid;
-                    this.name = name;
-                    this.playcount = playcount;
-                    this.url = url;
-                    this.listeners = listeners;
-                    this.tracks = tracks;
+                // constructor(artist: any,
+                //             image: Array<any>,
+                //             mbid: string,
+                //             name: string,
+                //             playcount: Number = 0,
+                //             url: string = '',
+                //             listeners:string = '',
+                //             tracks: any = {}
+                // )
+                function Album(album) {
+                    this.artist = album.artist;
+                    this.image = album.image;
+                    this.images = this.image ? this.getImages(this.image) : {};
+                    this.mbid = album.mbid;
+                    this.name = album.name;
+                    this.playcount = album.playcount || 0;
+                    this.url = album.url || '';
+                    this.listeners = album.listeners || '';
+                    this.tracks = album.tracks || {};
                 }
                 // Convert last.fm array for easier use
                 Album.prototype.getImages = function (image) {

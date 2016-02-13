@@ -21,19 +21,6 @@ export class LastFmService {
         return url;
     }
 
-    createSimilarArtists(similar): Array<Artist>{
-        if (!similar || !similar.artist) {
-            return [];
-        }
-        return similar.artist.map((artist: any) =>{
-            return new Artist(artist.name,
-                '',
-                artist.image,
-                artist.url                
-            );
-        });
-    }
-
     /**
     * Observable.forkJoin : along the lines of $q.all... Remember to import it!
     */
@@ -48,56 +35,31 @@ export class LastFmService {
             req: string = this.createUrl(params);
         return this.http.get(req)
             .map(res => res.json())
-            .do(data => console.log(data))
-            .map((data: any) => {
-                if (data.error) {
-                    return Observable.throw(data.message || 'Last.fm data error');
+            .do(data => console.log('getArtistInfo ::: ', data))
+            .map(data => {
+                if (!data.artist) {
+                    return data;
                 }
-                if (data.artist) {
-                    let artist: any = data.artist,
-                        similar: Array<Artist> = this.createSimilarArtists(artist.similar);
-
-                    return new Artist(artist.name,
-                        artist.mbid,
-                        artist.image,
-                        artist.url,
-                        artist.bio,
-                        artist.ontour,
-                        similar,
-                        artist.stats,
-                        artist.streamable,
-                        artist.tags
-                    );
-                }
-                return Observable.throw('No artists found');
+                return new Artist(data.artist);
             })
             .catch(this.handleError);
     }
-    getTopAlbums(artistName: string = 'The Cure', options: any = {}) {
 
+    getTopAlbums(artistName: string = 'The Cure', options: any = {}) {
         // let params = {...options, method: 'artist.getTopAlbums', artist: artistName }; // not part of es6... :-|
         let params: any = Object.assign({}, options, { method: 'artist.getTopAlbums', artist: artistName }),
             req: string = this.createUrl(params);
         return this.http.get(req)
             .map(res => res.json())
-            .do(data => console.log(data))
-            .map((data: any) => {
+            .do(data => console.log('getTopAlbums ::: ', data))
+            .map(data => {
+                if (!data.topalbums || !data.topalbums.album) {
+                    return data;
+                }
                 let albums: Array<Album> = [];
-                if (data.error) {
-                    return Observable.throw(data.message || 'Last.fm data error');
-                }
-                if (data.topalbums) {
-                    data.topalbums.album.forEach((album: any) => {
-                        albums.push(
-                            new Album(album.artist,
-                                album.image,
-                                album.mbid,
-                                album.name,
-                                album.playcount,
-                                album.url
-                            ));
-                    });
-                }
+                data.topalbums.album.forEach(album => {
+                    albums.push(new Album(album));
+                });
                 return albums;
             })
             .catch(this.handleError);
@@ -111,25 +73,15 @@ export class LastFmService {
         let params:any = Object.assign({}, options, { method: 'album.getInfo', mbid: mbid }),
             req: string = this.createUrl(params);
         return this.http.get(req)
-            .map(res => res.json())
-            .do(data => console.log(data))
-            .map((data:any) => {
-                if (data.error) {
-                    return Observable.throw(data.message || 'Last.fm data error');
-                }
-                let album = data.album;
-                return new Album(album.artist,
-                    album.image,
-                    album.mbid,
-                    album.name,
-                    album.playcount,
-                    album.url,
-                    album.listeners,
-                    album.tracks
-                );
-                return Observable.throw('Album not found');
-            })
-            .catch(this.handleError);
+                .map(res => res.json())
+                .do(data => console.log(data))         
+                .map(data => {
+                    if (!data.album) {
+                        return data;
+                    }
+                    return new Album(data.album);
+                })
+                .catch(this.handleError);
     }
 
     checkCanShow(results:any):boolean {
@@ -149,22 +101,15 @@ export class LastFmService {
         return this.http.get(req)
             .map(res => res.json())
             .do(data => console.log(data))
-            .map((data:any) => {
-                let results: Array<Artist> = [];
-                if (data.error) {
-                    return Observable.throw(data.message || 'Last.fm data error');
+            .map(data => {                
+                if (!data.results) {
+                    return data;
                 }
-                if (data.results && this.checkCanShow(data.results)) {
-                    let artists: Array<any> = data.results.artistmatches.artist; 
-
+                let results: Array<Artist> = [];
+                if (this.checkCanShow(data.results)) {
+                    let artists: Array<any> = data.results.artistmatches.artist;
                     artists.forEach((artist) => {
-                        results.push(
-                                new Artist(artist.name,
-                                    artist.mbid,
-                                    artist.image,
-                                    artist.url
-                                )
-                            );
+                        results.push(new Artist(artist));
                     });
                 }
                 return results;

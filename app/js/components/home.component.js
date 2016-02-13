@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', 'angular2/http', '../services/lastfm.service', '../pipes/limit-pipe', '../pipes/results-pipe', '../utils/error-message'], function(exports_1) {
+System.register(['angular2/core', 'angular2/router', '../services/lastfm.service', '../pipes/limit-pipe', '../pipes/results-pipe', '../utils/error-message'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(['angular2/core', 'angular2/router', 'angular2/http', '../servic
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, http_1, lastfm_service_1, limit_pipe_1, results_pipe_1, error_message_1;
+    var core_1, router_1, lastfm_service_1, limit_pipe_1, results_pipe_1, error_message_1;
     var HomeComponent;
     return {
         setters:[
@@ -17,9 +17,6 @@ System.register(['angular2/core', 'angular2/router', 'angular2/http', '../servic
             },
             function (router_1_1) {
                 router_1 = router_1_1;
-            },
-            function (http_1_1) {
-                http_1 = http_1_1;
             },
             function (lastfm_service_1_1) {
                 lastfm_service_1 = lastfm_service_1_1;
@@ -38,22 +35,21 @@ System.register(['angular2/core', 'angular2/router', 'angular2/http', '../servic
                 function HomeComponent(lastFmService) {
                     this.lastFmService = lastFmService;
                     this.model = { artist: 'The Cure' };
+                    this.maxResults = 5;
                 }
                 HomeComponent.prototype.onSubmit = function () {
                     var _this = this;
                     console.log(this.model.artist);
                     this.error = null;
                     this.lastFmService
-                        .searchArtists(this.model.artist, { limit: 5 })
+                        .searchArtists(this.model.artist, { limit: this.maxResults })
                         .subscribe(function (data) {
-                        if (data.error) {
-                            _this.error = new error_message_1.ErrorMessage('Error', data.message);
+                        if (data.error || !data.length) {
+                            _this.error = new error_message_1.ErrorMessage('Error', data.message || 'Nothing found...');
+                            _this.potentials = [];
                             return;
                         }
                         _this.potentials = data;
-                        if (!_this.potentials.length) {
-                            _this.error = new error_message_1.ErrorMessage('Error', 'Nothing found...');
-                        }
                     }, function (error) {
                         _this.error = new error_message_1.ErrorMessage('Error', error);
                     });
@@ -61,7 +57,6 @@ System.register(['angular2/core', 'angular2/router', 'angular2/http', '../servic
                 HomeComponent = __decorate([
                     core_1.Component({
                         selector: 'home',
-                        bindings: [http_1.HTTP_BINDINGS, lastfm_service_1.LastFmService],
                         providers: [lastfm_service_1.LastFmService],
                         pipes: [results_pipe_1.ResultsPipe, limit_pipe_1.LimitPipe],
                         directives: [router_1.ROUTER_DIRECTIVES],

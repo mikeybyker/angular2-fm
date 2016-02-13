@@ -1,6 +1,6 @@
 import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES, RouteParams} from 'angular2/router';
-import {HTTP_BINDINGS, Http} from 'angular2/http';
+
 
 import {BreadcrumbsComponent} from './breadcrumbs.component';
 import {LastFmService} from '../services/lastfm.service';
@@ -13,7 +13,6 @@ import {ErrorMessage} from '../utils/error-message';
 
 @Component({
     selector: 'artist',
-    bindings: [LastFmService],
     providers: [LastFmService],
     pipes: [ResultsPipe, LimitPipe, ExternalHrefPipe],
     directives: [ROUTER_DIRECTIVES, BreadcrumbsComponent],
@@ -31,6 +30,7 @@ export class ArtistComponent {
     artistName: string;
     links: Array<any> = [];
     error: ErrorMessage;
+    maxAlbums: number = 12;
 
     constructor(public lastFmService: LastFmService, private _routeParams: RouteParams) {
 
@@ -49,20 +49,18 @@ export class ArtistComponent {
         this.links.push({ title: this.artistName, url: `artist/${this.artistName}` });
 
         this.lastFmService
-            .getAllArtist(this.artistName, {}, { limit: 6 })
-            .subscribe(res => {
-                let artist = res[0],
-                    albums = res[1];
+            .getAllArtist(this.artistName, {}, { limit: this.maxAlbums })
+            .subscribe(data => {
+                let artist = data[0],
+                    albums = data[1];
                 if (artist.error || albums.error) {
-                    let err: any = artist.error ? artist : albums;
-                    this.error = new ErrorMessage('Error', err.error);
+                    this.error = new ErrorMessage('Error', artist.error ? artist.message : albums.message);
                     return;
                 }
                 this.artist = artist;
                 this.albums = albums;
             },
             error => {
-                // console.log('Error ::: ', error);
                 this.error = new ErrorMessage('Error', <string>error);
             });
     }

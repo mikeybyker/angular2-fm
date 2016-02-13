@@ -43,6 +43,7 @@ System.register(['angular2/core', 'angular2/router', './breadcrumbs.component', 
                     this._routeParams = _routeParams;
                     this.albums = [];
                     this.links = [];
+                    this.maxAlbums = 12;
                 }
                 ArtistComponent.prototype.ngOnInit = function () {
                     var _this = this;
@@ -54,25 +55,22 @@ System.register(['angular2/core', 'angular2/router', './breadcrumbs.component', 
                     this.error = null;
                     this.links.push({ title: this.artistName, url: "artist/" + this.artistName });
                     this.lastFmService
-                        .getAllArtist(this.artistName, {}, { limit: 6 })
-                        .subscribe(function (res) {
-                        var artist = res[0], albums = res[1];
+                        .getAllArtist(this.artistName, {}, { limit: this.maxAlbums })
+                        .subscribe(function (data) {
+                        var artist = data[0], albums = data[1];
                         if (artist.error || albums.error) {
-                            var err = artist.error ? artist : albums;
-                            _this.error = new error_message_1.ErrorMessage('Error', err.error);
+                            _this.error = new error_message_1.ErrorMessage('Error', artist.error ? artist.message : albums.message);
                             return;
                         }
                         _this.artist = artist;
                         _this.albums = albums;
                     }, function (error) {
-                        // console.log('Error ::: ', error);
                         _this.error = new error_message_1.ErrorMessage('Error', error);
                     });
                 };
                 ArtistComponent = __decorate([
                     core_1.Component({
                         selector: 'artist',
-                        bindings: [lastfm_service_1.LastFmService],
                         providers: [lastfm_service_1.LastFmService],
                         pipes: [results_pipe_1.ResultsPipe, limit_pipe_1.LimitPipe, external_href_pipe_1.ExternalHrefPipe],
                         directives: [router_1.ROUTER_DIRECTIVES, breadcrumbs_component_1.BreadcrumbsComponent],

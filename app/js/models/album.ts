@@ -21,24 +21,25 @@ export class Album {
         return o;
     }
 
-    constructor(artist: any,
-                image: Array<any>,
-                mbid: string,
-                name: string,
-                playcount: Number = 0,
-                url: string = '',
-                listeners:string = '',
-                tracks: any = {}
-    )
+    // constructor(artist: any,
+    //             image: Array<any>,
+    //             mbid: string,
+    //             name: string,
+    //             playcount: Number = 0,
+    //             url: string = '',
+    //             listeners:string = '',
+    //             tracks: any = {}
+    // )
+    constructor(album: any)
     {
-        this.artist = artist;
-        this.image = image;
-        this.images = this.getImages(image);
-        this.mbid = mbid;
-        this.name = name;
-        this.playcount = playcount;
-        this.url = url;
-        this.listeners = listeners;
-        this.tracks = tracks;
+        this.artist = album.artist;
+        this.image = album.image;
+        this.images = this.image ? this.getImages(this.image) : {};
+        this.mbid = album.mbid;
+        this.name = album.name;
+        this.playcount = album.playcount || 0;
+        this.url = album.url || '';
+        this.listeners = album.listeners || '';
+        this.tracks = album.tracks || {};
     }
 }

@@ -1,6 +1,5 @@
 import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES, RouteParams} from 'angular2/router';
-import {HTTP_BINDINGS, Http} from 'angular2/http';
 
 import {BreadcrumbsComponent} from './breadcrumbs.component';
 import {LastFmService} from '../services/lastfm.service';
@@ -10,7 +9,6 @@ import {ErrorMessage} from '../utils/error-message';
 
 @Component({
     selector: 'album',
-    bindings: [LastFmService],
     providers: [LastFmService],
     pipes: [TrackDurationPipe],
     directives: [ROUTER_DIRECTIVES, BreadcrumbsComponent],
@@ -38,15 +36,15 @@ export class AlbumComponent {
         this.error = null;
         this.lastFmService
             .getAlbumInfo(this.mbid, {})
-            .subscribe((data: any) => {             
-                if (data.error) {
-                    this.error = new ErrorMessage('Error', data.error);
+            .subscribe(data => {           
+                if (data.error) {        // Search errors i.e. not api errors
+                    this.error = new ErrorMessage('Error', data.message);
                     return;
                 }
                 this.album = <Album>data;
                 this.links.push({ title: this.album.name, url: '' });
             },
-            error => {
+            error => {                   // api errors eg. no api_key
                 this.error = new ErrorMessage('Error', <any>error);
             });
     }

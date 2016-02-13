@@ -31,28 +31,27 @@ export class Artist {
         return o;
     }
 
-    constructor(name: string = '',
-                mbid: string = '',                
-                image: Array<any> = [],
-                url: string = '',
-                bio: any = {},
-                ontour: string = '0',
-                similar: any = {},
-                stats: any = {},
-                streamable: string = '0',
-                tags: any = {}                
-    )
+    createSimilarArtists(similar): Array<Artist> {
+        if (!similar || !similar.artist) {
+            return [];
+        }
+        return similar.artist.map((artist: any) => {
+            return new Artist(artist);
+        });
+    }
+
+    constructor(artist)
     {
-        this.name = name; 
-        this.mbid = mbid;
-        this.image = image;
-        this.url = url;
-        this.images = this.getImages(image);        
-        this.bio = bio;
-        this.ontour = ontour;
-        this.similar = similar;
-        this.stats = stats;
-        this.streamable = streamable;
-        this.tags = tags;        
+        this.name = artist.name || ''; 
+        this.mbid = artist.mbid || '';
+        this.image = artist.image || [];
+        this.url = artist.url || '';
+        this.images = this.image.length ? this.getImages(this.image) : {};        
+        this.bio = artist.bio || {};
+        this.ontour = artist.ontour || '0';
+        this.similar = artist.similar ? this.createSimilarArtists(artist.similar) : [];
+        this.stats = artist.stats || {};
+        this.streamable = artist.streamable || '0';
+        this.tags = artist.tags || {};        
     }
 }

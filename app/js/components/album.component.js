@@ -51,7 +51,7 @@ System.register(['angular2/core', 'angular2/router', './breadcrumbs.component', 
                         .getAlbumInfo(this.mbid, {})
                         .subscribe(function (data) {
                         if (data.error) {
-                            _this.error = new error_message_1.ErrorMessage('Error', data.error);
+                            _this.error = new error_message_1.ErrorMessage('Error', data.message);
                             return;
                         }
                         _this.album = data;
@@ -63,7 +63,6 @@ System.register(['angular2/core', 'angular2/router', './breadcrumbs.component', 
                 AlbumComponent = __decorate([
                     core_1.Component({
                         selector: 'album',
-                        bindings: [lastfm_service_1.LastFmService],
                         providers: [lastfm_service_1.LastFmService],
                         pipes: [duration_pipe_1.TrackDurationPipe],
                         directives: [router_1.ROUTER_DIRECTIVES, breadcrumbs_component_1.BreadcrumbsComponent],

@@ -43,14 +43,6 @@ System.register(['angular2/http', 'angular2/core', 'rxjs/Observable', '../models
                     url += '&' + Object.keys(options).reduce(function (a, k) { a.push(k + '=' + (options[k])); return a; }, []).join('&');
                     return url;
                 };
-                LastFmService.prototype.createSimilarArtists = function (similar) {
-                    if (!similar || !similar.artist) {
-                        return [];
-                    }
-                    return similar.artist.map(function (artist) {
-                        return new artist_1.Artist(artist.name, '', artist.image, artist.url);
-                    });
-                };
                 /**
                 * Observable.forkJoin : along the lines of $q.all... Remember to import it!
                 */
@@ -61,22 +53,17 @@ System.register(['angular2/http', 'angular2/core', 'rxjs/Observable', '../models
                     return Observable_1.Observable.forkJoin(this.getArtistInfo(artist, options), this.getTopAlbums(artist, optionsAlbums));
                 };
                 LastFmService.prototype.getArtistInfo = function (artistName, options) {
-                    var _this = this;
                     if (artistName === void 0) { artistName = 'The Cure'; }
                     if (options === void 0) { options = {}; }
                     var params = Object.assign({}, options, { method: 'artist.getInfo', artist: artistName }), req = this.createUrl(params);
                     return this.http.get(req)
                         .map(function (res) { return res.json(); })
-                        .do(function (data) { return console.log(data); })
+                        .do(function (data) { return console.log('getArtistInfo ::: ', data); })
                         .map(function (data) {
-                        if (data.error) {
-                            return Observable_1.Observable.throw(data.message || 'Last.fm data error');
+                        if (!data.artist) {
+                            return data;
                         }
-                        if (data.artist) {
-                            var artist = data.artist, similar = _this.createSimilarArtists(artist.similar);
-                            return new artist_1.Artist(artist.name, artist.mbid, artist.image, artist.url, artist.bio, artist.ontour, similar, artist.stats, artist.streamable, artist.tags);
-                        }
-                        return Observable_1.Observable.throw('No artists found');
+                        return new artist_1.Artist(data.artist);
                     })
                         .catch(this.handleError);
                 };
@@ -87,17 +74,15 @@ System.register(['angular2/http', 'angular2/core', 'rxjs/Observable', '../models
                     var params = Object.assign({}, options, { method: 'artist.getTopAlbums', artist: artistName }), req = this.createUrl(params);
                     return this.http.get(req)
                         .map(function (res) { return res.json(); })
-                        .do(function (data) { return console.log(data); })
+                        .do(function (data) { return console.log('getTopAlbums ::: ', data); })
                         .map(function (data) {
+                        if (!data.topalbums || !data.topalbums.album) {
+                            return data;
+                        }
                         var albums = [];
-                        if (data.error) {
-                            return Observable_1.Observable.throw(data.message || 'Last.fm data error');
-                        }
-                        if (data.topalbums) {
-                            data.topalbums.album.forEach(function (album) {
-                                albums.push(new album_1.Album(album.artist, album.image, album.mbid, album.name, album.playcount, album.url));
-                            });
-                        }
+                        data.topalbums.album.forEach(function (album) {
+                            albums.push(new album_1.Album(album));
+                        });
                         return albums;
                     })
                         .catch(this.handleError);
@@ -113,12 +98,10 @@ System.register(['angular2/http', 'angular2/core', 'rxjs/Observable', '../models
                         .map(function (res) { return res.json(); })
                         .do(function (data) { return console.log(data); })
                         .map(function (data) {
-                        if (data.error) {
-                            return Observable_1.Observable.throw(data.message || 'Last.fm data error');
+                        if (!data.album) {
+                            return data;
                         }
-                        var album = data.album;
-                        return new album_1.Album(album.artist, album.image, album.mbid, album.name, album.playcount, album.url, album.listeners, album.tracks);
-                        return Observable_1.Observable.throw('Album not found');
+                        return new album_1.Album(data.album);
                     })
                         .catch(this.handleError);
                 };
@@ -140,14 +123,14 @@ System.register(['angular2/http', 'angular2/core', 'rxjs/Observable', '../models
                         .map(function (res) { return res.json(); })
                         .do(function (data) { return console.log(data); })
                         .map(function (data) {
-                        var results = [];
-                        if (data.error) {
-                            return Observable_1.Observable.throw(data.message || 'Last.fm data error');
+                        if (!data.results) {
+                            return data;
                         }
-                        if (data.results && _this.checkCanShow(data.results)) {
+                        var results = [];
+                        if (_this.checkCanShow(data.results)) {
                             var artists = data.results.artistmatches.artist;
                             artists.forEach(function (artist) {
-                                results.push(new artist_1.Artist(artist.name, artist.mbid, artist.image, artist.url));
+                                results.push(new artist_1.Artist(artist));
                             });
                         }
                         return results;
