@@ -1,4 +1,4 @@
-import {Http, Response, Headers} from 'angular2/http';
+import {Http, Response, Headers, URLSearchParams} from 'angular2/http';
 import { Injectable } from 'angular2/core';
 import {Observable} from 'rxjs/Observable';
 
@@ -12,13 +12,23 @@ export class LastFmService {
     constructor(public http: Http) {
         
     }
-
-    createUrl(options:any = {}) :string {
-        let url: string = `${LASTFM.apiEndpoint}?format=${LASTFM.format}&api_key=${LASTFM.api_key}`;
-        // yuk
-        // url += '&' + Object.keys(options).reduce(function(a, k) { a.push(k + '=' + encodeURIComponent(options[k])); return a }, []).join('&');
-        url += '&' + Object.keys(options).reduce(function(a, k) { a.push(k + '=' + (options[k])); return a }, []).join('&');
-        return url;
+    /**
+    * (Hopefully) URLSearchParams will change in next beta etc. to allow passing in object
+    * Currently setAll will not accept this, and all it does is the same thing - loop over.
+    * !! Watch out for Object.assign
+    */
+    private createParams(options: any = {}, requestParams: any = {}): URLSearchParams {
+        // let combined = {...options, method: 'artist.getTopAlbums', artist: artistName }; // not part of es6... :-|
+        let combined: any = Object.assign({ format: LASTFM.format, api_key: LASTFM.api_key }, options, requestParams),
+            params: URLSearchParams = new URLSearchParams();
+        for (let key in combined) {
+            params.set(key, combined[key]);
+        }
+        return params;
+    }
+    private handleError(error: Response) {
+        console.error('handleError ::: ', error);
+        return Observable.throw(error.json().message || 'Server Error');
     }
 
     /**
@@ -31,9 +41,8 @@ export class LastFmService {
         );
     }
     getArtistInfo(artistName: string = 'The Cure', options: any = {}) {
-        let params: any = Object.assign({}, options, { method: 'artist.getInfo', artist: artistName }),
-            req: string = this.createUrl(params);
-        return this.http.get(req)
+        let params: any = this.createParams(options, { method: 'artist.getInfo', artist: artistName });
+        return this.http.get(LASTFM.apiEndpoint, { search: params })
             .map(res => res.json())
             .do(data => console.log('getArtistInfo ::: ', data))
             .map(data => {
@@ -46,10 +55,8 @@ export class LastFmService {
     }
 
     getTopAlbums(artistName: string = 'The Cure', options: any = {}) {
-        // let params = {...options, method: 'artist.getTopAlbums', artist: artistName }; // not part of es6... :-|
-        let params: any = Object.assign({}, options, { method: 'artist.getTopAlbums', artist: artistName }),
-            req: string = this.createUrl(params);
-        return this.http.get(req)
+        let params: any = this.createParams(options, { method: 'artist.getTopAlbums', artist: artistName });
+        return this.http.get(LASTFM.apiEndpoint, { search: params })
             .map(res => res.json())
             .do(data => console.log('getTopAlbums ::: ', data))
             .map(data => {
@@ -64,15 +71,10 @@ export class LastFmService {
             })
             .catch(this.handleError);
     }
-    private handleError(error: Response) {
-        console.error('handleError ::: ', error);
-        return Observable.throw(error.json().message || 'Server Error');
-    }
 
     getAlbumInfo(mbid: String, options:any = {}) {
-        let params:any = Object.assign({}, options, { method: 'album.getInfo', mbid: mbid }),
-            req: string = this.createUrl(params);
-        return this.http.get(req)
+        let params: any = this.createParams(options, { method: 'album.getInfo', mbid: mbid });
+        return this.http.get(LASTFM.apiEndpoint, { search: params })
                 .map(res => res.json())
                 .do(data => console.log(data))         
                 .map(data => {
@@ -96,9 +98,8 @@ export class LastFmService {
     }
 
     searchArtists(artist:string, options:any = {}){
-        let params:any = Object.assign({}, options, { method: 'artist.search', artist: artist }),
-            req: string = this.createUrl(params);
-        return this.http.get(req)
+        let params: any = this.createParams(options, { method: 'artist.search', artist: artist });
+        return this.http.get(LASTFM.apiEndpoint, { search: params })
             .map(res => res.json())
             .do(data => console.log(data))
             .map(data => {                

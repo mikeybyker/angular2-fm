@@ -35,13 +35,24 @@ System.register(['angular2/http', 'angular2/core', 'rxjs/Observable', '../models
                 function LastFmService(http) {
                     this.http = http;
                 }
-                LastFmService.prototype.createUrl = function (options) {
+                /**
+                * (Hopefully) URLSearchParams will change in next beta etc. to allow passing in object
+                * Currently setAll will not accept this, and all it does is the same thing - loop over.
+                * !! Watch out for Object.assign
+                */
+                LastFmService.prototype.createParams = function (options, requestParams) {
                     if (options === void 0) { options = {}; }
-                    var url = constants_1.LASTFM.apiEndpoint + "?format=" + constants_1.LASTFM.format + "&api_key=" + constants_1.LASTFM.api_key;
-                    // yuk
-                    // url += '&' + Object.keys(options).reduce(function(a, k) { a.push(k + '=' + encodeURIComponent(options[k])); return a }, []).join('&');
-                    url += '&' + Object.keys(options).reduce(function (a, k) { a.push(k + '=' + (options[k])); return a; }, []).join('&');
-                    return url;
+                    if (requestParams === void 0) { requestParams = {}; }
+                    // let combined = {...options, method: 'artist.getTopAlbums', artist: artistName }; // not part of es6... :-|
+                    var combined = Object.assign({ format: constants_1.LASTFM.format, api_key: constants_1.LASTFM.api_key }, options, requestParams), params = new http_1.URLSearchParams();
+                    for (var key in combined) {
+                        params.set(key, combined[key]);
+                    }
+                    return params;
+                };
+                LastFmService.prototype.handleError = function (error) {
+                    console.error('handleError ::: ', error);
+                    return Observable_1.Observable.throw(error.json().message || 'Server Error');
                 };
                 /**
                 * Observable.forkJoin : along the lines of $q.all... Remember to import it!
@@ -55,8 +66,8 @@ System.register(['angular2/http', 'angular2/core', 'rxjs/Observable', '../models
                 LastFmService.prototype.getArtistInfo = function (artistName, options) {
                     if (artistName === void 0) { artistName = 'The Cure'; }
                     if (options === void 0) { options = {}; }
-                    var params = Object.assign({}, options, { method: 'artist.getInfo', artist: artistName }), req = this.createUrl(params);
-                    return this.http.get(req)
+                    var params = this.createParams(options, { method: 'artist.getInfo', artist: artistName });
+                    return this.http.get(constants_1.LASTFM.apiEndpoint, { search: params })
                         .map(function (res) { return res.json(); })
                         .do(function (data) { return console.log('getArtistInfo ::: ', data); })
                         .map(function (data) {
@@ -70,9 +81,8 @@ System.register(['angular2/http', 'angular2/core', 'rxjs/Observable', '../models
                 LastFmService.prototype.getTopAlbums = function (artistName, options) {
                     if (artistName === void 0) { artistName = 'The Cure'; }
                     if (options === void 0) { options = {}; }
-                    // let params = {...options, method: 'artist.getTopAlbums', artist: artistName }; // not part of es6... :-|
-                    var params = Object.assign({}, options, { method: 'artist.getTopAlbums', artist: artistName }), req = this.createUrl(params);
-                    return this.http.get(req)
+                    var params = this.createParams(options, { method: 'artist.getTopAlbums', artist: artistName });
+                    return this.http.get(constants_1.LASTFM.apiEndpoint, { search: params })
                         .map(function (res) { return res.json(); })
                         .do(function (data) { return console.log('getTopAlbums ::: ', data); })
                         .map(function (data) {
@@ -87,14 +97,10 @@ System.register(['angular2/http', 'angular2/core', 'rxjs/Observable', '../models
                     })
                         .catch(this.handleError);
                 };
-                LastFmService.prototype.handleError = function (error) {
-                    console.error('handleError ::: ', error);
-                    return Observable_1.Observable.throw(error.json().message || 'Server Error');
-                };
                 LastFmService.prototype.getAlbumInfo = function (mbid, options) {
                     if (options === void 0) { options = {}; }
-                    var params = Object.assign({}, options, { method: 'album.getInfo', mbid: mbid }), req = this.createUrl(params);
-                    return this.http.get(req)
+                    var params = this.createParams(options, { method: 'album.getInfo', mbid: mbid });
+                    return this.http.get(constants_1.LASTFM.apiEndpoint, { search: params })
                         .map(function (res) { return res.json(); })
                         .do(function (data) { return console.log(data); })
                         .map(function (data) {
@@ -118,8 +124,8 @@ System.register(['angular2/http', 'angular2/core', 'rxjs/Observable', '../models
                 LastFmService.prototype.searchArtists = function (artist, options) {
                     var _this = this;
                     if (options === void 0) { options = {}; }
-                    var params = Object.assign({}, options, { method: 'artist.search', artist: artist }), req = this.createUrl(params);
-                    return this.http.get(req)
+                    var params = this.createParams(options, { method: 'artist.search', artist: artist });
+                    return this.http.get(constants_1.LASTFM.apiEndpoint, { search: params })
                         .map(function (res) { return res.json(); })
                         .do(function (data) { return console.log(data); })
                         .map(function (data) {
