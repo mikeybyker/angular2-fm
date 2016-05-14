@@ -1,6 +1,6 @@
 # Angular2-FM
 
-A simple [Last.fm](http://www.last.fm/) app to search/browse artists and albums. Made with [Angular 2](https://angular.io/) (version 2.0.0-rc.0 - things may change).
+A simple [Last.fm](http://www.last.fm/) app to search/browse artists and albums. Made with [Angular 2](https://angular.io/) (version 2.0.0-rc.1 - things may change).
 
 ### Features Used
   - Components
