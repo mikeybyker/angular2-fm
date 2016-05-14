@@ -32,8 +32,10 @@
         </div>
     </div>
     <div class="row">
-        <div class="columns small-6 medium-4 large-2" *ngFor="#album of albums">
-            <a *ngIf="album.images.extralarge" [routerLink]="['/Album', {name: album.artist.name, mbid: album.mbid}]"><img class="thumbnail" [src]="album.images.extralarge"></a>
+        <div class="columns small-6 medium-4 large-2" *ngFor="let album of albums | results : 'extralarge'">
+            <a [routerLink]="['/Album', {name: album.artist.name, mbid: album.mbid}]">
+                <img class="thumbnail" [src]="album.images.extralarge">
+            </a>
         </div>
     </div>
     <div *ngIf="artist.similar.length">
@@ -43,7 +45,7 @@
             </div>
         </div>
         <div class="row align-spaced">
-            <div class="column small-5 medium-4" *ngFor="#similar of artist.similar | limit:4">
+            <div class="column small-5 medium-4" *ngFor="let similar of artist.similar | limit:4">
                <div class="artist" >
                     <a [routerLink]="['Artist', {name: similar.name}]">
                         <img class="thumbnail" [src]="similar.images.large">

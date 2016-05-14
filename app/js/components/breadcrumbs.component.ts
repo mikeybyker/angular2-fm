@@ -1,4 +1,4 @@
-import {Component, Input} from 'angular2/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
     selector: 'breadcrumbs',
@@ -8,7 +8,7 @@ import {Component, Input} from 'angular2/core';
                 <nav aria-label="You are here:" role="navigation">
                     <ul class="breadcrumbs">
                         <!-- docs say no first variable... -->
-                        <li *ngFor="#link of links; #last = last; #index  = index " [class.disabled]='last'>
+                        <li *ngFor="let link of links; let last = last; let index  = index " [class.disabled]='last'>
                             <span [ngSwitch]="last && index !== 0">
                                 <span *ngSwitchWhen="true">{{link.title}}</span>
                                 <a [href]="link.url" *ngSwitchDefault >{{link.title}}</a>

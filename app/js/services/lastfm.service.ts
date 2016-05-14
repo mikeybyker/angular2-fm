@@ -1,10 +1,13 @@
-import {Http, Response, Headers, URLSearchParams} from 'angular2/http';
-import { Injectable } from 'angular2/core';
-import {Observable} from 'rxjs/Observable';
+import {Http,
+        Response,
+        Headers,
+        URLSearchParams}  from '@angular/http';
+import {Injectable}       from '@angular/core';
+import {Observable}       from 'rxjs/Observable';
 
-import {Artist} from '../models/artist';
-import {Album} from '../models/album';
-import {LASTFM} from '../constants';
+import {Artist}           from '../models/artist';
+import {Album}            from '../models/album';
+import {LASTFM}           from '../constants';
 
 @Injectable()
 export class LastFmService {

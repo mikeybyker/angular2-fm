@@ -1,10 +1,10 @@
-import {Pipe} from 'angular2/core';
+import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
     name: 'trackduration'
 })
 
-export class TrackDurationPipe{
+export class TrackDurationPipe implements PipeTransform {
 
     getDuration(duration) {
         let mins = ~~(duration / 60),

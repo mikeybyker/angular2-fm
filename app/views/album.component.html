@@ -19,7 +19,7 @@
     <div class="small-12 medium-6 columns">
         <h4>{{album?.name}}</h4>
         <ol *ngIf="album" class="track-list">
-            <li *ngFor="#track of album.tracks.track">
+            <li *ngFor="let track of album.tracks.track">
                 <a [href]="track.url" target="_blank">{{track.name}}</a> ({{track.duration | trackduration}})
             </li>
         </ol>

@@ -1,12 +1,12 @@
-import {Component} from 'angular2/core';
-import {ROUTER_DIRECTIVES} from 'angular2/router';
-import {NgForm} from 'angular2/common';
+import {Component}         from '@angular/core';
+import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {NgForm}            from '@angular/common';
 
-import {LastFmService} from '../services/lastfm.service';
-import {Artist} from '../models/artist';
-import {LimitPipe} from '../pipes/limit-pipe';
-import {ResultsPipe} from '../pipes/results-pipe';
-import {ErrorMessage} from '../utils/error-message';
+import {LastFmService}     from '../services/lastfm.service';
+import {Artist}            from '../models/artist';
+import {LimitPipe}         from '../pipes/limit-pipe';
+import {ResultsPipe}       from '../pipes/results-pipe';
+import {ErrorMessage}      from '../utils/error-message';
 
 @Component({
     selector: 'home',

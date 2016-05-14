@@ -1,15 +1,16 @@
-import {Component} from 'angular2/core';
-import {ROUTER_DIRECTIVES, RouteParams} from 'angular2/router';
+import {Component}             from '@angular/core';
+import {ROUTER_DIRECTIVES,
+        RouteParams}           from '@angular/router-deprecated';
 
 
-import {BreadcrumbsComponent} from './breadcrumbs.component';
-import {LastFmService} from '../services/lastfm.service';
-import {Artist} from '../models/artist';
-import {Album} from '../models/album';
-import {ResultsPipe} from '../pipes/results-pipe';
-import {LimitPipe} from '../pipes/limit-pipe';
-import {ExternalHrefPipe} from '../pipes/external-href-pipe';
-import {ErrorMessage} from '../utils/error-message';
+import {BreadcrumbsComponent}  from './breadcrumbs.component';
+import {LastFmService}         from '../services/lastfm.service';
+import {Artist}                from '../models/artist';
+import {Album}                 from '../models/album';
+import {ResultsPipe}           from '../pipes/results-pipe';
+import {LimitPipe}             from '../pipes/limit-pipe';
+import {ExternalHrefPipe}      from '../pipes/external-href-pipe';
+import {ErrorMessage}          from '../utils/error-message';
 
 @Component({
     selector: 'artist',
@@ -58,6 +59,7 @@ export class ArtistComponent {
                     return;
                 }
                 this.artist = artist;
+                console.log(albums);
                 this.albums = albums;
             },
             error => {

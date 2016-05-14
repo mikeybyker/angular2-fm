@@ -1,10 +1,13 @@
-import {Component} from 'angular2/core';
-import {RouteConfig, RouterOutlet, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from 'angular2/router';
+import {Component}         from '@angular/core';
+import {RouteConfig,
+        RouterOutlet,
+        ROUTER_DIRECTIVES,
+        ROUTER_PROVIDERS}  from '@angular/router-deprecated';
 
-import { HomeComponent } from './home.component';
-import { AboutComponent } from './about.component';
-import { ArtistComponent } from './artist.component';
-import { AlbumComponent } from './album.component';
+import {HomeComponent}     from './home.component';
+import {AboutComponent}    from './about.component';
+import {ArtistComponent}   from './artist.component';
+import {AlbumComponent}    from './album.component';
 
 @RouteConfig([
     { path: '/', name: 'Home', component: HomeComponent, useAsDefault: true },

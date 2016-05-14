@@ -1,11 +1,11 @@
-import {Component} from 'angular2/core';
-import {ROUTER_DIRECTIVES, RouteParams} from 'angular2/router';
+import {Component}                      from '@angular/core';
+import {ROUTER_DIRECTIVES, RouteParams} from '@angular/router-deprecated';
 
-import {BreadcrumbsComponent} from './breadcrumbs.component';
-import {LastFmService} from '../services/lastfm.service';
-import {Album} from '../models/album';
-import {TrackDurationPipe} from '../pipes/duration-pipe';
-import {ErrorMessage} from '../utils/error-message';
+import {BreadcrumbsComponent}           from './breadcrumbs.component';
+import {LastFmService}                  from '../services/lastfm.service';
+import {Album}                          from '../models/album';
+import {TrackDurationPipe}              from '../pipes/duration-pipe';
+import {ErrorMessage}                   from '../utils/error-message';
 
 @Component({
     selector: 'album',

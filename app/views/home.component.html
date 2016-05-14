@@ -27,8 +27,9 @@
         </div>
     </div>
 </div>
+<!-- TODO: | results : 'extralarge' broken -->
 <div class="row align-center" *ngIf="potentials && potentials.length">
-    <div class="column small-6 medium-4" *ngFor="#artist of potentials | results : 'extralarge' | limit: 6">
+    <div class="column small-6 medium-4" *ngFor="let artist of potentials | results : 'extralarge'  | limit: 6">
         <div class="callout">
             <p>{{ artist.name }}</p>
             <p>
