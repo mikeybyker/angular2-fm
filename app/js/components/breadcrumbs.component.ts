@@ -10,7 +10,7 @@ import {Component, Input} from '@angular/core';
                         <!-- docs say no first variable... -->
                         <li *ngFor="let link of links; let last = last; let index  = index " [class.disabled]='last'>
                             <span [ngSwitch]="last && index !== 0">
-                                <span *ngSwitchWhen="true">{{link.title}}</span>
+                                <span *ngSwitchCase="true">{{link.title}}</span>
                                 <a [href]="link.url" *ngSwitchDefault >{{link.title}}</a>
                             </span>
                         </li>

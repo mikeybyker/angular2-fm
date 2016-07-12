@@ -4,7 +4,7 @@
             <h4 class="text-center">Search Last.fm</h4>
             <label>
                 <input type="text" placeholder="Artist" value="The Cure" required
-                [(ngModel)]="model.artist" ngControl="artist"  #artist="ngForm">
+                [(ngModel)]="model.artist" ngControl="artist"  name="artist" #artist="ngModel">
             </label>
             <p>
                 <button type="submit" [disabled]="!searchForm.form.valid" class="button expanded">Search</button>

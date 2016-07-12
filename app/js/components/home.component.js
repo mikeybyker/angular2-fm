@@ -26,7 +26,7 @@ var HomeComponent = (function () {
         // Using async pipe...
         this.potentials = this.lastFmService
             .searchArtistsAsync(this.model.artist, { limit: this.maxResults })
-            .share(); // so we don't get 2 network requests with the subscription for error below...
+            .share(); // so we don't get 2 network requests with the subscription for error handling (below...)
         this.error = null;
         this.potentials
             .subscribe(function (data) {

@@ -1,6 +1,6 @@
 import {Component}         from '@angular/core';
 import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
-import {NgForm}            from '@angular/common';
+import {NgForm}            from '@angular/forms';
 import {Observable}        from 'rxjs/Observable';
 
 import {LastFmService}     from '../services/lastfm.service';
@@ -32,7 +32,7 @@ export class HomeComponent {
         // Using async pipe...
         this.potentials = this.lastFmService
             .searchArtistsAsync(this.model.artist, { limit: this.maxResults })
-            .share(); // so we don't get 2 network requests with the subscription for error below...
+            .share(); // so we don't get 2 network requests with the subscription for error handling (below...)
 
         this.error = null;
         this.potentials

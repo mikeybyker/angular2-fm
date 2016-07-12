@@ -1,4 +1,5 @@
 node_modules
+typings
 .tmp
 keys.txt
 constants.ts
