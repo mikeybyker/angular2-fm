@@ -1,6 +1,7 @@
 import {Component}         from '@angular/core';
 import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 import {NgForm}            from '@angular/common';
+import {Observable}        from 'rxjs/Observable';
 
 import {LastFmService}     from '../services/lastfm.service';
 import {Artist}            from '../models/artist';
@@ -17,7 +18,8 @@ import {ErrorMessage}      from '../utils/error-message';
 })
 
 export class HomeComponent {
-    potentials:Array<Artist>;
+    // potentials:Array<Artist>;  When *not* using the angular async pipe...
+    potentials:Observable<Array<Artist>>;
     error: ErrorMessage;
     model:any = {artist:'The Cure'};
     maxResults: number = 5;
@@ -27,16 +29,18 @@ export class HomeComponent {
     }
     onSubmit(){
         console.log(this.model.artist);
+        // Using async pipe...
+        this.potentials = this.lastFmService
+            .searchArtistsAsync(this.model.artist, { limit: this.maxResults })
+            .share(); // so we don't get 2 network requests with the subscription for error below...
+
         this.error = null;
-        this.lastFmService
-            .searchArtists(this.model.artist, { limit: this.maxResults })
+        this.potentials
             .subscribe(data => {
-                if (data.error || !data.length) {
-                    this.error = new ErrorMessage('Error', data.message || 'Nothing found...');
-                    this.potentials = [];
+                if (!data.length) {
+                    this.error = new ErrorMessage('Error', 'Nothing found...');
                     return;
                 }
-                this.potentials = data;
             },
             error => {
                 this.error = new ErrorMessage('Error', <any>error);
@@ -44,3 +48,24 @@ export class HomeComponent {
     }
 
 }
+
+/*
+When *not* using the angular async pipe...
+onSubmit() {
+    console.log(this.model.artist);
+    this.error = null;
+    this.lastFmService
+        .searchArtists(this.model.artist, { limit: this.maxResults })
+        .subscribe(data => {
+            if (data.error || !data.length) {
+                this.error = new ErrorMessage('Error', data.message || 'Nothing found...');
+                this.potentials = [];
+                return;
+            }
+            this.potentials = data;
+        },
+        error => {
+            this.error = new ErrorMessage('Error', <any>error);
+        });
+}
+*/

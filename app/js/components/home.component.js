@@ -23,16 +23,17 @@ var HomeComponent = (function () {
     HomeComponent.prototype.onSubmit = function () {
         var _this = this;
         console.log(this.model.artist);
+        // Using async pipe...
+        this.potentials = this.lastFmService
+            .searchArtistsAsync(this.model.artist, { limit: this.maxResults })
+            .share(); // so we don't get 2 network requests with the subscription for error below...
         this.error = null;
-        this.lastFmService
-            .searchArtists(this.model.artist, { limit: this.maxResults })
+        this.potentials
             .subscribe(function (data) {
-            if (data.error || !data.length) {
-                _this.error = new error_message_1.ErrorMessage('Error', data.message || 'Nothing found...');
-                _this.potentials = [];
+            if (!data.length) {
+                _this.error = new error_message_1.ErrorMessage('Error', 'Nothing found...');
                 return;
             }
-            _this.potentials = data;
         }, function (error) {
             _this.error = new error_message_1.ErrorMessage('Error', error);
         });
@@ -50,4 +51,24 @@ var HomeComponent = (function () {
     return HomeComponent;
 }());
 exports.HomeComponent = HomeComponent;
+/*
+When *not* using the angular async pipe...
+onSubmit() {
+    console.log(this.model.artist);
+    this.error = null;
+    this.lastFmService
+        .searchArtists(this.model.artist, { limit: this.maxResults })
+        .subscribe(data => {
+            if (data.error || !data.length) {
+                this.error = new ErrorMessage('Error', data.message || 'Nothing found...');
+                this.potentials = [];
+                return;
+            }
+            this.potentials = data;
+        },
+        error => {
+            this.error = new ErrorMessage('Error', <any>error);
+        });
+}
+*/ 
 //# sourceMappingURL=home.component.js.map

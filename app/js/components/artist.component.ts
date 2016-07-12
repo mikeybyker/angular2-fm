@@ -59,7 +59,7 @@ export class ArtistComponent {
                     return;
                 }
                 this.artist = artist;
-                console.log(albums);
+                // console.log(albums);
                 this.albums = albums;
             },
             error => {

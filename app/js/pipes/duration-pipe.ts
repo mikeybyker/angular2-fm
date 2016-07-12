@@ -13,7 +13,7 @@ export class TrackDurationPipe implements PipeTransform {
         pretty += '' + secs;
         return pretty;
     }
-    transform(value){
+    transform(value:string){
         return this.getDuration(value);
     }
 }

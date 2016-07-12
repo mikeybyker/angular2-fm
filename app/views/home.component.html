@@ -3,7 +3,7 @@
         <form (ngSubmit)="onSubmit()" #searchForm="ngForm">
             <h4 class="text-center">Search Last.fm</h4>
             <label>
-                <input #artist type="text" placeholder="Artist" value="The Cure" required
+                <input type="text" placeholder="Artist" value="The Cure" required
                 [(ngModel)]="model.artist" ngControl="artist"  #artist="ngForm">
             </label>
             <p>
@@ -27,8 +27,21 @@
         </div>
     </div>
 </div>
-<!-- TODO: | results : 'extralarge' broken -->
-<div class="row align-center" *ngIf="potentials && potentials.length">
+
+<div class="row align-center" *ngIf="potentials">
+    <div class="column small-6 medium-4" *ngFor="let artist of potentials | async | limit: 6">
+        <div class="callout">
+            <p>{{ artist.name }}</p>
+            <p>
+                <a [routerLink]="['Artist', {name: artist.name}]" >
+                    <img class="thumbnail" [src] = "artist.images.extralarge">
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- When *not* using the angular async pipe... -->
+<!-- <div class="row align-center" *ngIf="potentials && potentials.length">
     <div class="column small-6 medium-4" *ngFor="let artist of potentials | results : 'extralarge'  | limit: 6">
         <div class="callout">
             <p>{{ artist.name }}</p>
@@ -37,6 +50,14 @@
                     <img class="thumbnail" [src] = "artist.images.extralarge">
                 </a>
             </p>
+        </div>
+    </div>
+</div> -->
+
+<div class="row align-center" *ngIf="error">
+    <div class="column small-12">
+        <div class="callout">
+            No results
         </div>
     </div>
 </div>

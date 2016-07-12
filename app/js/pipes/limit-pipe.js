@@ -12,9 +12,8 @@ var core_1 = require('@angular/core');
 var LimitPipe = (function () {
     function LimitPipe() {
     }
-    LimitPipe.prototype.transform = function (value, _a) {
-        var count = _a[0];
-        return value.slice(0, count);
+    LimitPipe.prototype.transform = function (value, count) {
+        return value && value.slice(0, count);
     };
     LimitPipe = __decorate([
         core_1.Pipe({

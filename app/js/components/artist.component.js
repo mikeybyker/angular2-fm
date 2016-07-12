@@ -42,7 +42,7 @@ var ArtistComponent = (function () {
                 return;
             }
             _this.artist = artist;
-            console.log(albums);
+            // console.log(albums);
             _this.albums = albums;
         }, function (error) {
             _this.error = new error_message_1.ErrorMessage('Error', error);

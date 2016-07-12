@@ -16,6 +16,7 @@ var artist_component_1 = require('./artist.component');
 var album_component_1 = require('./album.component');
 var AppComponent = (function () {
     function AppComponent() {
+        this.title = 'Angular2-FM';
     }
     AppComponent = __decorate([
         router_deprecated_1.RouteConfig([
@@ -27,7 +28,7 @@ var AppComponent = (function () {
         core_1.Component({
             selector: 'lastfm-app',
             directives: [router_deprecated_1.RouterOutlet, router_deprecated_1.ROUTER_DIRECTIVES],
-            template: "\n                <div class=\"top-bar\">\n                    <div class=\"row\">\n                        <div class=\"top-bar-left\">\n                            <ul class=\"dropdown menu\" data-dropdown-menu>\n                                <li class=\"menu-text\">Angular2-FM</li>\n                                <li><a [routerLink]=\"['Home']\">Home</a></li>\n                                <li><a [routerLink]=\"['About']\">About</a></li>\n                            </ul>\n                        </div>\n                    </div>\n                </div>\n\n                <router-outlet></router-outlet>\n        "
+            template: "\n                <div class=\"top-bar\">\n                    <div class=\"row\">\n                        <div class=\"top-bar-left\">\n                            <ul class=\"dropdown menu\" data-dropdown-menu>\n                                <li class=\"menu-text\">{{title}}</li>\n                                <li><a [routerLink]=\"['Home']\">Home</a></li>\n                                <li><a [routerLink]=\"['About']\">About</a></li>\n                            </ul>\n                        </div>\n                    </div>\n                </div>\n\n                <router-outlet></router-outlet>\n        "
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);

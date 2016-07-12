@@ -13,7 +13,7 @@ var ResultsPipe = (function () {
     function ResultsPipe() {
     }
     ResultsPipe.prototype.transform = function (value, size) {
-        return value.filter(function (item) { return item.mbid && item.images.hasOwnProperty(size); });
+        return value && value.filter(function (item) { return item.mbid && item.images.hasOwnProperty(size); });
     };
     ResultsPipe = __decorate([
         core_1.Pipe({

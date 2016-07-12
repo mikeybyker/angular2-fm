@@ -99,6 +99,16 @@ export class LastFmService {
         }
         return results.artistmatches.artist.some((element, index, array) => element.mbid && element.image.some(hasImage));
     }
+    /*
+        Check there's a mbid and at least an extralarge image source
+    */
+    checkUsableImage(result:any){
+
+        if (result.mbid && result.image && result.image[3] && result.image[3]['#text'] !== '') {
+            return true;
+        }
+        return false;
+    }
 
     searchArtists(artist:string, options:any = {}){
         let params: any = this.createParams(options, { method: 'artist.search', artist: artist });
@@ -117,6 +127,30 @@ export class LastFmService {
                     });
                 }
                 return results;
+            })
+            .catch(this.handleError);
+    }
+
+    searchArtistsAsync(artist: string, options: any = {}): Observable<Array<Artist>> {
+        let params: any = this.createParams(options, { method: 'artist.search', artist: artist });
+        return this.http.get(LASTFM.apiEndpoint, { search: params })
+            .map(res => res.json())
+            .do(data => console.log(data))
+            .map(data => {
+                if (!data.results) {
+                    return data;
+                }
+                let results: Array<Artist> = [];
+                if (this.checkCanShow(data.results)) {
+                    let artists: Array<any> = data.results.artistmatches.artist;
+                    artists.forEach((artist) => {
+                        // Rather than using results-pipe, don't push unusable results in the first place...
+                        if (this.checkUsableImage(artist)) {
+                            results.push(new Artist(artist));
+                        }                      
+                    });
+                }
+                return results; // hmm, could push an empty non-found if length here === 0...
             })
             .catch(this.handleError);
     }

@@ -5,3 +5,5 @@ constants.ts
 constants.js
 constants.js.map
 cleaner.bat
+# Ignore specs until sorted out...
+*.spec.*

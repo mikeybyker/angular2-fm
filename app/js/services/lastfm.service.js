@@ -104,6 +104,15 @@ var LastFmService = (function () {
         }
         return results.artistmatches.artist.some(function (element, index, array) { return element.mbid && element.image.some(hasImage); });
     };
+    /*
+        Check there's a mbid and at least an extralarge image source
+    */
+    LastFmService.prototype.checkUsableImage = function (result) {
+        if (result.mbid && result.image && result.image[3] && result.image[3]['#text'] !== '') {
+            return true;
+        }
+        return false;
+    };
     LastFmService.prototype.searchArtists = function (artist, options) {
         var _this = this;
         if (options === void 0) { options = {}; }
@@ -123,6 +132,31 @@ var LastFmService = (function () {
                 });
             }
             return results;
+        })
+            .catch(this.handleError);
+    };
+    LastFmService.prototype.searchArtistsAsync = function (artist, options) {
+        var _this = this;
+        if (options === void 0) { options = {}; }
+        var params = this.createParams(options, { method: 'artist.search', artist: artist });
+        return this.http.get(constants_1.LASTFM.apiEndpoint, { search: params })
+            .map(function (res) { return res.json(); })
+            .do(function (data) { return console.log(data); })
+            .map(function (data) {
+            if (!data.results) {
+                return data;
+            }
+            var results = [];
+            if (_this.checkCanShow(data.results)) {
+                var artists = data.results.artistmatches.artist;
+                artists.forEach(function (artist) {
+                    // Rather than using results-pipe, don't push unusable results in the first place...
+                    if (_this.checkUsableImage(artist)) {
+                        results.push(new artist_1.Artist(artist));
+                    }
+                });
+            }
+            return results; // hmm, could push an empty non-found if length here === 0...
         })
             .catch(this.handleError);
     };
