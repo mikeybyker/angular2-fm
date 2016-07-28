@@ -4,7 +4,7 @@ import {NgForm}            from '@angular/forms';
 import {Observable}        from 'rxjs/Observable';
 
 import {LastFmService}     from '../services/lastfm.service';
-import {Artist}            from '../models/artist';
+import {Artist}            from '../artist/artist';
 import {LimitPipe}         from '../pipes/limit-pipe';
 import {ResultsPipe}       from '../pipes/results-pipe';
 import {ErrorMessage}      from '../utils/error-message';
@@ -14,7 +14,7 @@ import {ErrorMessage}      from '../utils/error-message';
     providers: [LastFmService],
     pipes: [ResultsPipe, LimitPipe],
     directives: [ROUTER_DIRECTIVES],
-    templateUrl: './app/views/home.component.html'
+    templateUrl: './home.component.html'
 })
 
 export class HomeComponent {

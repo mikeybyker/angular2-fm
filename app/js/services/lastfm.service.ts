@@ -5,8 +5,8 @@ import {Http,
 import {Injectable}       from '@angular/core';
 import {Observable}       from 'rxjs/Observable';
 
-import {Artist}           from '../models/artist';
-import {Album}            from '../models/album';
+import {Artist}           from '../artist/artist';
+import {Album}            from '../album/album';
 import {LASTFM}           from '../constants';
 
 @Injectable()

@@ -3,10 +3,10 @@ import {ROUTER_DIRECTIVES,
         RouteParams}           from '@angular/router-deprecated';
 
 
-import {BreadcrumbsComponent}  from './breadcrumbs.component';
+import {BreadcrumbsComponent}  from '../components/breadcrumbs.component';
 import {LastFmService}         from '../services/lastfm.service';
-import {Artist}                from '../models/artist';
-import {Album}                 from '../models/album';
+import {Artist}                from './artist';
+import {Album}                 from '../album/album';
 import {ResultsPipe}           from '../pipes/results-pipe';
 import {LimitPipe}             from '../pipes/limit-pipe';
 import {ExternalHrefPipe}      from '../pipes/external-href-pipe';
@@ -21,7 +21,7 @@ import {ErrorMessage}          from '../utils/error-message';
     //   .foo {
     //     background-image: {{artist.images.extralarge}}; // this would be nice!
     //   }`],
-    templateUrl: './app/views/artist.component.html'
+    templateUrl: './artist.component.html'
 })
 
 export class ArtistComponent {

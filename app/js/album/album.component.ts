@@ -1,9 +1,9 @@
 import {Component}                      from '@angular/core';
 import {ROUTER_DIRECTIVES, RouteParams} from '@angular/router-deprecated';
 
-import {BreadcrumbsComponent}           from './breadcrumbs.component';
+import {BreadcrumbsComponent}           from '../components/breadcrumbs.component';
 import {LastFmService}                  from '../services/lastfm.service';
-import {Album}                          from '../models/album';
+import {Album}                          from './album';
 import {TrackDurationPipe}              from '../pipes/duration-pipe';
 import {ErrorMessage}                   from '../utils/error-message';
 
@@ -12,7 +12,7 @@ import {ErrorMessage}                   from '../utils/error-message';
     providers: [LastFmService],
     pipes: [TrackDurationPipe],
     directives: [ROUTER_DIRECTIVES, BreadcrumbsComponent],
-    templateUrl: './app/views/album.component.html'
+    templateUrl: './album.component.html'
 })
 export class AlbumComponent { 
     artistName: string;
