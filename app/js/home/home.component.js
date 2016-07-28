@@ -44,7 +44,7 @@ var HomeComponent = (function () {
             providers: [lastfm_service_1.LastFmService],
             pipes: [results_pipe_1.ResultsPipe, limit_pipe_1.LimitPipe],
             directives: [router_deprecated_1.ROUTER_DIRECTIVES],
-            templateUrl: './app/views/home.component.html'
+            templateUrl: 'app/js/home/home.component.html'
         }), 
         __metadata('design:paramtypes', [lastfm_service_1.LastFmService])
     ], HomeComponent);

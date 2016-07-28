@@ -2,7 +2,7 @@
 var platform_browser_dynamic_1 = require('@angular/platform-browser-dynamic');
 var http_1 = require('@angular/http');
 var router_deprecated_1 = require('@angular/router-deprecated');
-var app_component_1 = require('./components/app.component');
+var app_component_1 = require('./app.component');
 var forms_1 = require('@angular/forms');
 require('rxjs/add/operator/map');
 require('rxjs/add/observable/forkJoin');

@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
-var breadcrumbs_component_1 = require('./breadcrumbs.component');
+var breadcrumbs_component_1 = require('../utils/breadcrumbs.component');
 var lastfm_service_1 = require('../services/lastfm.service');
 var duration_pipe_1 = require('../pipes/duration-pipe');
 var error_message_1 = require('../utils/error-message');
@@ -49,7 +49,7 @@ var AlbumComponent = (function () {
             providers: [lastfm_service_1.LastFmService],
             pipes: [duration_pipe_1.TrackDurationPipe],
             directives: [router_deprecated_1.ROUTER_DIRECTIVES, breadcrumbs_component_1.BreadcrumbsComponent],
-            templateUrl: './app/views/album.component.html'
+            templateUrl: 'app/js/album/album.component.html'
         }), 
         __metadata('design:paramtypes', [lastfm_service_1.LastFmService, router_deprecated_1.RouteParams])
     ], AlbumComponent);

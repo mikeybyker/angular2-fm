@@ -3,7 +3,7 @@ import {ROUTER_DIRECTIVES,
         RouteParams}           from '@angular/router-deprecated';
 
 
-import {BreadcrumbsComponent}  from '../components/breadcrumbs.component';
+import {BreadcrumbsComponent}  from '../utils/breadcrumbs.component';
 import {LastFmService}         from '../services/lastfm.service';
 import {Artist}                from './artist';
 import {Album}                 from '../album/album';
@@ -21,7 +21,7 @@ import {ErrorMessage}          from '../utils/error-message';
     //   .foo {
     //     background-image: {{artist.images.extralarge}}; // this would be nice!
     //   }`],
-    templateUrl: './artist.component.html'
+    templateUrl: 'app/js/artist/artist.component.html'
 })
 
 export class ArtistComponent {

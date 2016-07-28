@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
-var breadcrumbs_component_1 = require('./breadcrumbs.component');
+var breadcrumbs_component_1 = require('../utils/breadcrumbs.component');
 var lastfm_service_1 = require('../services/lastfm.service');
 var results_pipe_1 = require('../pipes/results-pipe');
 var limit_pipe_1 = require('../pipes/limit-pipe');
@@ -58,7 +58,7 @@ var ArtistComponent = (function () {
             //   .foo {
             //     background-image: {{artist.images.extralarge}}; // this would be nice!
             //   }`],
-            templateUrl: './app/views/artist.component.html'
+            templateUrl: 'app/js/artist/artist.component.html'
         }), 
         __metadata('design:paramtypes', [lastfm_service_1.LastFmService, router_deprecated_1.RouteParams])
     ], ArtistComponent);

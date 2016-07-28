@@ -4,10 +4,10 @@ import {RouteConfig,
         ROUTER_DIRECTIVES,
         ROUTER_PROVIDERS}  from '@angular/router-deprecated';
 
-import {HomeComponent}     from '../home/home.component';
-import {AboutComponent}    from '../about/about.component';
-import {ArtistComponent}   from '../artist/artist.component';
-import {AlbumComponent}    from '../album/album.component';
+import {HomeComponent}     from './home/home.component';
+import {AboutComponent}    from './about/about.component';
+import {ArtistComponent}   from './artist/artist.component';
+import {AlbumComponent}    from './album/album.component';
 
 @RouteConfig([
     { path: '/', name: 'Home', component: HomeComponent, useAsDefault: true },

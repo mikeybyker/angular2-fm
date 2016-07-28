@@ -14,7 +14,7 @@ import {ErrorMessage}      from '../utils/error-message';
     providers: [LastFmService],
     pipes: [ResultsPipe, LimitPipe],
     directives: [ROUTER_DIRECTIVES],
-    templateUrl: './home.component.html'
+    templateUrl: 'app/js/home/home.component.html'
 })
 
 export class HomeComponent {

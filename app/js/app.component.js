@@ -10,10 +10,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
-var home_component_1 = require('./home.component');
-var about_component_1 = require('./about.component');
-var artist_component_1 = require('./artist.component');
-var album_component_1 = require('./album.component');
+var home_component_1 = require('./home/home.component');
+var about_component_1 = require('./about/about.component');
+var artist_component_1 = require('./artist/artist.component');
+var album_component_1 = require('./album/album.component');
 var AppComponent = (function () {
     function AppComponent() {
         this.title = 'Angular2-FM';

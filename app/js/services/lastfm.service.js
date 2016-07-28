@@ -11,8 +11,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var http_1 = require('@angular/http');
 var core_1 = require('@angular/core');
 var Observable_1 = require('rxjs/Observable');
-var artist_1 = require('../models/artist');
-var album_1 = require('../models/album');
+var artist_1 = require('../artist/artist');
+var album_1 = require('../album/album');
 var constants_1 = require('../constants');
 var LastFmService = (function () {
     function LastFmService(http) {
