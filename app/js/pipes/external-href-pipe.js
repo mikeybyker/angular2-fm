@@ -13,7 +13,7 @@ var ExternalHrefPipe = (function () {
     function ExternalHrefPipe() {
     }
     ExternalHrefPipe.prototype.transform = function (value) {
-        var s = value.replace(/(<a href="[^"]+")>/ig, "$1 target='_blank'>");
+        var s = value && value.replace(/(<a href="[^"]+")>/ig, "$1 target='_blank'>");
         return s;
     };
     ExternalHrefPipe = __decorate([

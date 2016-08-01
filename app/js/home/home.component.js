@@ -11,23 +11,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
 var lastfm_service_1 = require('../services/lastfm.service');
+var lastfm_service_new_1 = require('../services/lastfm.service.new');
+var artist_1 = require('../artist/artist');
 var limit_pipe_1 = require('../pipes/limit-pipe');
 var results_pipe_1 = require('../pipes/results-pipe');
 var error_message_1 = require('../utils/error-message');
 var HomeComponent = (function () {
-    function HomeComponent(lastFmService) {
+    function HomeComponent(lastFmService, _LastFM) {
         this.lastFmService = lastFmService;
+        this._LastFM = _LastFM;
         this.model = { artist: 'The Cure' };
-        this.maxResults = 5;
+        this.maxResults = 10;
     }
     HomeComponent.prototype.onSubmit = function () {
         var _this = this;
         console.log(this.model.artist);
-        // Using async pipe...
-        this.potentials = this.lastFmService
-            .searchArtistsAsync(this.model.artist, { limit: this.maxResults })
-            .share(); // so we don't get 2 network requests with the subscription for error handling (below...)
         this.error = null;
+        this.potentials = this._LastFM
+            .searchArtists(this.model.artist, { limit: this.maxResults })
+            .map(function (artists) {
+            return artists
+                .filter(function (artist) { return _this._LastFM.checkUsableImage(artist); })
+                .map(function (artist) { return new artist_1.Artist(artist); });
+        })
+            .do(function (data) { return console.log(data); })
+            .share(); // so we don't get 2 network requests with the subscription for error handling (below...)
         this.potentials
             .subscribe(function (data) {
             if (!data.length) {
@@ -37,6 +45,7 @@ var HomeComponent = (function () {
         }, function (error) {
             _this.error = new error_message_1.ErrorMessage('Error', error);
         });
+        // return false; // doesn't stop the form making a GET request
     };
     HomeComponent = __decorate([
         core_1.Component({
@@ -46,7 +55,7 @@ var HomeComponent = (function () {
             directives: [router_deprecated_1.ROUTER_DIRECTIVES],
             templateUrl: 'app/js/home/home.component.html'
         }), 
-        __metadata('design:paramtypes', [lastfm_service_1.LastFmService])
+        __metadata('design:paramtypes', [lastfm_service_1.LastFmService, lastfm_service_new_1.LastFM])
     ], HomeComponent);
     return HomeComponent;
 }());

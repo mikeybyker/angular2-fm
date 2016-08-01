@@ -1,13 +1,15 @@
 <div class="row align-center">
     <div class="medium-6 large-4 column">
-        <form (ngSubmit)="onSubmit()" #searchForm="ngForm">
+        <!-- @todo: In form, making a Get request to http://localhost:3000/null ?! Dunno why -->
+        <!-- Aha! Because I wasn't (am now) filtering out those with no images! -->
+        <form #searchForm="ngForm">
             <h4 class="text-center">Search Last.fm</h4>
             <label>
                 <input type="text" placeholder="Artist" value="The Cure" required
                 [(ngModel)]="model.artist" ngControl="artist"  name="artist" #artist="ngModel">
             </label>
             <p>
-                <button type="submit" [disabled]="!searchForm.form.valid" class="button expanded">Search</button>
+                <button type="button" [disabled]="!searchForm.form.valid" class="button expanded" (click)="onSubmit()">Search</button>
             </p>
             <div [hidden]="artist.valid" class="alert callout">
                 <p>
@@ -34,7 +36,8 @@
             <p>{{ artist.name }}</p>
             <p>
                 <a [routerLink]="['Artist', {name: artist.name}]" >
-                    <img class="thumbnail" [src] = "artist.images.extralarge">
+                    <!-- The elvis operator... not helping here -->
+                    <img class="thumbnail" [src] = "artist?.images?.extralarge">
                 </a>
             </p>
         </div>

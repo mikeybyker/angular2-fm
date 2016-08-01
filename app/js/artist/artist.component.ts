@@ -2,9 +2,13 @@ import {Component}             from '@angular/core';
 import {ROUTER_DIRECTIVES,
         RouteParams}           from '@angular/router-deprecated';
 
+import {Observable}            from 'rxjs/Observable';
 
 import {BreadcrumbsComponent}  from '../utils/breadcrumbs.component';
-import {LastFmService}         from '../services/lastfm.service';
+
+import {LastFM}                from '../services/lastfm.service.new';
+
+
 import {Artist}                from './artist';
 import {Album}                 from '../album/album';
 import {ResultsPipe}           from '../pipes/results-pipe';
@@ -14,7 +18,6 @@ import {ErrorMessage}          from '../utils/error-message';
 
 @Component({
     selector: 'artist',
-    providers: [LastFmService],
     pipes: [ResultsPipe, LimitPipe, ExternalHrefPipe],
     directives: [ROUTER_DIRECTIVES, BreadcrumbsComponent],
     // styles: [`
@@ -33,7 +36,7 @@ export class ArtistComponent {
     error: ErrorMessage;
     maxAlbums: number = 12;
 
-    constructor(public lastFmService: LastFmService, private _routeParams: RouteParams) {
+    constructor(private _LastFM: LastFM, private _routeParams: RouteParams) {
 
     }
 
@@ -49,8 +52,10 @@ export class ArtistComponent {
         this.error = null;
         this.links.push({ title: this.artistName, url: `artist/${this.artistName}` });
 
-        this.lastFmService
-            .getAllArtist(this.artistName, {}, { limit: this.maxAlbums })
+        Observable.forkJoin(
+            this._LastFM.getArtistInfo(this.artistName),
+            this._LastFM.getTopAlbums(this.artistName, { limit: this.maxAlbums })
+        )
             .subscribe(data => {
                 let artist = data[0],
                     albums = data[1];
@@ -58,9 +63,8 @@ export class ArtistComponent {
                     this.error = new ErrorMessage('Error', artist.error ? artist.message : albums.message);
                     return;
                 }
-                this.artist = artist;
-                // console.log(albums);
-                this.albums = albums;
+                this.artist =  new Artist(artist);
+                this.albums = albums.map(album => new Album(album));
             },
             error => {
                 this.error = new ErrorMessage('Error', <string>error);

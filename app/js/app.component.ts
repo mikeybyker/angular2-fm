@@ -1,4 +1,4 @@
-import {Component}         from '@angular/core';
+import {Component, provide}         from '@angular/core';
 import {RouteConfig,
         RouterOutlet,
         ROUTER_DIRECTIVES,
@@ -8,6 +8,7 @@ import {HomeComponent}     from './home/home.component';
 import {AboutComponent}    from './about/about.component';
 import {ArtistComponent}   from './artist/artist.component';
 import {AlbumComponent}    from './album/album.component';
+import {LastFM}             from './services/lastfm.service.new';
 
 @RouteConfig([
     { path: '/', name: 'Home', component: HomeComponent, useAsDefault: true },
@@ -19,6 +20,13 @@ import {AlbumComponent}    from './album/album.component';
 @Component({
     selector: 'lastfm-app',
     directives: [RouterOutlet, ROUTER_DIRECTIVES],
+    providers:[LastFM,
+        provide('LastFMConfig', {
+            useValue: {
+                api_key: '636d81e5364ebc98a99d202c57268f18'
+            }
+        })
+    ],
     template: `
                 <div class="top-bar">
                     <div class="row">

@@ -10,15 +10,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
+var Observable_1 = require('rxjs/Observable');
 var breadcrumbs_component_1 = require('../utils/breadcrumbs.component');
-var lastfm_service_1 = require('../services/lastfm.service');
+var lastfm_service_new_1 = require('../services/lastfm.service.new');
+var artist_1 = require('./artist');
+var album_1 = require('../album/album');
 var results_pipe_1 = require('../pipes/results-pipe');
 var limit_pipe_1 = require('../pipes/limit-pipe');
 var external_href_pipe_1 = require('../pipes/external-href-pipe');
 var error_message_1 = require('../utils/error-message');
 var ArtistComponent = (function () {
-    function ArtistComponent(lastFmService, _routeParams) {
-        this.lastFmService = lastFmService;
+    function ArtistComponent(_LastFM, _routeParams) {
+        this._LastFM = _LastFM;
         this._routeParams = _routeParams;
         this.albums = [];
         this.links = [];
@@ -33,17 +36,15 @@ var ArtistComponent = (function () {
         }
         this.error = null;
         this.links.push({ title: this.artistName, url: "artist/" + this.artistName });
-        this.lastFmService
-            .getAllArtist(this.artistName, {}, { limit: this.maxAlbums })
+        Observable_1.Observable.forkJoin(this._LastFM.getArtistInfo(this.artistName), this._LastFM.getTopAlbums(this.artistName, { limit: this.maxAlbums }))
             .subscribe(function (data) {
             var artist = data[0], albums = data[1];
             if (artist.error || albums.error) {
                 _this.error = new error_message_1.ErrorMessage('Error', artist.error ? artist.message : albums.message);
                 return;
             }
-            _this.artist = artist;
-            // console.log(albums);
-            _this.albums = albums;
+            _this.artist = new artist_1.Artist(artist);
+            _this.albums = albums.map(function (album) { return new album_1.Album(album); });
         }, function (error) {
             _this.error = new error_message_1.ErrorMessage('Error', error);
         });
@@ -51,7 +52,6 @@ var ArtistComponent = (function () {
     ArtistComponent = __decorate([
         core_1.Component({
             selector: 'artist',
-            providers: [lastfm_service_1.LastFmService],
             pipes: [results_pipe_1.ResultsPipe, limit_pipe_1.LimitPipe, external_href_pipe_1.ExternalHrefPipe],
             directives: [router_deprecated_1.ROUTER_DIRECTIVES, breadcrumbs_component_1.BreadcrumbsComponent],
             // styles: [`
@@ -60,7 +60,7 @@ var ArtistComponent = (function () {
             //   }`],
             templateUrl: 'app/js/artist/artist.component.html'
         }), 
-        __metadata('design:paramtypes', [lastfm_service_1.LastFmService, router_deprecated_1.RouteParams])
+        __metadata('design:paramtypes', [lastfm_service_new_1.LastFM, router_deprecated_1.RouteParams])
     ], ArtistComponent);
     return ArtistComponent;
 }());
