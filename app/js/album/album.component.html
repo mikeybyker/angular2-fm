@@ -9,7 +9,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row" *ngIf="album">
     <div class="small-12 columns">
         <h3><a [routerLink]="['Artist', {name: artistName}]">{{album?.artist}}</a></h3>
     </div>
@@ -24,4 +24,4 @@
             </li>
         </ol>
     </div>
-</div> 
+</div>

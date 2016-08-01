@@ -81,7 +81,7 @@ var LastFM = (function () {
         var value = path.split('.').reduce(function (a, b) { return a[b] || {}; }, data);
         // console.log('validateData ::: ', value);
         return Object.keys(value).length === 0 ? empty : value;
-    }; // @todo - what about error! lastfm data error....
+    };
     LastFM.prototype.searchArtists = function (artist, options) {
         var _this = this;
         if (options === void 0) { options = {}; }
@@ -96,7 +96,7 @@ var LastFM = (function () {
         if (options === void 0) { options = {}; }
         return this._http({ method: 'artist.getInfo', artist: artistName }, options)
             .map(function (res) { return res.json(); })
-            .map(function (data) { return _this.validateData(data, 'artist', { error: true, message: 'Data error' }); })
+            .map(function (data) { return _this.validateData(data, 'artist', {}); })
             .catch(this.handleError);
     };
     LastFM.prototype.getTopAlbums = function (artistName, options) {
@@ -106,6 +106,21 @@ var LastFM = (function () {
         return this._http({ method: 'artist.getTopAlbums', artist: artistName }, options)
             .map(function (res) { return res.json(); })
             .map(function (data) { return _this.validateData(data, 'topalbums.album'); })
+            .catch(this.handleError);
+    };
+    LastFM.prototype.getAlbumInfo = function (mbid, options) {
+        var _this = this;
+        if (options === void 0) { options = {}; }
+        return this._http({ method: 'album.getInfo', mbid: mbid }, options)
+            .map(function (res) { return res.json(); })
+            .map(function (data) {
+            // var d = this.validateData(data, 'album1', {});
+            // if(Object.keys(d).length === 0){
+            //     console.log('throw it');
+            //     return Observable.throw( new Error( "'ARggg"'));
+            // }
+            return _this.validateData(data, 'album', {});
+        })
             .catch(this.handleError);
     };
     LastFM = __decorate([

@@ -3,8 +3,6 @@ import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 import {NgForm}            from '@angular/forms';
 import {Observable}        from 'rxjs/Observable';
 
-import {LastFmService}     from '../services/lastfm.service';
-
 import {LastFM}             from '../services/lastfm.service.new';
 
 import {Artist}            from '../artist/artist';
@@ -14,7 +12,6 @@ import {ErrorMessage}      from '../utils/error-message';
 
 @Component({
     selector: 'home',
-    providers: [LastFmService],
     pipes: [ResultsPipe, LimitPipe],
     directives: [ROUTER_DIRECTIVES],
     templateUrl: 'app/js/home/home.component.html'
@@ -27,7 +24,7 @@ export class HomeComponent {
     model:any = {artist:'The Cure'};
     maxResults: number = 10;
 
-    constructor(public lastFmService: LastFmService, private _LastFM: LastFM) {
+    constructor(private _lastFM: LastFM) {
 
     }
     onSubmit(){
@@ -35,11 +32,12 @@ export class HomeComponent {
         console.log(this.model.artist);
         this.error = null;
 
-        this.potentials = this._LastFM
+// Note: not subscribe! Does the async pipe do that for you?
+        this.potentials = this._lastFM
             .searchArtists(this.model.artist, { limit: this.maxResults })
             .map(artists =>{
                 return artists
-                    .filter(artist => this._LastFM.checkUsableImage(artist))
+                    .filter(artist => this._lastFM.checkUsableImage(artist))
                     .map((artist)=> new Artist(artist))
             })
             .do(data => console.log(data))

@@ -10,16 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
-var lastfm_service_1 = require('../services/lastfm.service');
 var lastfm_service_new_1 = require('../services/lastfm.service.new');
 var artist_1 = require('../artist/artist');
 var limit_pipe_1 = require('../pipes/limit-pipe');
 var results_pipe_1 = require('../pipes/results-pipe');
 var error_message_1 = require('../utils/error-message');
 var HomeComponent = (function () {
-    function HomeComponent(lastFmService, _LastFM) {
-        this.lastFmService = lastFmService;
-        this._LastFM = _LastFM;
+    function HomeComponent(_lastFM) {
+        this._lastFM = _lastFM;
         this.model = { artist: 'The Cure' };
         this.maxResults = 10;
     }
@@ -27,11 +25,12 @@ var HomeComponent = (function () {
         var _this = this;
         console.log(this.model.artist);
         this.error = null;
-        this.potentials = this._LastFM
+        // Note: not subscribe! Does the async pipe do that for you?
+        this.potentials = this._lastFM
             .searchArtists(this.model.artist, { limit: this.maxResults })
             .map(function (artists) {
             return artists
-                .filter(function (artist) { return _this._LastFM.checkUsableImage(artist); })
+                .filter(function (artist) { return _this._lastFM.checkUsableImage(artist); })
                 .map(function (artist) { return new artist_1.Artist(artist); });
         })
             .do(function (data) { return console.log(data); })
@@ -50,12 +49,11 @@ var HomeComponent = (function () {
     HomeComponent = __decorate([
         core_1.Component({
             selector: 'home',
-            providers: [lastfm_service_1.LastFmService],
             pipes: [results_pipe_1.ResultsPipe, limit_pipe_1.LimitPipe],
             directives: [router_deprecated_1.ROUTER_DIRECTIVES],
             templateUrl: 'app/js/home/home.component.html'
         }), 
-        __metadata('design:paramtypes', [lastfm_service_1.LastFmService, lastfm_service_new_1.LastFM])
+        __metadata('design:paramtypes', [lastfm_service_new_1.LastFM])
     ], HomeComponent);
     return HomeComponent;
 }());

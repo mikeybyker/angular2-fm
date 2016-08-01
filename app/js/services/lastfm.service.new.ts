@@ -83,7 +83,7 @@ export class LastFM {
         const value = path.split('.').reduce((a, b) => a[b] || {}, data);
         // console.log('validateData ::: ', value);
         return Object.keys(value).length === 0 ? empty : value;
-    } // @todo - what about error! lastfm data error....
+    }
 
     searchArtists(artist: string, options: any = {}): Observable<Array<Artist>> {
         return this._http({ method: 'artist.search', artist: artist }, options)
@@ -97,7 +97,7 @@ export class LastFM {
         return this._http({ method: 'artist.getInfo', artist: artistName}, options)
             .map(res => res.json())
             // .do(data => console.log('getArtistInfo ::: ', data))
-            .map(data => this.validateData(data, 'artist', {error: true, message:'Data error'}))
+            .map(data => this.validateData(data, 'artist', {}))
             .catch(this.handleError);
     }
 
@@ -108,5 +108,22 @@ export class LastFM {
             .map(data => this.validateData(data, 'topalbums.album'))
             .catch(this.handleError);
     }
+
+    getAlbumInfo(mbid: string, options:any = {}) {
+        return this._http({ method: 'album.getInfo',  mbid: mbid}, options)
+                .map(res => res.json())
+                // .do(data => console.log(data))         
+                .map(data => {
+                    // var d = this.validateData(data, 'album1', {});
+                    // if(Object.keys(d).length === 0){
+                    //     console.log('throw it');
+                    //     return Observable.throw( new Error( "'ARggg"'));
+                    // }
+                    return this.validateData(data, 'album', {});
+                })
+                .catch(this.handleError);
+    }
+
+    // Rx.Observable.throw( new Error( "ApproachSevenError" ) 
 
 }

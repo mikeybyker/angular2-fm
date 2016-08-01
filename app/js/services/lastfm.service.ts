@@ -75,7 +75,7 @@ export class LastFmService {
             .catch(this.handleError);
     }
 
-    getAlbumInfo(mbid: String, options:any = {}) {
+    getAlbumInfo(mbid: string, options:any = {}) {
         let params: any = this.createParams(options, { method: 'album.getInfo', mbid: mbid });
         return this.http.get(LASTFM.apiEndpoint, { search: params })
                 .map(res => res.json())

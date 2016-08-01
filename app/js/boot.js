@@ -9,6 +9,7 @@ require('rxjs/add/observable/forkJoin');
 require('rxjs/add/observable/from');
 require('rxjs/add/observable/throw');
 require('rxjs/add/operator/catch');
+require('rxjs/add/operator/filter');
 require('rxjs/add/operator/do');
 require('rxjs/add/operator/share');
 platform_browser_dynamic_1.bootstrap(app_component_1.AppComponent, [

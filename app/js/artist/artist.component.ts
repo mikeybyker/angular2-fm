@@ -36,7 +36,7 @@ export class ArtistComponent {
     error: ErrorMessage;
     maxAlbums: number = 12;
 
-    constructor(private _LastFM: LastFM, private _routeParams: RouteParams) {
+    constructor(private _lastFM: LastFM, private _routeParams: RouteParams) {
 
     }
 
@@ -52,9 +52,10 @@ export class ArtistComponent {
         this.error = null;
         this.links.push({ title: this.artistName, url: `artist/${this.artistName}` });
 
+
         Observable.forkJoin(
-            this._LastFM.getArtistInfo(this.artistName),
-            this._LastFM.getTopAlbums(this.artistName, { limit: this.maxAlbums })
+            this._lastFM.getArtistInfo(this.artistName),
+            this._lastFM.getTopAlbums(this.artistName, { limit: this.maxAlbums })
         )
             .subscribe(data => {
                 let artist = data[0],
@@ -63,7 +64,7 @@ export class ArtistComponent {
                     this.error = new ErrorMessage('Error', artist.error ? artist.message : albums.message);
                     return;
                 }
-                this.artist =  new Artist(artist);
+                this.artist =  artist.name ? new Artist(artist) : null;
                 this.albums = albums.map(album => new Album(album));
             },
             error => {

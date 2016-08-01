@@ -20,8 +20,8 @@ var limit_pipe_1 = require('../pipes/limit-pipe');
 var external_href_pipe_1 = require('../pipes/external-href-pipe');
 var error_message_1 = require('../utils/error-message');
 var ArtistComponent = (function () {
-    function ArtistComponent(_LastFM, _routeParams) {
-        this._LastFM = _LastFM;
+    function ArtistComponent(_lastFM, _routeParams) {
+        this._lastFM = _lastFM;
         this._routeParams = _routeParams;
         this.albums = [];
         this.links = [];
@@ -36,14 +36,14 @@ var ArtistComponent = (function () {
         }
         this.error = null;
         this.links.push({ title: this.artistName, url: "artist/" + this.artistName });
-        Observable_1.Observable.forkJoin(this._LastFM.getArtistInfo(this.artistName), this._LastFM.getTopAlbums(this.artistName, { limit: this.maxAlbums }))
+        Observable_1.Observable.forkJoin(this._lastFM.getArtistInfo(this.artistName), this._lastFM.getTopAlbums(this.artistName, { limit: this.maxAlbums }))
             .subscribe(function (data) {
             var artist = data[0], albums = data[1];
             if (artist.error || albums.error) {
                 _this.error = new error_message_1.ErrorMessage('Error', artist.error ? artist.message : albums.message);
                 return;
             }
-            _this.artist = new artist_1.Artist(artist);
+            _this.artist = artist.name ? new artist_1.Artist(artist) : null;
             _this.albums = albums.map(function (album) { return new album_1.Album(album); });
         }, function (error) {
             _this.error = new error_message_1.ErrorMessage('Error', error);
