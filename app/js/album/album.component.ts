@@ -1,4 +1,4 @@
-import {Component}                      from '@angular/core';
+import {Component, OnInit}              from '@angular/core';
 import {ROUTER_DIRECTIVES, RouteParams} from '@angular/router-deprecated';
 import {Observable}                     from 'rxjs/Observable';
 
@@ -16,7 +16,7 @@ import {ErrorMessage}                   from '../utils/error-message';
     directives: [ROUTER_DIRECTIVES, BreadcrumbsComponent],
     templateUrl: 'app/js/album/album.component.html'
 })
-export class AlbumComponent { 
+export class AlbumComponent implements OnInit{ 
     artistName: string;
     // mbid: string;
     album: Album;

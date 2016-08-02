@@ -1,0 +1,63 @@
+<div class="callout secondary api-explorer">
+    <label>
+        Api Method:
+        <select [(ngModel)]="selectedOption" name="power">
+            <!-- ngValue when object, value ok for strings -->
+            <option *ngFor="let m of apiMethods" [ngValue]="m">{{m.name}}</option>
+        </select>
+    </label>
+
+    <form name="form" novalidate>
+        
+        <div class="row">
+            <!-- ng-repeat="field in $ctrl.selectedOption.params" -->
+            <div class="small-12 columns" *ngFor="let field of selectedOption.params">
+
+                <div [ngSwitch]="field.id">
+                    <div *ngSwitchCase="'mbid'">
+                        <label>
+                            <input type="text" mbid placeholder="{{field.label}}" [(ngModel)]="fields[field.id]" name="{{field.id}}" [required]='field.required'>                    
+                        </label>
+                    </div>
+                    <div *ngSwitchCase="'artistOrMbid'">
+                        <label>
+                            <input type="text" placeholder="{{field.label}}" name="{{field.id}}" [(ngModel)]="fields[field.id]" [required]='field.required'
+                            (change)="change(fields[field.id])" ng-model-options="{debounce: {updateOn: 'default blur', 'default': 400, 'blur': 0 }}">                    
+                        </label>
+                        <p class="help-text" ng-if="validMbid">Valid mbid format</p>
+                    </div>
+                    <div *ngSwitchDefault>
+                        <label>
+                            <input type="text" placeholder="{{field.label}}" [(ngModel)]="fields[field.id]" name="{{field.id}}" [required]='field.required && !validMbid'>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+<!-- 
+
+@todo
+
+? this right?
+[required]
+
+ng-change
+
+ng-model-options : debounce
+http://stackoverflow.com/questions/32051273/angular2-and-debounce
+might be good idea?
+
+[disabled]="!form.$valid"
+ -->
+        <div class="row">
+            <div class="small-12 columns">
+                <button class="expanded button" (click)="callApi()" >
+                    {{selectedOption.name}}
+                </button>
+            </div>
+        </div>
+
+    </form>
+    {{selectedOption | json}}
+</div>

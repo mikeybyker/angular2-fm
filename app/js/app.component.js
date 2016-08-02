@@ -14,15 +14,17 @@ var home_component_1 = require('./home/home.component');
 var about_component_1 = require('./about/about.component');
 var artist_component_1 = require('./artist/artist.component');
 var album_component_1 = require('./album/album.component');
+var explore_component_1 = require('./explore/explore.component');
 var lastfm_service_new_1 = require('./services/lastfm.service.new');
 var AppComponent = (function () {
     function AppComponent() {
-        this.title = 'Angular2-FM';
+        this.title = 'LastFM - Angular 2';
     }
     AppComponent = __decorate([
         router_deprecated_1.RouteConfig([
             { path: '/', name: 'Home', component: home_component_1.HomeComponent, useAsDefault: true },
             { path: '/about', name: 'About', component: about_component_1.AboutComponent },
+            { path: '/explore', name: 'Explore', component: explore_component_1.ExploreComponent },
             { path: '/artist/:name', name: 'Artist', component: artist_component_1.ArtistComponent },
             { path: '/artist/:name/album/:mbid', name: 'Album', component: album_component_1.AlbumComponent }
         ]),

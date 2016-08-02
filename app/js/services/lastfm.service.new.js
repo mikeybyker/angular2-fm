@@ -21,6 +21,20 @@ var LastFM = (function () {
     function LastFM(config, http) {
         this.config = config;
         this.http = http;
+        /*
+        How? the this in this._http would point to artist, so would not work...
+        how to namespace methods??
+        artist:any = {
+                xxx : this.searchArtists
+            }
+        */
+        // Artist = {search : this.searchArtists.bind(this)}; // this in this._http correct
+        // Artist = {search : this.searchArtists}; // this in this._http would point to artist
+        this.Artist = {
+            search: this.searchArtists.bind(this),
+            getInfo: this.getArtistInfo.bind(this),
+            getTopAlbums: this.getTopAlbums.bind(this)
+        };
         config.endPoint || (config.endPoint = 'http://ws.audioscrobbler.com/2.0/');
         config.format || (config.format = 'json');
     }
@@ -92,7 +106,6 @@ var LastFM = (function () {
     };
     LastFM.prototype.getArtistInfo = function (artistName, options) {
         var _this = this;
-        if (artistName === void 0) { artistName = 'The Cure'; }
         if (options === void 0) { options = {}; }
         return this._http({ method: 'artist.getInfo', artist: artistName }, options)
             .map(function (res) { return res.json(); })
@@ -101,7 +114,6 @@ var LastFM = (function () {
     };
     LastFM.prototype.getTopAlbums = function (artistName, options) {
         var _this = this;
-        if (artistName === void 0) { artistName = 'The Cure'; }
         if (options === void 0) { options = {}; }
         return this._http({ method: 'artist.getTopAlbums', artist: artistName }, options)
             .map(function (res) { return res.json(); })
@@ -114,11 +126,6 @@ var LastFM = (function () {
         return this._http({ method: 'album.getInfo', mbid: mbid }, options)
             .map(function (res) { return res.json(); })
             .map(function (data) {
-            // var d = this.validateData(data, 'album1', {});
-            // if(Object.keys(d).length === 0){
-            //     console.log('throw it');
-            //     return Observable.throw( new Error( "'ARggg"'));
-            // }
             return _this.validateData(data, 'album', {});
         })
             .catch(this.handleError);

@@ -25,6 +25,6 @@ export class BreadcrumbsComponent {
     @Input() links: Array<any> = [];
 
     ngOnInit(){
-        this.links.unshift({ title: 'HOME', url: '' })
+        this.links.unshift({ title: 'HOME', url: '' });
     }
 }

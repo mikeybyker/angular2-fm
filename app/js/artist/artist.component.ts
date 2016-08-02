@@ -1,4 +1,4 @@
-import {Component}             from '@angular/core';
+import {Component, OnInit}     from '@angular/core';
 import {ROUTER_DIRECTIVES,
         RouteParams}           from '@angular/router-deprecated';
 
@@ -27,7 +27,7 @@ import {ErrorMessage}          from '../utils/error-message';
     templateUrl: 'app/js/artist/artist.component.html'
 })
 
-export class ArtistComponent {
+export class ArtistComponent implements OnInit {
     potentials:Array<Artist>;
     artist: Artist;
     albums: Array<Album> = [];
@@ -53,12 +53,16 @@ export class ArtistComponent {
         this.links.push({ title: this.artistName, url: `artist/${this.artistName}` });
 
 
+        // Observable.forkJoin(
+        //     this._lastFM.getArtistInfo(this.artistName),
+        //     this._lastFM.getTopAlbums(this.artistName, { limit: this.maxAlbums })
+        // )
         Observable.forkJoin(
-            this._lastFM.getArtistInfo(this.artistName),
-            this._lastFM.getTopAlbums(this.artistName, { limit: this.maxAlbums })
+            this._lastFM.Artist.getInfo(this.artistName),
+            this._lastFM.Artist.getTopAlbums(this.artistName, { limit: this.maxAlbums })
         )
             .subscribe(data => {
-                let artist = data[0],
+                const artist = data[0],
                     albums = data[1];
                 if (artist.error || albums.error) {
                     this.error = new ErrorMessage('Error', artist.error ? artist.message : albums.message);

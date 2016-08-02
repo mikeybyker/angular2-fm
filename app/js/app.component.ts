@@ -8,11 +8,13 @@ import {HomeComponent}     from './home/home.component';
 import {AboutComponent}    from './about/about.component';
 import {ArtistComponent}   from './artist/artist.component';
 import {AlbumComponent}    from './album/album.component';
+import {ExploreComponent}    from './explore/explore.component';
 import {LastFM}             from './services/lastfm.service.new';
 
 @RouteConfig([
     { path: '/', name: 'Home', component: HomeComponent, useAsDefault: true },
     { path: '/about', name: 'About', component: AboutComponent },
+    { path: '/explore', name: 'Explore', component: ExploreComponent },
     { path: '/artist/:name', name: 'Artist', component: ArtistComponent },
     { path: '/artist/:name/album/:mbid', name: 'Album', component: AlbumComponent }
 ])
@@ -44,5 +46,5 @@ import {LastFM}             from './services/lastfm.service.new';
         `
 })
 export class AppComponent {
-    title = 'Angular2-FM'
+    title = 'LastFM - Angular 2'
 }

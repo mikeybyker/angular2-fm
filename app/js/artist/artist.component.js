@@ -36,7 +36,11 @@ var ArtistComponent = (function () {
         }
         this.error = null;
         this.links.push({ title: this.artistName, url: "artist/" + this.artistName });
-        Observable_1.Observable.forkJoin(this._lastFM.getArtistInfo(this.artistName), this._lastFM.getTopAlbums(this.artistName, { limit: this.maxAlbums }))
+        // Observable.forkJoin(
+        //     this._lastFM.getArtistInfo(this.artistName),
+        //     this._lastFM.getTopAlbums(this.artistName, { limit: this.maxAlbums })
+        // )
+        Observable_1.Observable.forkJoin(this._lastFM.Artist.getInfo(this.artistName), this._lastFM.Artist.getTopAlbums(this.artistName, { limit: this.maxAlbums }))
             .subscribe(function (data) {
             var artist = data[0], albums = data[1];
             if (artist.error || albums.error) {

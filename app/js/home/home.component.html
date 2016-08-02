@@ -1,7 +1,5 @@
 <div class="row align-center">
     <div class="medium-6 large-4 column">
-        <!-- @todo: In form, making a Get request to http://localhost:3000/null ?! Dunno why -->
-        <!-- Aha! Because I wasn't (am now) filtering out those with no images! -->
         <form #searchForm="ngForm">
             <h4 class="text-center">Search Last.fm</h4>
             <label>
@@ -17,6 +15,7 @@
                 </p>
             </div>
         </form>
+        <a [routerLink]="['Explore']">Explore API</a>
     </div>
 </div>
 <div class="row align-center" *ngIf="error">

@@ -85,7 +85,25 @@ export class LastFM {
         return Object.keys(value).length === 0 ? empty : value;
     }
 
-    searchArtists(artist: string, options: any = {}): Observable<Array<Artist>> {
+/*    
+How? the this in this._http would point to artist, so would not work...
+how to namespace methods??
+artist:any = {
+        xxx : this.searchArtists
+    }
+*/
+
+// Artist = {search : this.searchArtists.bind(this)}; // this in this._http correct
+// Artist = {search : this.searchArtists}; // this in this._http would point to artist
+
+    Artist = {
+        search : this.searchArtists.bind(this),
+        getInfo : this.getArtistInfo.bind(this),
+        getTopAlbums : this.getTopAlbums.bind(this)
+
+    }; 
+
+    searchArtists(artist: string, options: any = {}):Observable<any> {
         return this._http({ method: 'artist.search', artist: artist }, options)
             .map(res => res.json())
             // .do(data => console.log(data))
@@ -93,7 +111,7 @@ export class LastFM {
             .catch(this.handleError);
     }
 
-    getArtistInfo(artistName: string = 'The Cure', options: any = {}) {
+    getArtistInfo(artistName: string, options: any = {}) {
         return this._http({ method: 'artist.getInfo', artist: artistName}, options)
             .map(res => res.json())
             // .do(data => console.log('getArtistInfo ::: ', data))
@@ -101,7 +119,7 @@ export class LastFM {
             .catch(this.handleError);
     }
 
-    getTopAlbums(artistName: string = 'The Cure', options: any = {}) {
+    getTopAlbums(artistName: string, options: any = {}) {
         return this._http({ method: 'artist.getTopAlbums', artist: artistName}, options)
             .map(res => res.json())
             // .do(data => console.log('getTopAlbums ::: ', data))
@@ -114,16 +132,10 @@ export class LastFM {
                 .map(res => res.json())
                 // .do(data => console.log(data))         
                 .map(data => {
-                    // var d = this.validateData(data, 'album1', {});
-                    // if(Object.keys(d).length === 0){
-                    //     console.log('throw it');
-                    //     return Observable.throw( new Error( "'ARggg"'));
-                    // }
                     return this.validateData(data, 'album', {});
                 })
                 .catch(this.handleError);
     }
 
-    // Rx.Observable.throw( new Error( "ApproachSevenError" ) 
 
 }

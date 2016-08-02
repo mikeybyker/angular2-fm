@@ -1,0 +1,23 @@
+<breadcrumbs [links]="links"></breadcrumbs>
+<div class="row align-center" *ngIf="error">
+    <div class="medium-6 large-4 column">
+        <div class="callout alert">
+            <h5>{{error.title}}</h5>
+            <p>
+                {{error.message}}
+            </p>
+        </div>
+    </div>
+</div>
+<div class="row " >
+    <div class="medium-4 columns">
+        <api-input [apiMethods]='methods' [onCall]="apiCall(data, params)"></api-input>
+    </div>
+    <div class="medium-8 columns">
+        <div class="callout">
+            <div class="over">
+                <!-- <pre>{{$ctrl.output || json}}</pre> -->
+            </div>
+        </div>
+    </div>
+</div>
