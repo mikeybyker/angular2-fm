@@ -25,9 +25,9 @@ export class ExploreComponent implements OnInit {
     links: Array<any> = [{title:'Explore', url:''}];
     error: ErrorMessage;
     methods:any[] = [];
+    output:string = '';
 
-    // @todo : get from service
- 
+
     constructor(private _lastFM: LastFM, private methodsService: MethodsService) {
 
     }
@@ -36,21 +36,42 @@ export class ExploreComponent implements OnInit {
         this.methods = this.methodsService.getMethods();
     }
 
-    apiCall(data, params){
-        console.log('called...');
-            // var fn;
-            // $ctrl.output = '';
+    apiCall(o){
 
-            // fn = data.fn;
-            // if(!fn) return;
+        let data = o.data,
+            params = o.params,
+            fn,
+            call;
+        this.output = '';
+        fn =  data.fn.split('.');
+        if(fn.length !==2) return;
 
+/*
+Could do this with angular1 as well!
+
+
+*/
+        call = this._lastFM[fn[0]][fn[1]];
+        console.log('/*call*/ : ', call);
             // fn.apply(this, params)
-            //     .then(function(data) {
-            //         $ctrl.output = JSON.stringify(data, null, '    ');
-            //     })
-            //     .catch(function(reason) {
-            //         $log.warn('Error ::: ', reason);
-            //         $ctrl.output = reason.statusText || 'Error';
-            //     });
-        }
+            // this._lastFM.Album.getInfo('91fa2331-d8b4-4d1f-aa4d-53b1c54853e5', '', {});
+        //fn.apply(this, params)
+        if(typeof call !== 'function') return;
+        call.apply(this, params)
+            .subscribe(data => {
+                    this.output = data;
+                },
+                error => {
+                    this.output = <string>error;
+                });
+    }
+
+    // getAlbumInfo(artist, album){
+    //     return this._lastFM.Album.getInfo(artist, album, {});
+
+    // }
+    // getArtistInfo(artistName: string, options: any = {}) {
+    //      return this._lastFM.Artist.getInfo(artistName, {});
+    // }
+
 }

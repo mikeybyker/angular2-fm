@@ -11,12 +11,12 @@
 </div>
 <div class="row " >
     <div class="medium-4 columns">
-        <api-input [apiMethods]='methods' [onCall]="apiCall(data, params)"></api-input>
+        <api-input [apiMethods]='methods' (doCall)="apiCall($event)"></api-input>
     </div>
     <div class="medium-8 columns">
         <div class="callout">
             <div class="over">
-                <!-- <pre>{{$ctrl.output || json}}</pre> -->
+                <pre>{{output | json}}</pre>
             </div>
         </div>
     </div>

@@ -1,14 +1,16 @@
 <div class="callout secondary api-explorer">
     <label>
         Api Method:
-        <select [(ngModel)]="selectedOption" name="power">
+        <!-- *not (change)!!!! -->
+        <select [(ngModel)]="selectedOption" (ngModelChange)="selectChange(methodSelect.value)" name="methodSelect" #methodSelect="ngModel">
             <!-- ngValue when object, value ok for strings -->
             <option *ngFor="let m of apiMethods" [ngValue]="m">{{m.name}}</option>
         </select>
+        <!-- {{selectedOption | json}} -->
     </label>
 
-    <form name="form" novalidate>
-        
+    <form #apiForm="ngForm" novalidate>
+
         <div class="row">
             <!-- ng-repeat="field in $ctrl.selectedOption.params" -->
             <div class="small-12 columns" *ngFor="let field of selectedOption.params">
@@ -16,31 +18,34 @@
                 <div [ngSwitch]="field.id">
                     <div *ngSwitchCase="'mbid'">
                         <label>
-                            <input type="text" mbid placeholder="{{field.label}}" [(ngModel)]="fields[field.id]" name="{{field.id}}" [required]='field.required'>                    
+                            <input type="text" mbid placeholder="{{field.label}}" [(ngModel)]="fields[field.id]" name="{{field.id}}" [required]='field.required'>
                         </label>
                     </div>
                     <div *ngSwitchCase="'artistOrMbid'">
                         <label>
-                            <input type="text" placeholder="{{field.label}}" name="{{field.id}}" [(ngModel)]="fields[field.id]" [required]='field.required'
-                            (change)="change(fields[field.id])" ng-model-options="{debounce: {updateOn: 'default blur', 'default': 400, 'blur': 0 }}">                    
+                            <input type="text" placeholder="{{field.label}}" name="{{field.id}}" [(ngModel)]="fields[field.id]" [required]='field.required' #artistOrMbid
+                            (keyup)="inputChange(artistOrMbid.value)">
+                           <!--  ng-model-options="{debounce: {updateOn: 'default blur', 'default': 400, 'blur': 0 }}"   -->
                         </label>
-                        <p class="help-text" ng-if="validMbid">Valid mbid format</p>
+                        <p class="help-text" *ngIf="validMbid">Valid mbid format</p>
                     </div>
                     <div *ngSwitchDefault>
                         <label>
-                            <input type="text" placeholder="{{field.label}}" [(ngModel)]="fields[field.id]" name="{{field.id}}" [required]='field.required && !validMbid'>
+                            <input type="text" placeholder="{{field.label}}" [(ngModel)]="fields[field.id]" name="{{field.id}}" >
+                            <!-- @todo [required]='field.required && !validMbid' -->
                         </label>
                     </div>
                 </div>
 
             </div>
         </div>
-<!-- 
+<!--
 
 @todo
 
 ? this right?
 [required]
+htf?
 
 ng-change
 
@@ -52,12 +57,13 @@ might be good idea?
  -->
         <div class="row">
             <div class="small-12 columns">
-                <button class="expanded button" (click)="callApi()" >
+                <button class="expanded button" (click)="callApi()" [disabled]="!apiForm.form.valid">
                     {{selectedOption.name}}
                 </button>
             </div>
         </div>
 
     </form>
-    {{selectedOption | json}}
+    <!-- {{selectedOption | json}} -->
+    {{fields | json}}
 </div>

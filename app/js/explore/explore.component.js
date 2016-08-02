@@ -15,30 +15,41 @@ var lastfm_service_new_1 = require('../services/lastfm.service.new');
 var api_input_component_1 = require('./api-input.component');
 var methods_service_1 = require('./methods.service');
 var ExploreComponent = (function () {
-    // @todo : get from service
     function ExploreComponent(_lastFM, methodsService) {
         this._lastFM = _lastFM;
         this.methodsService = methodsService;
         this.links = [{ title: 'Explore', url: '' }];
         this.methods = [];
+        this.output = '';
     }
     ExploreComponent.prototype.ngOnInit = function () {
         this.methods = this.methodsService.getMethods();
     };
-    ExploreComponent.prototype.apiCall = function (data, params) {
-        console.log('called...');
-        // var fn;
-        // $ctrl.output = '';
-        // fn = data.fn;
-        // if(!fn) return;
+    ExploreComponent.prototype.apiCall = function (o) {
+        var _this = this;
+        var data = o.data, params = o.params, fn, call;
+        this.output = '';
+        fn = data.fn.split('.');
+        if (fn.length !== 2)
+            return;
+        /*
+        Could do this with angular1 as well!
+        
+        
+        */
+        call = this._lastFM[fn[0]][fn[1]];
+        console.log('/*call*/ : ', call);
         // fn.apply(this, params)
-        //     .then(function(data) {
-        //         $ctrl.output = JSON.stringify(data, null, '    ');
-        //     })
-        //     .catch(function(reason) {
-        //         $log.warn('Error ::: ', reason);
-        //         $ctrl.output = reason.statusText || 'Error';
-        //     });
+        // this._lastFM.Album.getInfo('91fa2331-d8b4-4d1f-aa4d-53b1c54853e5', '', {});
+        //fn.apply(this, params)
+        if (typeof call !== 'function')
+            return;
+        call.apply(this, params)
+            .subscribe(function (data) {
+            _this.output = data;
+        }, function (error) {
+            _this.output = error;
+        });
     };
     ExploreComponent = __decorate([
         core_1.Component({

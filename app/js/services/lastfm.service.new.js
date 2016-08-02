@@ -21,6 +21,7 @@ var LastFM = (function () {
     function LastFM(config, http) {
         this.config = config;
         this.http = http;
+        this.mbidPattern = /^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$/;
         /*
         How? the this in this._http would point to artist, so would not work...
         how to namespace methods??
@@ -34,6 +35,9 @@ var LastFM = (function () {
             search: this.searchArtists.bind(this),
             getInfo: this.getArtistInfo.bind(this),
             getTopAlbums: this.getTopAlbums.bind(this)
+        };
+        this.Album = {
+            getInfo: this.getAlbumInfo.bind(this)
         };
         config.endPoint || (config.endPoint = 'http://ws.audioscrobbler.com/2.0/');
         config.format || (config.format = 'json');
@@ -53,6 +57,17 @@ var LastFM = (function () {
     LastFM.prototype.handleError = function (error) {
         console.error('handleError ::: ', error);
         return Observable_1.Observable.throw(error.json().message || 'Server Error');
+    };
+    LastFM.prototype.isMbid = function (str) {
+        return this.mbidPattern.test(str);
+    };
+    LastFM.prototype.getSettings = function (settings, fieldName) {
+        fieldName = fieldName || 'artist';
+        if (this.isMbid(settings[fieldName])) {
+            settings.mbid = settings[fieldName];
+            settings[fieldName] = '';
+        }
+        return settings;
     };
     LastFM.prototype.checkCanShow = function (results) {
         if (!results || !results.artistmatches) {
@@ -99,31 +114,51 @@ var LastFM = (function () {
     LastFM.prototype.searchArtists = function (artist, options) {
         var _this = this;
         if (options === void 0) { options = {}; }
-        return this._http({ method: 'artist.search', artist: artist }, options)
+        var settings = {
+            artist: artist,
+            method: 'artist.search'
+        };
+        return this._http(settings, options)
             .map(function (res) { return res.json(); })
             .map(function (data) { return _this.validateData(data, 'results.artistmatches.artist'); })
             .catch(this.handleError);
     };
-    LastFM.prototype.getArtistInfo = function (artistName, options) {
+    LastFM.prototype.getArtistInfo = function (artistOrMbid, options) {
         var _this = this;
         if (options === void 0) { options = {}; }
-        return this._http({ method: 'artist.getInfo', artist: artistName }, options)
+        var settings = {
+            artist: artistOrMbid,
+            method: 'artist.getinfo'
+        };
+        var settings = this.getSettings(settings);
+        return this._http(settings, options)
             .map(function (res) { return res.json(); })
             .map(function (data) { return _this.validateData(data, 'artist', {}); })
             .catch(this.handleError);
     };
-    LastFM.prototype.getTopAlbums = function (artistName, options) {
+    LastFM.prototype.getTopAlbums = function (artistOrMbid, options) {
         var _this = this;
         if (options === void 0) { options = {}; }
-        return this._http({ method: 'artist.getTopAlbums', artist: artistName }, options)
+        var settings = {
+            artist: artistOrMbid,
+            method: 'artist.gettopalbums'
+        };
+        return this._http(settings, options)
             .map(function (res) { return res.json(); })
             .map(function (data) { return _this.validateData(data, 'topalbums.album'); })
             .catch(this.handleError);
     };
-    LastFM.prototype.getAlbumInfo = function (mbid, options) {
+    LastFM.prototype.getAlbumInfo = function (artistOrMbid, album, options) {
         var _this = this;
+        if (album === void 0) { album = ''; }
         if (options === void 0) { options = {}; }
-        return this._http({ method: 'album.getInfo', mbid: mbid }, options)
+        var settings = {
+            artist: artistOrMbid,
+            album: album,
+            method: 'album.getinfo'
+        };
+        settings = this.getSettings(settings);
+        return this._http(settings, options)
             .map(function (res) { return res.json(); })
             .map(function (data) {
             return _this.validateData(data, 'album', {});

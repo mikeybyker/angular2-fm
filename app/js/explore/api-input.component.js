@@ -20,6 +20,7 @@ var ApiInputComponent = (function () {
         // selectChange = selectChange;
         this.acceptsMbid = false;
         this.validMbid = false;
+        this.doCall = new core_1.EventEmitter();
     }
     ApiInputComponent.prototype.ngOnInit = function () {
         this.selectedOption = this.apiMethods.length ? this.apiMethods[0] : null;
@@ -28,18 +29,32 @@ var ApiInputComponent = (function () {
     ApiInputComponent.prototype.callApi = function () {
         var params = this.getParamsArray(this.selectedOption, this.fields), o = { data: this.selectedOption, params: params };
         console.log('>>>call api');
-        this.onCall && this.onCall(o);
+        // this.onCall && this.onCall(o);
+        this.doCall.emit({
+            data: this.selectedOption,
+            params: params
+        });
     };
-    ApiInputComponent.prototype.change = function (value) {
-        console.log('CHANGE');
-        this.validMbid = this.mbidPattern.test(value);
+    // change is only blur...keypress is only keypress - how about any change?!
+    // keyup works...
+    ApiInputComponent.prototype.inputChange = function (field) {
+        console.log('CHANGE', field, field.value);
+        this.validMbid = this.mbidPattern.test(field);
+        console.log('this.validMbid', this.validMbid);
     };
+    /*
+look at using a model...
+
+    */
     ApiInputComponent.prototype.initFields = function (option) {
+        console.log('CHANGE FIELDS', option);
+        console.log('CHANGE selectedOption', this.selectedOption);
         var id;
         this.acceptsMbid = false;
         if (!option || !option.params) {
             return false;
         }
+        // var copy = Object.assign({}, myObject)
         for (var i = 0, len = option.params.length; i < len; i++) {
             id = option.params[i].id;
             if (option.params[i].default) {
@@ -47,7 +62,7 @@ var ApiInputComponent = (function () {
             }
             if (id === 'artistOrMbid') {
                 this.acceptsMbid = true;
-                this.change(this.fields[id] || '');
+                this.inputChange(this.fields[id] || '');
             }
         }
         return false;
@@ -63,14 +78,19 @@ var ApiInputComponent = (function () {
         return params;
     };
     ApiInputComponent.prototype.selectChange = function () {
+        console.log('selectChange');
         this.fields = {};
         this.validMbid = false;
         this.initFields(this.selectedOption);
     };
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], ApiInputComponent.prototype, "doCall", void 0);
     ApiInputComponent = __decorate([
         core_1.Component({
             selector: 'api-input',
-            inputs: ['apiMethods', 'onCall'],
+            inputs: ['apiMethods'],
             directives: [common_1.NgSwitch, common_1.NgSwitchCase, common_1.NgSwitchDefault],
             templateUrl: 'app/js/explore/api-input.component.html'
         }), 
