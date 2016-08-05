@@ -4,7 +4,7 @@ import {REACTIVE_FORM_DIRECTIVES,
 import {Observable}                                       from 'rxjs/Observable';
 
 @Component({
-    selector: 'api-input',
+    selector: 'service-input',
     inputs: ['serviceMethods'],
     directives:[REACTIVE_FORM_DIRECTIVES],
     templateUrl: 'app/js/explore/service-input.component.html'

@@ -146,7 +146,7 @@ var ServiceInputComponent = (function () {
     ], ServiceInputComponent.prototype, "changeMethod", void 0);
     ServiceInputComponent = __decorate([
         core_1.Component({
-            selector: 'api-input',
+            selector: 'service-input',
             inputs: ['serviceMethods'],
             directives: [forms_1.REACTIVE_FORM_DIRECTIVES],
             templateUrl: 'app/js/explore/service-input.component.html'
