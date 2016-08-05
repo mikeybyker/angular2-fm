@@ -37,7 +37,6 @@ var ExploreComponent = (function () {
             .subscribe(function (data) {
             _this.output = data;
         }, function (error) {
-            console.log('HERE I AM ERROR :: ', error);
             _this.output = error;
         });
     };

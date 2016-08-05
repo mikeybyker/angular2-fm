@@ -14,30 +14,31 @@
     <form #sForm="ngForm" [formGroup]="apiForm" novalidate>
         <div class="row">
             <div class="small-12 columns">
-                <label [hidden]="selectedOption.params.length <1">
-                    <input type="text" formControlName="field1" [attr.placeholder]="configs.field1.placeholder" [(ngModel)]="fields.field1">
-                </label>
-                <div class="help-holder">
-                    <p class="help-text" *ngIf="canBeMbid && validMbid">Valid mbid format entered</p>
-                    <p class="help-text" *ngIf="canBeMbid!==undefined && !canBeMbid">*mbid not accepted</p>
+                <div>
+                    <label [hidden]="selectedOption.params.length <1">
+                        <input type="text" formControlName="field1" [attr.placeholder]="selectedOption?.params[0]?.label || ''" [(ngModel)]="fields.field1">
+                    </label>
+                    <div class="help-holder">
+                        <p class="help-text" *ngIf="canBeMbid && validMbid">Valid mbid format entered</p>
+                        <p class="help-text" *ngIf="canBeMbid!==undefined && !canBeMbid">*mbid not accepted</p>
+                    </div>
                 </div>
 
-                <label [hidden]="selectedOption.params.length <2">
-                    <input type="text" formControlName="field2" [attr.placeholder]="configs.field2.placeholder" [(ngModel)]="fields.field2">
-                </label>
+                <div>
+                    <label [hidden]="selectedOption.params.length <2">
+                        <input type="text" formControlName="field2" [attr.placeholder]="selectedOption?.params[1]?.label || ''" [(ngModel)]="fields.field2">
+                    </label>
+                </div>
             </div>
 
         </div>
-            <div class="row">
-                <div class="small-12 columns">
-                    <button type="button" class="expanded button" [disabled]="!sForm.form.valid" (click)="callApi()">{{selectedOption.name}}</button>
-                </div>
+
+        <div class="row">
+            <div class="small-12 columns">
+                <button type="button" class="expanded button" [disabled]="!sForm.form.valid" (click)="callApi()">{{selectedOption.name}}</button>
             </div>
-
-
+        </div>
+        
     </form>
-    <!-- {{selectedOption | json}} -->
-    {{fields | json}}<br><br>
-    {{configs | json}}
-
+    {{fields | json}}
 </div>

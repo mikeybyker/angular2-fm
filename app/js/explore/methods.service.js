@@ -9,12 +9,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var mock_methods_1 = require('./mock-methods');
+var data_methods_1 = require('./data-methods');
 var MethodsService = (function () {
     function MethodsService() {
     }
     MethodsService.prototype.getMethods = function () {
-        return mock_methods_1.METHODS;
+        return data_methods_1.METHODS;
     };
     MethodsService = __decorate([
         core_1.Injectable(), 

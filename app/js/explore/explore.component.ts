@@ -1,15 +1,11 @@
-import {Component, OnInit}     from '@angular/core';
-import {ROUTER_DIRECTIVES,
-        RouteParams}           from '@angular/router-deprecated';
+import {Component, OnInit}                 from '@angular/core';
+import {ROUTER_DIRECTIVES, RouteParams}    from '@angular/router-deprecated';
+import {Observable}                        from 'rxjs/Observable';
 
-import {Observable}            from 'rxjs/Observable';
-
-import {BreadcrumbsComponent}  from '../utils/breadcrumbs.component';
-
-import {LastFM}                from '../services/lastfm.service.new';
-
-import {ApiInputComponent}     from './api-input.component';
-import { MethodsService }      from './methods.service';
+import {BreadcrumbsComponent}              from '../utils/breadcrumbs.component';
+import {LastFM}                            from '../services/lastfm.service.new';
+import {ApiInputComponent}                 from './api-input.component';
+import { MethodsService }                  from './methods.service';
 
 
 @Component({
@@ -24,7 +20,6 @@ export class ExploreComponent implements OnInit {
     links: Array<any> = [{title:'Explore', url:''}];
     methods:any[] = [];
     output:string = '[Waiting...]';
-
 
     constructor(private _lastFM: LastFM, private methodsService: MethodsService) {
 
@@ -50,7 +45,6 @@ export class ExploreComponent implements OnInit {
                     this.output = data;
                 },
                 error => {
-                    console.log('HERE I AM ERROR :: ', error);
                     this.output = <string>error;
                 });
     }

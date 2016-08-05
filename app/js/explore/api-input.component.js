@@ -9,7 +9,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-// import {NgSwitch, NgSwitchCase, NgSwitchDefault}          from '@angular/common';
 var forms_1 = require('@angular/forms');
 var ApiInputComponent = (function () {
     function ApiInputComponent(formBuilder) {
@@ -17,13 +16,8 @@ var ApiInputComponent = (function () {
         this.mbidPattern = /^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$/;
         this.apiMethods = [];
         this.fields = {};
-        this.configs = {
-            field1: { placeholder: '' },
-            field2: { placeholder: '' }
-        };
         this.callService = new core_1.EventEmitter();
     }
-    // https://github.com/angular/angular/issues/5976
     ApiInputComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.apiForm = this.formBuilder.group({
@@ -34,26 +28,18 @@ var ApiInputComponent = (function () {
         this.field2 = this.apiForm.controls['field2'];
         var subscription = this.field1.valueChanges
             .filter(function () {
+            // Not good, sorry :-|
             _this.canBeMbid = _this.selectedOption && _this.selectedOption.params[0].id === 'artistOrMbid';
             return _this.canBeMbid;
         })
             .debounceTime(500)
             .map(function (newValue) {
-            // console.log('Validation...');
-            if (_this.mbidPattern.test(newValue)) {
-                return newValue;
-            }
-            else {
-                return '';
-            }
+            // console.log('!Validation...', newValue);
+            return _this.mbidPattern.test(newValue) ? newValue : '';
         })
             .share(); // only validate once per value...
-        this.valid$ =
-            subscription
-                .filter(function (r) { return !!r; }); // only valid mbid passes...
-        this.invalid$ =
-            subscription
-                .filter(function (r) { return !r; }); // only non-mbid passes...
+        this.valid$ = subscription.filter(function (r) { return !!r; }); // only valid mbid passes...
+        this.invalid$ = subscription.filter(function (r) { return !r; }); // only non-mbid passes...
         this.selectedOption = this.apiMethods['Album'].length ? this.apiMethods['Album'][0] : null;
         this.initFields(this.selectedOption);
         this.beginSubscribe();
@@ -66,15 +52,9 @@ var ApiInputComponent = (function () {
         for (var i = 0, len = option.params.length; i < len; i++) {
             p = option.params[i];
             id = p.id;
-            this.configs[("field" + (i + 1))].placeholder = p.label || '';
             this.fields[("field" + (i + 1))] = p.default || '';
-            /*if(id === 'artistOrMbid')
-            {
-                // this.validMbid = this.mbidPattern.test(p.default); // shame :-|
-                // this.beginSubscribe();
-            }*/
-            if (i > 0 && p.required) {
-                this.updateRequired(this[("field" + (i + 1))], true);
+            if (i > 0) {
+                this.updateRequired(this[("field" + (i + 1))], p.required);
             }
         }
     };
@@ -88,12 +68,8 @@ var ApiInputComponent = (function () {
         }
         field.updateValueAndValidity();
     };
-    ApiInputComponent.prototype.keys = function () {
-        return Object.keys(this.apiMethods);
-    };
     ApiInputComponent.prototype.callApi = function () {
         var params = this.getParamsArray(this.selectedOption, this.fields), o = { data: this.selectedOption, params: params };
-        // console.log('params', params);
         this.callService.emit({
             data: this.selectedOption,
             params: params
@@ -112,7 +88,8 @@ var ApiInputComponent = (function () {
         this.valid$
             .filter(function () { return _this.selectedOption && _this.selectedOption.params.length === 2; })
             .subscribe(function (newValue) {
-            console.log('SUCCESS there IS a validator - REMOVE IT');
+            console.log('SUCCESS there IS a validator - REMOVE IT', newValue);
+            console.log('this.valid$ ', _this.valid$);
             _this.updateRequired(_this.field2, false);
         });
         // Not mbid...
@@ -140,6 +117,9 @@ var ApiInputComponent = (function () {
         }
         return params;
     };
+    ApiInputComponent.prototype.keys = function () {
+        return Object.keys(this.apiMethods);
+    };
     ApiInputComponent.prototype.selectChange = function () {
         this.fields = {};
         this.validMbid = false;
@@ -153,7 +133,6 @@ var ApiInputComponent = (function () {
         core_1.Component({
             selector: 'api-input',
             inputs: ['apiMethods'],
-            // directives:[NgSwitch, NgSwitchCase, NgSwitchDefault, REACTIVE_FORM_DIRECTIVES],
             directives: [forms_1.REACTIVE_FORM_DIRECTIVES],
             templateUrl: 'app/js/explore/api-input.component.html'
         }), 
@@ -162,66 +141,4 @@ var ApiInputComponent = (function () {
     return ApiInputComponent;
 }());
 exports.ApiInputComponent = ApiInputComponent;
-/*
-    beginSubscribeX(){
-        // Yey! Works! Needs rewriting of course, but in theory...
-        this.subscription
-            .subscribe(newValue => {
-                  // console.log(this.mbidPattern.test(newValue));
-                  console.log('subscription : ', this.subscription);
-                  console.log(this.field2);
-                  if(this.mbidPattern.test(newValue)){
-                      this.validMbid = true;
-                      if(!!this.field2.validator){ // Only if there is a validator
-                            this.field2.clearValidators();
-                            this.field2.updateValueAndValidity(); // make it show!
-                            //console.log('this.field2 ::: ', !!this.field2.validator);
-                      }
-                  } else {
-                    this.validMbid = false;
-                    if(!this.field2.validator){ // Only if there is not a validator
-                        this.field2.setValidators([Validators.required]);
-                        this.field2.updateValueAndValidity(); // make it show!
-                        console.log('this.field2 ::: ', !!this.field2.validator);
-                    }
-                  }
-              });
-        // see: https://github.com/angular/angular/commit/638fd74
-        // should be able to reset validators!
-        //
-        //var c = new FormControl(null, Validators.required);
-         //
-
-    }
-
-
-
-        /*this.subscription
-            .subscribe(newValue => {
-                  console.log('newValue :: ': newValue);
-                  // console.log(this.mbidPattern.test(newValue));
-                  console.log('subscription : ', this.subscription);
-                  console.log(this.field2);
-                  if(this.mbidPattern.test(newValue)){
-                      this.validMbid = true;
-                      if(!!this.field2.validator){ // Only if there is a validator
-                            this.field2.clearValidators();
-                            this.field2.updateValueAndValidity(); // make it show!
-                            //console.log('this.field2 ::: ', !!this.field2.validator);
-                      }
-                  } else {
-                    this.validMbid = false;
-                    if(!this.field2.validator){ // Only if there is not a validator
-                        this.field2.setValidators([Validators.required]);
-                        this.field2.updateValueAndValidity(); // make it show!
-                        console.log('this.field2 ::: ', !!this.field2.validator);
-                    }
-                  }
-              });*/
-// see: https://github.com/angular/angular/commit/638fd74
-// should be able to reset validators!
-/*
-var c = new FormControl(null, Validators.required);
-
-*/ 
 //# sourceMappingURL=api-input.component.js.map

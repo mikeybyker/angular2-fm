@@ -1,13 +1,11 @@
 import {Component, Input, OnInit, Output, EventEmitter}   from '@angular/core';
-// import {NgSwitch, NgSwitchCase, NgSwitchDefault}          from '@angular/common';
 import {REACTIVE_FORM_DIRECTIVES,
         FormGroup, FormBuilder, Validators, FormControl}  from '@angular/forms';
-
+import {Observable}                                       from 'rxjs/Observable';
 
 @Component({
     selector: 'api-input',
     inputs: ['apiMethods'],
-    // directives:[NgSwitch, NgSwitchCase, NgSwitchDefault, REACTIVE_FORM_DIRECTIVES],
     directives:[REACTIVE_FORM_DIRECTIVES],
     templateUrl: 'app/js/explore/api-input.component.html'
 })
@@ -22,61 +20,45 @@ export class ApiInputComponent implements OnInit{
     canBeMbid:boolean;// = false;
 
     apiForm: FormGroup;
-    // subscription:any; // Subscriber;
-    valid$:any; // Subscriber;
-    invalid$:any; // Subscriber;
-    field1:any; // FormControl is complaining, fuck knows why
-    field2:any; // FormControl is complaining, fuck knows why
-
-    configs = {
-                field1: {placeholder:''},
-                field2: {placeholder:''}
-            };
+    valid$:Observable<string>;
+    invalid$:Observable<string>;
+    field1:FormControl;
+    field2:FormControl;
 
     @Output() callService = new EventEmitter();
 
     constructor(private formBuilder: FormBuilder){}
 
-// https://github.com/angular/angular/issues/5976
-
     ngOnInit(){
-
 
         this.apiForm = this.formBuilder.group({
             field1: ['', Validators.required],
             field2: ['']
         });
 
-        this.field1 = this.apiForm.controls['field1'];
-        this.field2 = this.apiForm.controls['field2'];
+        this.field1 = <FormControl>this.apiForm.controls['field1'];
+        this.field2 = <FormControl>this.apiForm.controls['field2'];
 
-        const subscription = this.field1.valueChanges
+        const subscription:Observable<string> = this.field1.valueChanges
             .filter(()=>{
+                // Not good, sorry :-|
                 this.canBeMbid = this.selectedOption && this.selectedOption.params[0].id === 'artistOrMbid';
                 return this.canBeMbid;
             })
             .debounceTime(500)
             .map(newValue => {
-                // console.log('Validation...');
-                if(this.mbidPattern.test(newValue)){
-                    return newValue;
-                } else {
-                    return '';
-                }
+                // console.log('!Validation...', newValue);
+                return this.mbidPattern.test(newValue) ? newValue : '';
             })
             .share(); // only validate once per value...
 
-        this.valid$ =
-            subscription
-            .filter(r => !!r) // only valid mbid passes...
-
-        this.invalid$ =
-            subscription
-            .filter(r => !r); // only non-mbid passes...
+        this.valid$ = subscription.filter(r => !!r);         // only valid mbid passes...
+        this.invalid$ = subscription.filter(r => !r);        // only non-mbid passes...
 
         this.selectedOption = this.apiMethods['Album'].length? this.apiMethods['Album'][0] : null;
         this.initFields(this.selectedOption);
         this.beginSubscribe();
+
     }
 
     initFields(option){
@@ -87,21 +69,13 @@ export class ApiInputComponent implements OnInit{
         }
         for(let i=0, len=option.params.length;i<len;i++)
         {
-            p =  option.params[i];
+            p = option.params[i];
             id = p.id;
-            this.configs[`field${i+1}`].placeholder = p.label || '';
             this.fields[`field${i+1}`] = p.default || '';
-
-            /*if(id === 'artistOrMbid')
-            {
-                // this.validMbid = this.mbidPattern.test(p.default); // shame :-|
-                // this.beginSubscribe();
-            }*/
-            if(i>0 && p.required){
-                this.updateRequired(this[`field${i+1}`], true);
+            if(i>0){
+                this.updateRequired(this[`field${i+1}`], p.required);
             }
         }
-
     }
 
     updateRequired(field, required:boolean = true){
@@ -113,14 +87,9 @@ export class ApiInputComponent implements OnInit{
         field.updateValueAndValidity();
     }
 
-    keys() : Array<string> {
-        return Object.keys(this.apiMethods);
-    }
-
     callApi(){
-        let params = this.getParamsArray(this.selectedOption, this.fields),
+        let params:Array<string> = this.getParamsArray(this.selectedOption, this.fields),
             o = {data: this.selectedOption, params: params};
-            // console.log('params', params);
         this.callService.emit({
             data: this.selectedOption,
             params: params
@@ -142,7 +111,8 @@ export class ApiInputComponent implements OnInit{
         this.valid$
             .filter(() => this.selectedOption && this.selectedOption.params.length === 2)
             .subscribe(newValue => {
-                console.log('SUCCESS there IS a validator - REMOVE IT');
+                console.log('SUCCESS there IS a validator - REMOVE IT', newValue);
+                console.log('this.valid$ ', this.valid$);
                 this.updateRequired(this.field2, false);
             });
 
@@ -164,83 +134,25 @@ export class ApiInputComponent implements OnInit{
 
     }
 
-    getParamsArray(data, fields){
+    getParamsArray(data, fields):Array<string>{
         if(!data || !data.params){
             return [];
         }
-        let params = [],
+        let params:Array<string> = [],
             len = data.params.length;
         for(let i=0;i<len;i++){
             params.push(fields[`field${i+1}`] || '');
         }
         return params;
     }
+    
+    keys() : Array<string> {
+        return Object.keys(this.apiMethods);
+    }
+
     selectChange(){
         this.fields = {};
         this.validMbid = false;
         this.initFields(this.selectedOption);
     }
 }
-
-/*
-    beginSubscribeX(){
-        // Yey! Works! Needs rewriting of course, but in theory...
-        this.subscription
-            .subscribe(newValue => {
-                  // console.log(this.mbidPattern.test(newValue));
-                  console.log('subscription : ', this.subscription);
-                  console.log(this.field2);
-                  if(this.mbidPattern.test(newValue)){
-                      this.validMbid = true;
-                      if(!!this.field2.validator){ // Only if there is a validator
-                            this.field2.clearValidators();
-                            this.field2.updateValueAndValidity(); // make it show!
-                            //console.log('this.field2 ::: ', !!this.field2.validator);
-                      }
-                  } else {
-                    this.validMbid = false;
-                    if(!this.field2.validator){ // Only if there is not a validator
-                        this.field2.setValidators([Validators.required]);
-                        this.field2.updateValueAndValidity(); // make it show!
-                        console.log('this.field2 ::: ', !!this.field2.validator);
-                    }
-                  }
-              });
-        // see: https://github.com/angular/angular/commit/638fd74
-        // should be able to reset validators!
-        //
-        //var c = new FormControl(null, Validators.required);
-         //
-
-    }
-
-
-
-        /*this.subscription
-            .subscribe(newValue => {
-                  console.log('newValue :: ': newValue);
-                  // console.log(this.mbidPattern.test(newValue));
-                  console.log('subscription : ', this.subscription);
-                  console.log(this.field2);
-                  if(this.mbidPattern.test(newValue)){
-                      this.validMbid = true;
-                      if(!!this.field2.validator){ // Only if there is a validator
-                            this.field2.clearValidators();
-                            this.field2.updateValueAndValidity(); // make it show!
-                            //console.log('this.field2 ::: ', !!this.field2.validator);
-                      }
-                  } else {
-                    this.validMbid = false;
-                    if(!this.field2.validator){ // Only if there is not a validator
-                        this.field2.setValidators([Validators.required]);
-                        this.field2.updateValueAndValidity(); // make it show!
-                        console.log('this.field2 ::: ', !!this.field2.validator);
-                    }
-                  }
-              });*/
-        // see: https://github.com/angular/angular/commit/638fd74
-        // should be able to reset validators!
-        /*
-        var c = new FormControl(null, Validators.required);
-
-        */
