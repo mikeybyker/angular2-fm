@@ -50,6 +50,7 @@ export class ExploreComponent implements OnInit {
                     this.output = data;
                 },
                 error => {
+                    console.log('HERE I AM ERROR :: ', error);
                     this.output = <string>error;
                 });
     }

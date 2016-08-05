@@ -86,9 +86,9 @@ var LastFM = (function () {
         Attempts to return body as parsed JSON object, or raises an exception.
     */
     LastFM.prototype.handleError = function (error) {
-        console.error('handleError ::: ', error);
-        var o = error.json();
-        return Observable_1.Observable.throw(o.message || 'Server Error');
+        // console.error('handleError ::: ', error);
+        var o = error.json(), msg = o.message || error.statusText;
+        return Observable_1.Observable.throw(msg || 'Server Error');
     };
     LastFM.prototype.isMbid = function (str) {
         return this.mbidPattern.test(str);

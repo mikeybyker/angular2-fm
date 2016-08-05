@@ -18,10 +18,10 @@
                     <input type="text" formControlName="field1" [attr.placeholder]="configs.field1.placeholder" [(ngModel)]="fields.field1">
                 </label>
                 <div class="help-holder">
-                    <p class="help-text" *ngIf="validMbid">Valid mbid format entered</p>
-                    <!-- <p class="help-text" *ngIf="!field2.validator">xValid mbid format entered</p> -->
+                    <p class="help-text" *ngIf="canBeMbid && validMbid">Valid mbid format entered</p>
+                    <p class="help-text" *ngIf="canBeMbid!==undefined && !canBeMbid">*mbid not accepted</p>
                 </div>
-                
+
                 <label [hidden]="selectedOption.params.length <2">
                     <input type="text" formControlName="field2" [attr.placeholder]="configs.field2.placeholder" [(ngModel)]="fields.field2">
                 </label>

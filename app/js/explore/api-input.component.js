@@ -32,12 +32,14 @@ var ApiInputComponent = (function () {
         });
         this.field1 = this.apiForm.controls['field1'];
         this.field2 = this.apiForm.controls['field2'];
-        //@todo :  filter etc. if mbid not accepted...
-        // Maybe want to show when mbid not accepted...
         var subscription = this.field1.valueChanges
+            .filter(function () {
+            _this.canBeMbid = _this.selectedOption && _this.selectedOption.params[0].id === 'artistOrMbid';
+            return _this.canBeMbid;
+        })
             .debounceTime(500)
             .map(function (newValue) {
-            console.log('VALIDATION');
+            // console.log('Validation...');
             if (_this.mbidPattern.test(newValue)) {
                 return newValue;
             }
@@ -54,6 +56,7 @@ var ApiInputComponent = (function () {
                 .filter(function (r) { return !r; }); // only non-mbid passes...
         this.selectedOption = this.apiMethods['Album'].length ? this.apiMethods['Album'][0] : null;
         this.initFields(this.selectedOption);
+        this.beginSubscribe();
     };
     ApiInputComponent.prototype.initFields = function (option) {
         var id, p;
@@ -65,27 +68,40 @@ var ApiInputComponent = (function () {
             id = p.id;
             this.configs[("field" + (i + 1))].placeholder = p.label || '';
             this.fields[("field" + (i + 1))] = p.default || '';
-            if (id === 'artistOrMbid') {
+            /*if(id === 'artistOrMbid')
+            {
                 // this.validMbid = this.mbidPattern.test(p.default); // shame :-|
-                this.beginSubscribe();
+                // this.beginSubscribe();
+            }*/
+            if (i > 0 && p.required) {
+                this.updateRequired(this[("field" + (i + 1))], true);
             }
         }
+    };
+    ApiInputComponent.prototype.updateRequired = function (field, required) {
+        if (required === void 0) { required = true; }
+        if (required) {
+            field.setValidators([forms_1.Validators.required]);
+        }
+        else {
+            field.clearValidators();
+        }
+        field.updateValueAndValidity();
     };
     ApiInputComponent.prototype.keys = function () {
         return Object.keys(this.apiMethods);
     };
     ApiInputComponent.prototype.callApi = function () {
         var params = this.getParamsArray(this.selectedOption, this.fields), o = { data: this.selectedOption, params: params };
-        console.log('params', params);
+        // console.log('params', params);
         this.callService.emit({
             data: this.selectedOption,
             params: params
         });
     };
     ApiInputComponent.prototype.beginSubscribe = function () {
-        var _this = this;
-        console.log('begin sub with : ', this.validMbid);
         // Is mbid...
+        var _this = this;
         // To show is valid
         this.valid$
             .subscribe(function (newValue) {
@@ -97,9 +113,7 @@ var ApiInputComponent = (function () {
             .filter(function () { return _this.selectedOption && _this.selectedOption.params.length === 2; })
             .subscribe(function (newValue) {
             console.log('SUCCESS there IS a validator - REMOVE IT');
-            _this.field2.clearValidators();
-            _this.field2.updateValueAndValidity(); // make it show!
-            //console.log('this.field2 ::: ', !!this.field2.validator);
+            _this.updateRequired(_this.field2, false);
         });
         // Not mbid...
         // To show invalid
@@ -113,8 +127,7 @@ var ApiInputComponent = (function () {
             .filter(function () { return _this.selectedOption && _this.selectedOption.params.length === 2; })
             .subscribe(function (newValue) {
             console.log('FAIL there IS *NOT* a validator - ADD IT');
-            _this.field2.setValidators([forms_1.Validators.required]);
-            _this.field2.updateValueAndValidity(); // make it show!
+            _this.updateRequired(_this.field2, true);
         });
     };
     ApiInputComponent.prototype.getParamsArray = function (data, fields) {
@@ -178,7 +191,7 @@ exports.ApiInputComponent = ApiInputComponent;
         //
         //var c = new FormControl(null, Validators.required);
          //
-        
+
     }
 
 

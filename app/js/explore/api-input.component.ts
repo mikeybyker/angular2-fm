@@ -19,6 +19,7 @@ export class ApiInputComponent implements OnInit{
     selectedOption:any;
     fields:any = {};
     validMbid:boolean;// = false;
+    canBeMbid:boolean;// = false;
 
     apiForm: FormGroup;
     // subscription:any; // Subscriber;
@@ -49,14 +50,14 @@ export class ApiInputComponent implements OnInit{
         this.field1 = this.apiForm.controls['field1'];
         this.field2 = this.apiForm.controls['field2'];
 
-//@todo :  filter etc. if mbid not accepted...
-// Maybe want to show when mbid not accepted...
-
         const subscription = this.field1.valueChanges
-            // .startWith('')
+            .filter(()=>{
+                this.canBeMbid = this.selectedOption && this.selectedOption.params[0].id === 'artistOrMbid';
+                return this.canBeMbid;
+            })
             .debounceTime(500)
             .map(newValue => {
-                console.log('VALIDATION');
+                // console.log('Validation...');
                 if(this.mbidPattern.test(newValue)){
                     return newValue;
                 } else {
@@ -65,7 +66,7 @@ export class ApiInputComponent implements OnInit{
             })
             .share(); // only validate once per value...
 
-        this.valid$ = 
+        this.valid$ =
             subscription
             .filter(r => !!r) // only valid mbid passes...
 
@@ -75,6 +76,7 @@ export class ApiInputComponent implements OnInit{
 
         this.selectedOption = this.apiMethods['Album'].length? this.apiMethods['Album'][0] : null;
         this.initFields(this.selectedOption);
+        this.beginSubscribe();
     }
 
     initFields(option){
@@ -88,15 +90,27 @@ export class ApiInputComponent implements OnInit{
             p =  option.params[i];
             id = p.id;
             this.configs[`field${i+1}`].placeholder = p.label || '';
-            this.fields[`field${i+1}`] = p.default || '';            
+            this.fields[`field${i+1}`] = p.default || '';
 
-            if(id === 'artistOrMbid')
+            /*if(id === 'artistOrMbid')
             {
                 // this.validMbid = this.mbidPattern.test(p.default); // shame :-|
-                this.beginSubscribe();
+                // this.beginSubscribe();
+            }*/
+            if(i>0 && p.required){
+                this.updateRequired(this[`field${i+1}`], true);
             }
         }
 
+    }
+
+    updateRequired(field, required:boolean = true){
+        if(required){
+            field.setValidators([Validators.required]);
+        } else {
+            field.clearValidators();
+        }
+        field.updateValueAndValidity();
     }
 
     keys() : Array<string> {
@@ -106,7 +120,7 @@ export class ApiInputComponent implements OnInit{
     callApi(){
         let params = this.getParamsArray(this.selectedOption, this.fields),
             o = {data: this.selectedOption, params: params};
-            console.log('params', params);
+            // console.log('params', params);
         this.callService.emit({
             data: this.selectedOption,
             params: params
@@ -114,7 +128,6 @@ export class ApiInputComponent implements OnInit{
     }
 
     beginSubscribe(){
-        console.log('begin sub with : ', this.validMbid);
 
         // Is mbid...
 
@@ -130,9 +143,7 @@ export class ApiInputComponent implements OnInit{
             .filter(() => this.selectedOption && this.selectedOption.params.length === 2)
             .subscribe(newValue => {
                 console.log('SUCCESS there IS a validator - REMOVE IT');
-                this.field2.clearValidators();
-                this.field2.updateValueAndValidity(); // make it show!
-                //console.log('this.field2 ::: ', !!this.field2.validator);
+                this.updateRequired(this.field2, false);
             });
 
         // Not mbid...
@@ -140,7 +151,7 @@ export class ApiInputComponent implements OnInit{
         // To show invalid
         this.invalid$
             .subscribe(newValue => {
-                console.log('FAIL newValue :: ': newValue);
+                console.log('FAIL newValue :: ', newValue);
                 this.validMbid = false;
               });
         // To add validators
@@ -148,8 +159,7 @@ export class ApiInputComponent implements OnInit{
             .filter(() => this.selectedOption && this.selectedOption.params.length === 2)
             .subscribe(newValue => {
                 console.log('FAIL there IS *NOT* a validator - ADD IT');
-                this.field2.setValidators([Validators.required]);
-                this.field2.updateValueAndValidity(); // make it show!
+                this.updateRequired(this.field2, true);
               });
 
     }
@@ -201,7 +211,7 @@ export class ApiInputComponent implements OnInit{
         //
         //var c = new FormControl(null, Validators.required);
          //
-        
+
     }
 
 

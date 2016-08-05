@@ -44,9 +44,10 @@ export class LastFM {
         Attempts to return body as parsed JSON object, or raises an exception.
     */
     private handleError(error: Response) {
-        console.error('handleError ::: ', error);
-        let o:any = error.json();
-        return Observable.throw(o.message || 'Server Error');
+        // console.error('handleError ::: ', error);
+        let o:any = error.json(),
+            msg:string = o.message || error.statusText;
+        return Observable.throw(msg || 'Server Error');
     }
     isMbid(str){
         return this.mbidPattern.test(str);
@@ -121,7 +122,7 @@ export class LastFM {
         getTopAlbums  : this.getTopAlbums.bind(this),
         getTopTags    : this.getArtistTopTags.bind(this),
         getTopTracks  : this.getTopTracks.bind(this),
-        search        : this.searchArtists.bind(this),        
+        search        : this.searchArtists.bind(this),
 
         _getInfo      : this._getArtistInfo.bind(this),
         _getSimilar   : this._getSimilar.bind(this),
@@ -149,7 +150,7 @@ export class LastFM {
         _getTopTracks : this._getTopGeoTracks.bind(this)
     };
 
-    Track = {                    
+    Track = {
         getInfo       : this.getTrackInfo.bind(this),
         getSimilar    : this.getSimilarTrack.bind(this),
         getTopTags    : this.getTrackTopTags.bind(this),
@@ -161,7 +162,7 @@ export class LastFM {
         _search       : this._searchTrack.bind(this)
     };
 
-    
+
     // Album
 
         // Docs: http://www.last.fm/api/show/album.getInfo
