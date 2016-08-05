@@ -9,9 +9,8 @@ import {BreadcrumbsComponent}  from '../utils/breadcrumbs.component';
 import {LastFM}                from '../services/lastfm.service.new';
 
 import {ApiInputComponent}     from './api-input.component';
-import { MethodsService } from './methods.service';
+import { MethodsService }      from './methods.service';
 
-import {ErrorMessage}          from '../utils/error-message';
 
 @Component({
     selector: 'explore',
@@ -23,9 +22,8 @@ import {ErrorMessage}          from '../utils/error-message';
 export class ExploreComponent implements OnInit {
 
     links: Array<any> = [{title:'Explore', url:''}];
-    error: ErrorMessage;
     methods:any[] = [];
-    output:string = '';
+    output:string = '[Waiting...]';
 
 
     constructor(private _lastFM: LastFM, private methodsService: MethodsService) {
@@ -40,22 +38,12 @@ export class ExploreComponent implements OnInit {
 
         let data = o.data,
             params = o.params,
-            fn,
+            fn = data.fn || '',
+            group = data.group || '',
             call;
-        this.output = '';
-        fn =  data.fn.split('.');
-        if(fn.length !==2) return;
-
-/*
-Could do this with angular1 as well!
-
-
-*/
-        call = this._lastFM[fn[0]][fn[1]];
-        console.log('/*call*/ : ', call);
-            // fn.apply(this, params)
-            // this._lastFM.Album.getInfo('91fa2331-d8b4-4d1f-aa4d-53b1c54853e5', '', {});
-        //fn.apply(this, params)
+        this.output = '[Loading...]';
+        call =  group ? this._lastFM[group][fn] : this._lastFM[fn];
+        // console.log('/*call*/ : ', call);
         if(typeof call !== 'function') return;
         call.apply(this, params)
             .subscribe(data => {
@@ -65,13 +53,5 @@ Could do this with angular1 as well!
                     this.output = <string>error;
                 });
     }
-
-    // getAlbumInfo(artist, album){
-    //     return this._lastFM.Album.getInfo(artist, album, {});
-
-    // }
-    // getArtistInfo(artistName: string, options: any = {}) {
-    //      return this._lastFM.Artist.getInfo(artistName, {});
-    // }
 
 }

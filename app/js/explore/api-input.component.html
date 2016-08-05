@@ -1,69 +1,43 @@
 <div class="callout secondary api-explorer">
     <label>
         Api Method:
-        <!-- *not (change)!!!! -->
+        <!-- manually creating optgroup as it isn't part of the angular spec for select -->
         <select [(ngModel)]="selectedOption" (ngModelChange)="selectChange(methodSelect.value)" name="methodSelect" #methodSelect="ngModel">
-            <!-- ngValue when object, value ok for strings -->
-            <option *ngFor="let m of apiMethods" [ngValue]="m">{{m.name}}</option>
+            <optgroup *ngFor="let key of keys();" label="{{key}}">
+                <!-- ngValue when object, value ok for strings -->
+                <option *ngFor="let m of apiMethods[key]" [ngValue]="m">{{m.name}}</option>
+            </optgroup>
+
         </select>
-        <!-- {{selectedOption | json}} -->
     </label>
 
-    <form #apiForm="ngForm" novalidate>
-
-        <div class="row">
-            <!-- ng-repeat="field in $ctrl.selectedOption.params" -->
-            <div class="small-12 columns" *ngFor="let field of selectedOption.params">
-
-                <div [ngSwitch]="field.id">
-                    <div *ngSwitchCase="'mbid'">
-                        <label>
-                            <input type="text" mbid placeholder="{{field.label}}" [(ngModel)]="fields[field.id]" name="{{field.id}}" [required]='field.required'>
-                        </label>
-                    </div>
-                    <div *ngSwitchCase="'artistOrMbid'">
-                        <label>
-                            <input type="text" placeholder="{{field.label}}" name="{{field.id}}" [(ngModel)]="fields[field.id]" [required]='field.required' #artistOrMbid
-                            (keyup)="inputChange(artistOrMbid.value)">
-                           <!--  ng-model-options="{debounce: {updateOn: 'default blur', 'default': 400, 'blur': 0 }}"   -->
-                        </label>
-                        <p class="help-text" *ngIf="validMbid">Valid mbid format</p>
-                    </div>
-                    <div *ngSwitchDefault>
-                        <label>
-                            <input type="text" placeholder="{{field.label}}" [(ngModel)]="fields[field.id]" name="{{field.id}}" >
-                            <!-- @todo [required]='field.required && !validMbid' -->
-                        </label>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-<!--
-
-@todo
-
-? this right?
-[required]
-htf?
-
-ng-change
-
-ng-model-options : debounce
-http://stackoverflow.com/questions/32051273/angular2-and-debounce
-might be good idea?
-
-[disabled]="!form.$valid"
- -->
+    <form #sForm="ngForm" [formGroup]="apiForm" novalidate>
         <div class="row">
             <div class="small-12 columns">
-                <button class="expanded button" (click)="callApi()" [disabled]="!apiForm.form.valid">
-                    {{selectedOption.name}}
-                </button>
+                <label [hidden]="selectedOption.params.length <1">
+                    <input type="text" formControlName="field1" [attr.placeholder]="configs.field1.placeholder" [(ngModel)]="fields.field1">
+                </label>
+                <div class="help-holder">
+                    <p class="help-text" *ngIf="validMbid">Valid mbid format entered</p>
+                    <!-- <p class="help-text" *ngIf="!field2.validator">xValid mbid format entered</p> -->
+                </div>
+                
+                <label [hidden]="selectedOption.params.length <2">
+                    <input type="text" formControlName="field2" [attr.placeholder]="configs.field2.placeholder" [(ngModel)]="fields.field2">
+                </label>
             </div>
+
         </div>
+            <div class="row">
+                <div class="small-12 columns">
+                    <button type="button" class="expanded button" [disabled]="!sForm.form.valid" (click)="callApi()">{{selectedOption.name}}</button>
+                </div>
+            </div>
+
 
     </form>
     <!-- {{selectedOption | json}} -->
-    {{fields | json}}
+    {{fields | json}}<br><br>
+    {{configs | json}}
+
 </div>

@@ -33,8 +33,9 @@ var AlbumComponent = (function () {
             return;
         }
         this.error = null;
+        //artistOrMbid: string, album: string = '', options:any = {}
         var album$ = this._lastFM
-            .getAlbumInfo(mbid, {})
+            .Album.getInfo(mbid)
             .share();
         // console.log('pre album$  : ', album$, typeof album$);
         // Display album (if any)

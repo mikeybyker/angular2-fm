@@ -20,28 +20,17 @@ var ExploreComponent = (function () {
         this.methodsService = methodsService;
         this.links = [{ title: 'Explore', url: '' }];
         this.methods = [];
-        this.output = '';
+        this.output = '[Waiting...]';
     }
     ExploreComponent.prototype.ngOnInit = function () {
         this.methods = this.methodsService.getMethods();
     };
     ExploreComponent.prototype.apiCall = function (o) {
         var _this = this;
-        var data = o.data, params = o.params, fn, call;
-        this.output = '';
-        fn = data.fn.split('.');
-        if (fn.length !== 2)
-            return;
-        /*
-        Could do this with angular1 as well!
-        
-        
-        */
-        call = this._lastFM[fn[0]][fn[1]];
-        console.log('/*call*/ : ', call);
-        // fn.apply(this, params)
-        // this._lastFM.Album.getInfo('91fa2331-d8b4-4d1f-aa4d-53b1c54853e5', '', {});
-        //fn.apply(this, params)
+        var data = o.data, params = o.params, fn = data.fn || '', group = data.group || '', call;
+        this.output = '[Loading...]';
+        call = group ? this._lastFM[group][fn] : this._lastFM[fn];
+        // console.log('/*call*/ : ', call);
         if (typeof call !== 'function')
             return;
         call.apply(this, params)
