@@ -25,28 +25,15 @@ var HomeComponent = (function () {
         var _this = this;
         console.log(this.model.artist);
         this.error = null;
-        // console.log('this._lastFM.artist.search : ', this._lastFM.artist().search);
-        // console.log('this._lastFM.xxx.search : ', this._lastFM.xxx.search);
         var search$ = this._lastFM
             .Artist.search(this.model.artist, { limit: this.maxResults })
             .share(); // so we don't get 2 network requests with the subscription for error handling (below...)
-        // Note: not subscribe! Does the async pipe do that for you? "and subscribes to the input automatically," - Yes!            
         this.potentials = search$
             .map(function (artists) {
             return artists
                 .filter(function (artist) { return _this._lastFM.checkUsableImage(artist); })
                 .map(function (artist) { return new artist_1.Artist(artist); });
         });
-        // .do(data => console.log(data));
-        /*
-        If I type the return of searchArtists...
-        then it will complain on data.error below - no such on the Observable<Array<any>>
-        Cos - if successful - get an array returned
-        If data error - get object
-        How to deal with that?!
-        Maybe just : :Observable<any>
-        Rather than specifying array of anything...
-        */
         search$
             .subscribe(function (data) {
             if (!data.length || data.error) {
@@ -54,7 +41,7 @@ var HomeComponent = (function () {
                 return;
             }
         }, function (error) {
-            // Keeping this for http errors
+            // http errors
             _this.error = new error_message_1.ErrorMessage('Error', error);
         });
     };

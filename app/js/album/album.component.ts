@@ -16,13 +16,9 @@ import {ErrorMessage}                   from '../utils/error-message';
 })
 export class AlbumComponent implements OnInit{ 
     artistName: string;
-    // mbid: string;
-    album: Album;
+    album:Observable<Album>;
     links: Array<any> = [];
     error: ErrorMessage;
-
-    // album:Observable<Album>; // why not? Why can't I have
-    // this.album = this._lastFM.getAlbumInfo(this.mbid, {}) etc. like in home/search?
 
     constructor(private _lastFM: LastFM, private _routeParams: RouteParams) {
         
@@ -38,23 +34,14 @@ export class AlbumComponent implements OnInit{
         }
         this.error = null;
 
-//artistOrMbid: string, album: string = '', options:any = {}
         const album$:Observable<any> = this._lastFM
             .Album.getInfo(mbid)
             .share();
-            // console.log('pre album$  : ', album$, typeof album$);
 
-            // Display album (if any)
-            album$
+            // Display album (if any) - async pipe
+            this.album = album$
                 .filter(album => !!album.artist) // make sure is album data (note before subscribe!)
-                .map(album => new Album(album))
-                .subscribe(album => {
-                     this.album = album;
-                     console.log('album$ ::: ', album$);
-                },
-                error => {
-                    this.error = new ErrorMessage('Error', <string>error);
-                });
+                .map(album => new Album(album));
 
             // Display error (if any)
             album$
@@ -64,28 +51,15 @@ export class AlbumComponent implements OnInit{
                         return;
                     }
                 });
-        // this.album = 
-        /*this._lastFM
-            .getAlbumInfo(this.mbid, {})
-            // .subscribe(album => new Album(album));
-            .subscribe(album => {
-
-                 this.album = album.artist ? new Album(album) : null; // or would we want error?
-                 // this.artist =  artist.name ? new Artist(artist) : null;
-            },
-            error => {
-                console.log('HMMMM');
-                this.error = new ErrorMessage('Error', <string>error);
-            });*/
-
-
-                 /*if(!album.artist){
-                    // throw error??
-                    console.log('HERE! THROW'); // nope, is not caught
-                    throw new Error('This request has failed '); // Or do you handle errors in the service??
-                    // What if you want to do something else though - like not all users of the service want to 
-                    // repond same way...
-                 }*/
-        // Or have another sub that shows errors? like home...sort of
     }
 }
+// Alt.
+// album$
+//     .filter(album => !!album.artist) // make sure is album data (note before subscribe!)
+//     .map(album => new Album(album))
+//     .subscribe(album => {
+//          this.album = album;
+//     },
+//     error => {
+//         this.error = new ErrorMessage('Error', <string>error);
+//     });

@@ -9,17 +9,17 @@
         </div>
     </div>
 </div>
-<div class="row" *ngIf="album">
+<div class="row">
     <div class="small-12 columns">
-        <h3><a [routerLink]="['Artist', {name: artistName}]">{{album?.artist}}</a></h3>
+        <h3><a [routerLink]="['Artist', {name: artistName}]">{{(album | async)?.artist}}</a></h3>
     </div>
     <div class="small-12 medium-6 columns">
-        <a [href]="album?.url" target="_blank"><img *ngIf="album" class="thumbnail main-artist" [src]="album.images.mega"></a>
+        <a [href]="(album | async)?.url" target="_blank"><img class="thumbnail main-artist" [src]="(album | async)?.images?.mega || ''"></a>
     </div>
     <div class="small-12 medium-6 columns">
-        <h4>{{album?.name}}</h4>
-        <ol *ngIf="album" class="track-list">
-            <li *ngFor="let track of album.tracks.track">
+        <h4>{{(album | async)?.name}}</h4>
+        <ol class="track-list">
+            <li *ngFor="let track of (album | async)?.tracks?.track">
                 <a [href]="track.url" target="_blank">{{track.name}}</a> ({{track.duration | trackduration}})
             </li>
         </ol>

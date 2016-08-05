@@ -23,7 +23,7 @@ import {LastFMConfig}          from './lastfm.config';
 @Component({
     selector: 'lastfm-app',
     directives: [RouterOutlet, ROUTER_DIRECTIVES],
-    providers:[LastFM, LastFMConfig],
+    providers:[LastFM, LastFMConfig], // *
     template: `
                 <div class="top-bar">
                     <div class="row">
