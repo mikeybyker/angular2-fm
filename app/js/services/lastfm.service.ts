@@ -1,5 +1,3 @@
-// https://www.npmjs.com/package/angular2-spotify
-
 import {Http,
         Response,
         Headers,
@@ -44,7 +42,6 @@ export class LastFM {
         Attempts to return body as parsed JSON object, or raises an exception.
     */
     private handleError(error: Response) {
-        // console.error('handleError ::: ', error);
         let o:any = error.json(),
             msg:string = o.message || error.statusText;
         return Observable.throw(msg || 'Server Error');
@@ -73,7 +70,7 @@ export class LastFM {
         return results.artistmatches.artist.some((element, index, array) => element.mbid && element.image.some(hasImage));
     }
     /*
-        Check there's a mbid and at least an extralarge image source
+        Check there's an mbid and at least an extralarge image source
     */
     checkUsableImage(result:any){
         if (result.mbid && result.image && result.image[3] && result.image[3]['#text'] !== '') {

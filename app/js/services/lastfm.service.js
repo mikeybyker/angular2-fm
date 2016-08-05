@@ -1,4 +1,3 @@
-// https://www.npmjs.com/package/angular2-spotify
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -86,7 +85,6 @@ var LastFM = (function () {
         Attempts to return body as parsed JSON object, or raises an exception.
     */
     LastFM.prototype.handleError = function (error) {
-        // console.error('handleError ::: ', error);
         var o = error.json(), msg = o.message || error.statusText;
         return Observable_1.Observable.throw(msg || 'Server Error');
     };
@@ -112,7 +110,7 @@ var LastFM = (function () {
         return results.artistmatches.artist.some(function (element, index, array) { return element.mbid && element.image.some(hasImage); });
     };
     /*
-        Check there's a mbid and at least an extralarge image source
+        Check there's an mbid and at least an extralarge image source
     */
     LastFM.prototype.checkUsableImage = function (result) {
         if (result.mbid && result.image && result.image[3] && result.image[3]['#text'] !== '') {
