@@ -5,15 +5,15 @@ import {Observable}                                       from 'rxjs/Observable'
 
 @Component({
     selector: 'api-input',
-    inputs: ['apiMethods'],
+    inputs: ['serviceMethods'],
     directives:[REACTIVE_FORM_DIRECTIVES],
-    templateUrl: 'app/js/explore/api-input.component.html'
+    templateUrl: 'app/js/explore/service-input.component.html'
 })
 
-export class ApiInputComponent implements OnInit{
+export class ServiceInputComponent implements OnInit{
 
     mbidPattern = /^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$/;
-    public apiMethods:any[] = [];
+    public serviceMethods:any[] = [];
     selectedOption:any;
     fields:any = {};
     maxFields:number = 2;
@@ -27,6 +27,7 @@ export class ApiInputComponent implements OnInit{
     field2:FormControl;
 
     @Output() callService = new EventEmitter();
+    @Output() changeMethod = new EventEmitter();
 
     constructor(private formBuilder: FormBuilder){}
 
@@ -56,7 +57,7 @@ export class ApiInputComponent implements OnInit{
         this.valid$ = subscription.filter(r => !!r);         // only valid mbid passes...
         this.invalid$ = subscription.filter(r => !r);        // only non-mbid passes...
 
-        this.selectedOption = this.apiMethods['Album'].length? this.apiMethods['Album'][0] : null;
+        this.selectedOption = this.serviceMethods['Album'].length? this.serviceMethods['Album'][0] : null;
         this.initFields(this.selectedOption);
         this.beginSubscribe();
 
@@ -152,12 +153,17 @@ export class ApiInputComponent implements OnInit{
     }
     
     keys() : Array<string> {
-        return Object.keys(this.apiMethods);
+        return Object.keys(this.serviceMethods);
     }
 
     selectChange(){
         this.fields = {};
         this.validMbid = false;
         this.initFields(this.selectedOption);
+        console.log(this.selectedOption, this.selectedOption.fn);
+        this.changeMethod.emit({
+            fn: this.selectedOption.fn,
+            group: this.selectedOption.group
+        });
     }
 }

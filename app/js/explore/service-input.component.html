@@ -1,11 +1,11 @@
 <div class="callout secondary api-explorer">
     <label>
-        Api Method:
+        Service Method:
         <!-- manually creating optgroup as it isn't part of the angular spec for select -->
         <select [(ngModel)]="selectedOption" (ngModelChange)="selectChange(methodSelect.value)" name="methodSelect" #methodSelect="ngModel">
             <optgroup *ngFor="let key of keys();" label="{{key}}">
                 <!-- ngValue when object, value ok for strings -->
-                <option *ngFor="let m of apiMethods[key]" [ngValue]="m">{{m.name}}</option>
+                <option *ngFor="let m of serviceMethods[key]" [ngValue]="m">{{m.name}}</option>
             </optgroup>
 
         </select>

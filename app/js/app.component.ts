@@ -25,20 +25,20 @@ import {LastFMConfig}          from './lastfm.config';
     directives: [RouterOutlet, ROUTER_DIRECTIVES],
     providers:[LastFM, LastFMConfig], // *
     template: `
-                <div class="top-bar">
-                    <div class="row">
-                        <div class="top-bar-left">
-                            <ul class="dropdown menu" data-dropdown-menu>
-                                <li class="menu-text">{{title}}</li>
-                                <li><a [routerLink]="['Home']">Home</a></li>
-                                <li><a [routerLink]="['About']">About</a></li>
-                            </ul>
-                        </div>
-                    </div>
+        <div class="top-bar">
+            <div class="row">
+                <div class="top-bar-left">
+                    <ul class="dropdown menu" data-dropdown-menu>
+                        <li class="menu-text">{{title}}</li>
+                        <li><a [routerLink]="['Home']">Home</a></li>
+                        <li><a [routerLink]="['About']">About</a></li>
+                    </ul>
                 </div>
+            </div>
+        </div>
 
-                <router-outlet></router-outlet>
-        `
+        <router-outlet></router-outlet>
+    `
 })
 export class AppComponent {
     title = 'LastFM - Angular 2'

@@ -4,14 +4,14 @@ import {Observable}                        from 'rxjs/Observable';
 
 import {BreadcrumbsComponent}              from '../utils/breadcrumbs.component';
 import {LastFM}                            from '../services/lastfm.service';
-import {ApiInputComponent}                 from './api-input.component';
+import {ServiceInputComponent}             from './service-input.component';
 import { MethodsService }                  from './methods.service';
 
 
 @Component({
     selector: 'explore',
     providers: [MethodsService],
-    directives: [ROUTER_DIRECTIVES, BreadcrumbsComponent, ApiInputComponent],
+    directives: [ROUTER_DIRECTIVES, BreadcrumbsComponent, ServiceInputComponent],
     templateUrl: 'app/js/explore/explore.component.html'
 })
 
@@ -19,7 +19,7 @@ export class ExploreComponent implements OnInit {
 
     links: Array<any> = [{title:'Explore', url:''}];
     methods:any[] = [];
-    output:string = '[Waiting...]';
+    output:string; // = '[Waiting...]';
 
     constructor(private _lastFM: LastFM, private methodsService: MethodsService) {
 
@@ -27,6 +27,7 @@ export class ExploreComponent implements OnInit {
 
     ngOnInit(){
         this.methods = this.methodsService.getMethods();
+        this.clearView();
     }
 
     apiCall(o){
@@ -47,6 +48,10 @@ export class ExploreComponent implements OnInit {
                 error => {
                     this.output = <string>error;
                 });
+    }
+
+    clearView(){
+        this.output = '[Waiting...]';
     }
 
 }

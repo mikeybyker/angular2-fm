@@ -12,7 +12,7 @@ var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
 var breadcrumbs_component_1 = require('../utils/breadcrumbs.component');
 var lastfm_service_1 = require('../services/lastfm.service');
-var api_input_component_1 = require('./api-input.component');
+var service_input_component_1 = require('./service-input.component');
 var methods_service_1 = require('./methods.service');
 var ExploreComponent = (function () {
     function ExploreComponent(_lastFM, methodsService) {
@@ -20,10 +20,10 @@ var ExploreComponent = (function () {
         this.methodsService = methodsService;
         this.links = [{ title: 'Explore', url: '' }];
         this.methods = [];
-        this.output = '[Waiting...]';
     }
     ExploreComponent.prototype.ngOnInit = function () {
         this.methods = this.methodsService.getMethods();
+        this.clearView();
     };
     ExploreComponent.prototype.apiCall = function (o) {
         var _this = this;
@@ -40,11 +40,14 @@ var ExploreComponent = (function () {
             _this.output = error;
         });
     };
+    ExploreComponent.prototype.clearView = function () {
+        this.output = '[Waiting...]';
+    };
     ExploreComponent = __decorate([
         core_1.Component({
             selector: 'explore',
             providers: [methods_service_1.MethodsService],
-            directives: [router_deprecated_1.ROUTER_DIRECTIVES, breadcrumbs_component_1.BreadcrumbsComponent, api_input_component_1.ApiInputComponent],
+            directives: [router_deprecated_1.ROUTER_DIRECTIVES, breadcrumbs_component_1.BreadcrumbsComponent, service_input_component_1.ServiceInputComponent],
             templateUrl: 'app/js/explore/explore.component.html'
         }), 
         __metadata('design:paramtypes', [lastfm_service_1.LastFM, methods_service_1.MethodsService])

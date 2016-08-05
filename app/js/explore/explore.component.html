@@ -9,9 +9,9 @@
         </div>
     </div>
 </div>
-<div class="row " >
+<div class="row" >
     <div class="medium-4 columns">
-        <api-input [apiMethods]='methods' (callService)="apiCall($event)"></api-input>
+        <api-input [serviceMethods]='methods' (callService)="apiCall($event)" (changeMethod)="clearView($event)"></api-input>
     </div>
     <div class="medium-8 columns">
         <div class="callout">

@@ -33,7 +33,7 @@ var AppComponent = (function () {
             selector: 'lastfm-app',
             directives: [router_deprecated_1.RouterOutlet, router_deprecated_1.ROUTER_DIRECTIVES],
             providers: [lastfm_service_1.LastFM, lastfm_config_1.LastFMConfig],
-            template: "\n                <div class=\"top-bar\">\n                    <div class=\"row\">\n                        <div class=\"top-bar-left\">\n                            <ul class=\"dropdown menu\" data-dropdown-menu>\n                                <li class=\"menu-text\">{{title}}</li>\n                                <li><a [routerLink]=\"['Home']\">Home</a></li>\n                                <li><a [routerLink]=\"['About']\">About</a></li>\n                            </ul>\n                        </div>\n                    </div>\n                </div>\n\n                <router-outlet></router-outlet>\n        "
+            template: "\n        <div class=\"top-bar\">\n            <div class=\"row\">\n                <div class=\"top-bar-left\">\n                    <ul class=\"dropdown menu\" data-dropdown-menu>\n                        <li class=\"menu-text\">{{title}}</li>\n                        <li><a [routerLink]=\"['Home']\">Home</a></li>\n                        <li><a [routerLink]=\"['About']\">About</a></li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n\n        <router-outlet></router-outlet>\n    "
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);

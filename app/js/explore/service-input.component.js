@@ -10,16 +10,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var forms_1 = require('@angular/forms');
-var ApiInputComponent = (function () {
-    function ApiInputComponent(formBuilder) {
+var ServiceInputComponent = (function () {
+    function ServiceInputComponent(formBuilder) {
         this.formBuilder = formBuilder;
         this.mbidPattern = /^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$/;
-        this.apiMethods = [];
+        this.serviceMethods = [];
         this.fields = {};
         this.maxFields = 2;
         this.callService = new core_1.EventEmitter();
+        this.changeMethod = new core_1.EventEmitter();
     }
-    ApiInputComponent.prototype.ngOnInit = function () {
+    ServiceInputComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.apiForm = this.formBuilder.group({
             field1: ['', forms_1.Validators.required],
@@ -41,11 +42,11 @@ var ApiInputComponent = (function () {
             .share(); // only validate once per value...
         this.valid$ = subscription.filter(function (r) { return !!r; }); // only valid mbid passes...
         this.invalid$ = subscription.filter(function (r) { return !r; }); // only non-mbid passes...
-        this.selectedOption = this.apiMethods['Album'].length ? this.apiMethods['Album'][0] : null;
+        this.selectedOption = this.serviceMethods['Album'].length ? this.serviceMethods['Album'][0] : null;
         this.initFields(this.selectedOption);
         this.beginSubscribe();
     };
-    ApiInputComponent.prototype.initFields = function (option) {
+    ServiceInputComponent.prototype.initFields = function (option) {
         var id, p;
         if (!option || !option.params) {
             return false;
@@ -64,7 +65,7 @@ var ApiInputComponent = (function () {
             this.updateRequired(this[("field" + (i + 1))], false);
         }
     };
-    ApiInputComponent.prototype.updateRequired = function (field, required) {
+    ServiceInputComponent.prototype.updateRequired = function (field, required) {
         if (required === void 0) { required = true; }
         if (required) {
             field.setValidators([forms_1.Validators.required]);
@@ -74,14 +75,14 @@ var ApiInputComponent = (function () {
         }
         field.updateValueAndValidity();
     };
-    ApiInputComponent.prototype.callApi = function () {
+    ServiceInputComponent.prototype.callApi = function () {
         var params = this.getParamsArray(this.selectedOption, this.fields), o = { data: this.selectedOption, params: params };
         this.callService.emit({
             data: this.selectedOption,
             params: params
         });
     };
-    ApiInputComponent.prototype.beginSubscribe = function () {
+    ServiceInputComponent.prototype.beginSubscribe = function () {
         // Is mbid...
         var _this = this;
         // To show is valid
@@ -112,7 +113,7 @@ var ApiInputComponent = (function () {
             _this.updateRequired(_this.field2, true);
         });
     };
-    ApiInputComponent.prototype.getParamsArray = function (data, fields) {
+    ServiceInputComponent.prototype.getParamsArray = function (data, fields) {
         if (!data || !data.params) {
             return [];
         }
@@ -122,28 +123,37 @@ var ApiInputComponent = (function () {
         }
         return params;
     };
-    ApiInputComponent.prototype.keys = function () {
-        return Object.keys(this.apiMethods);
+    ServiceInputComponent.prototype.keys = function () {
+        return Object.keys(this.serviceMethods);
     };
-    ApiInputComponent.prototype.selectChange = function () {
+    ServiceInputComponent.prototype.selectChange = function () {
         this.fields = {};
         this.validMbid = false;
         this.initFields(this.selectedOption);
+        console.log(this.selectedOption, this.selectedOption.fn);
+        this.changeMethod.emit({
+            fn: this.selectedOption.fn,
+            group: this.selectedOption.group
+        });
     };
     __decorate([
         core_1.Output(), 
         __metadata('design:type', Object)
-    ], ApiInputComponent.prototype, "callService", void 0);
-    ApiInputComponent = __decorate([
+    ], ServiceInputComponent.prototype, "callService", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], ServiceInputComponent.prototype, "changeMethod", void 0);
+    ServiceInputComponent = __decorate([
         core_1.Component({
             selector: 'api-input',
-            inputs: ['apiMethods'],
+            inputs: ['serviceMethods'],
             directives: [forms_1.REACTIVE_FORM_DIRECTIVES],
-            templateUrl: 'app/js/explore/api-input.component.html'
+            templateUrl: 'app/js/explore/service-input.component.html'
         }), 
         __metadata('design:paramtypes', [forms_1.FormBuilder])
-    ], ApiInputComponent);
-    return ApiInputComponent;
+    ], ServiceInputComponent);
+    return ServiceInputComponent;
 }());
-exports.ApiInputComponent = ApiInputComponent;
-//# sourceMappingURL=api-input.component.js.map
+exports.ServiceInputComponent = ServiceInputComponent;
+//# sourceMappingURL=service-input.component.js.map
