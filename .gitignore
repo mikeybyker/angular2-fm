@@ -2,9 +2,7 @@ node_modules
 typings
 .tmp
 keys.txt
-constants.ts
-constants.js
-constants.js.map
+app/js/lastfm.config.ts
 cleaner.bat
 # Ignore specs until sorted out...
 *.spec.*

@@ -1,14 +1,10 @@
 import {Component, OnInit}     from '@angular/core';
 import {ROUTER_DIRECTIVES,
         RouteParams}           from '@angular/router-deprecated';
-
 import {Observable}            from 'rxjs/Observable';
 
 import {BreadcrumbsComponent}  from '../utils/breadcrumbs.component';
-
-import {LastFM}                from '../services/lastfm.service.new';
-
-
+import {LastFM}                from '../services/lastfm.service';
 import {Artist}                from './artist';
 import {Album}                 from '../album/album';
 import {ResultsPipe}           from '../pipes/results-pipe';

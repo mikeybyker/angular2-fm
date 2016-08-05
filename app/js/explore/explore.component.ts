@@ -3,7 +3,7 @@ import {ROUTER_DIRECTIVES, RouteParams}    from '@angular/router-deprecated';
 import {Observable}                        from 'rxjs/Observable';
 
 import {BreadcrumbsComponent}              from '../utils/breadcrumbs.component';
-import {LastFM}                            from '../services/lastfm.service.new';
+import {LastFM}                            from '../services/lastfm.service';
 import {ApiInputComponent}                 from './api-input.component';
 import { MethodsService }                  from './methods.service';
 

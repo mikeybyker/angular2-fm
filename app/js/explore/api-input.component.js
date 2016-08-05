@@ -16,6 +16,7 @@ var ApiInputComponent = (function () {
         this.mbidPattern = /^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$/;
         this.apiMethods = [];
         this.fields = {};
+        this.maxFields = 2;
         this.callService = new core_1.EventEmitter();
     }
     ApiInputComponent.prototype.ngOnInit = function () {
@@ -57,6 +58,11 @@ var ApiInputComponent = (function () {
                 this.updateRequired(this[("field" + (i + 1))], p.required);
             }
         }
+        // Reset required on hidden fields
+        // for(;i<this.maxFields;i++){ // could just do this...but upsets tsc
+        for (var i = option.params.length; i < this.maxFields; i++) {
+            this.updateRequired(this[("field" + (i + 1))], false);
+        }
     };
     ApiInputComponent.prototype.updateRequired = function (field, required) {
         if (required === void 0) { required = true; }
@@ -81,29 +87,28 @@ var ApiInputComponent = (function () {
         // To show is valid
         this.valid$
             .subscribe(function (newValue) {
-            console.log('SUCCESS newValue :: ', newValue);
+            // console.log('Valid : newValue ::: ', newValue);
             _this.validMbid = true;
         });
-        // To update field2
+        // To remove validators
         this.valid$
             .filter(function () { return _this.selectedOption && _this.selectedOption.params.length === 2; })
             .subscribe(function (newValue) {
-            console.log('SUCCESS there IS a validator - REMOVE IT', newValue);
-            console.log('this.valid$ ', _this.valid$);
+            // console.log('There IS a validator - REMOVE IT', newValue);
             _this.updateRequired(_this.field2, false);
         });
         // Not mbid...
         // To show invalid
         this.invalid$
             .subscribe(function (newValue) {
-            console.log('FAIL newValue :: ', newValue);
+            // console.log('Invalid : newValue ::: ', newValue);
             _this.validMbid = false;
         });
         // To add validators
         this.invalid$
             .filter(function () { return _this.selectedOption && _this.selectedOption.params.length === 2; })
             .subscribe(function (newValue) {
-            console.log('FAIL there IS *NOT* a validator - ADD IT');
+            // console.log('There IS *NOT* a validator - ADD IT');
             _this.updateRequired(_this.field2, true);
         });
     };

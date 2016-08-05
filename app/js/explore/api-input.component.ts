@@ -16,13 +16,14 @@ export class ApiInputComponent implements OnInit{
     public apiMethods:any[] = [];
     selectedOption:any;
     fields:any = {};
+    maxFields:number = 2;
     validMbid:boolean;// = false;
     canBeMbid:boolean;// = false;
 
     apiForm: FormGroup;
     valid$:Observable<string>;
     invalid$:Observable<string>;
-    field1:FormControl;
+    field1:FormControl; // Very tired to this use case
     field2:FormControl;
 
     @Output() callService = new EventEmitter();
@@ -76,6 +77,11 @@ export class ApiInputComponent implements OnInit{
                 this.updateRequired(this[`field${i+1}`], p.required);
             }
         }
+        // Reset required on hidden fields
+        // for(;i<this.maxFields;i++){ // could just do this...but upsets tsc
+        for(let i=option.params.length;i<this.maxFields;i++){
+            this.updateRequired(this[`field${i+1}`], false);
+        }
     }
 
     updateRequired(field, required:boolean = true){
@@ -103,16 +109,15 @@ export class ApiInputComponent implements OnInit{
         // To show is valid
         this.valid$
             .subscribe(newValue => {
-                console.log('SUCCESS newValue :: ', newValue);
+                // console.log('Valid : newValue ::: ', newValue);
                 this.validMbid = true;
             });
 
-        // To update field2
+        // To remove validators
         this.valid$
             .filter(() => this.selectedOption && this.selectedOption.params.length === 2)
             .subscribe(newValue => {
-                console.log('SUCCESS there IS a validator - REMOVE IT', newValue);
-                console.log('this.valid$ ', this.valid$);
+                // console.log('There IS a validator - REMOVE IT', newValue);
                 this.updateRequired(this.field2, false);
             });
 
@@ -121,14 +126,14 @@ export class ApiInputComponent implements OnInit{
         // To show invalid
         this.invalid$
             .subscribe(newValue => {
-                console.log('FAIL newValue :: ', newValue);
+                // console.log('Invalid : newValue ::: ', newValue);
                 this.validMbid = false;
               });
         // To add validators
         this.invalid$
             .filter(() => this.selectedOption && this.selectedOption.params.length === 2)
             .subscribe(newValue => {
-                console.log('FAIL there IS *NOT* a validator - ADD IT');
+                // console.log('There IS *NOT* a validator - ADD IT');
                 this.updateRequired(this.field2, true);
               });
 

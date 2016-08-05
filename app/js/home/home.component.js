@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
-var lastfm_service_new_1 = require('../services/lastfm.service.new');
+var lastfm_service_1 = require('../services/lastfm.service');
 var artist_1 = require('../artist/artist');
 var limit_pipe_1 = require('../pipes/limit-pipe');
 var results_pipe_1 = require('../pipes/results-pipe');
@@ -65,7 +65,7 @@ var HomeComponent = (function () {
             directives: [router_deprecated_1.ROUTER_DIRECTIVES],
             templateUrl: 'app/js/home/home.component.html'
         }), 
-        __metadata('design:paramtypes', [lastfm_service_new_1.LastFM])
+        __metadata('design:paramtypes', [lastfm_service_1.LastFM])
     ], HomeComponent);
     return HomeComponent;
 }());

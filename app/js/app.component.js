@@ -15,7 +15,8 @@ var about_component_1 = require('./about/about.component');
 var artist_component_1 = require('./artist/artist.component');
 var album_component_1 = require('./album/album.component');
 var explore_component_1 = require('./explore/explore.component');
-var lastfm_service_new_1 = require('./services/lastfm.service.new');
+var lastfm_service_1 = require('./services/lastfm.service');
+var lastfm_config_1 = require('./lastfm.config');
 var AppComponent = (function () {
     function AppComponent() {
         this.title = 'LastFM - Angular 2';
@@ -31,13 +32,7 @@ var AppComponent = (function () {
         core_1.Component({
             selector: 'lastfm-app',
             directives: [router_deprecated_1.RouterOutlet, router_deprecated_1.ROUTER_DIRECTIVES],
-            providers: [lastfm_service_new_1.LastFM,
-                core_1.provide('LastFMConfig', {
-                    useValue: {
-                        api_key: '636d81e5364ebc98a99d202c57268f18'
-                    }
-                })
-            ],
+            providers: [lastfm_service_1.LastFM, lastfm_config_1.LastFMConfig],
             template: "\n                <div class=\"top-bar\">\n                    <div class=\"row\">\n                        <div class=\"top-bar-left\">\n                            <ul class=\"dropdown menu\" data-dropdown-menu>\n                                <li class=\"menu-text\">{{title}}</li>\n                                <li><a [routerLink]=\"['Home']\">Home</a></li>\n                                <li><a [routerLink]=\"['About']\">About</a></li>\n                            </ul>\n                        </div>\n                    </div>\n                </div>\n\n                <router-outlet></router-outlet>\n        "
         }), 
         __metadata('design:paramtypes', [])
@@ -45,4 +40,12 @@ var AppComponent = (function () {
     return AppComponent;
 }());
 exports.AppComponent = AppComponent;
+/*
+Or...
+    provide('LastFMConfig', {
+        useValue: {
+            api_key: 'YOUR_API_KEY'
+        }
+    })
+*/ 
 //# sourceMappingURL=app.component.js.map

@@ -1,15 +1,16 @@
-import {Component, provide}         from '@angular/core';
+import {Component, provide}    from '@angular/core';
 import {RouteConfig,
         RouterOutlet,
         ROUTER_DIRECTIVES,
-        ROUTER_PROVIDERS}  from '@angular/router-deprecated';
+        ROUTER_PROVIDERS}      from '@angular/router-deprecated';
 
-import {HomeComponent}     from './home/home.component';
-import {AboutComponent}    from './about/about.component';
-import {ArtistComponent}   from './artist/artist.component';
-import {AlbumComponent}    from './album/album.component';
-import {ExploreComponent}    from './explore/explore.component';
-import {LastFM}             from './services/lastfm.service.new';
+import {HomeComponent}         from './home/home.component';
+import {AboutComponent}        from './about/about.component';
+import {ArtistComponent}       from './artist/artist.component';
+import {AlbumComponent}        from './album/album.component';
+import {ExploreComponent}      from './explore/explore.component';
+import {LastFM}                from './services/lastfm.service';
+import {LastFMConfig}          from './lastfm.config';
 
 @RouteConfig([
     { path: '/', name: 'Home', component: HomeComponent, useAsDefault: true },
@@ -22,13 +23,7 @@ import {LastFM}             from './services/lastfm.service.new';
 @Component({
     selector: 'lastfm-app',
     directives: [RouterOutlet, ROUTER_DIRECTIVES],
-    providers:[LastFM,
-        provide('LastFMConfig', {
-            useValue: {
-                api_key: '636d81e5364ebc98a99d202c57268f18'
-            }
-        })
-    ],
+    providers:[LastFM, LastFMConfig],
     template: `
                 <div class="top-bar">
                     <div class="row">
@@ -48,3 +43,11 @@ import {LastFM}             from './services/lastfm.service.new';
 export class AppComponent {
     title = 'LastFM - Angular 2'
 }
+/*
+Or...
+    provide('LastFMConfig', {
+        useValue: {
+            api_key: 'YOUR_API_KEY'
+        }
+    })
+*/

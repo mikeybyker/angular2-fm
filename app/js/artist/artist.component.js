@@ -12,7 +12,7 @@ var core_1 = require('@angular/core');
 var router_deprecated_1 = require('@angular/router-deprecated');
 var Observable_1 = require('rxjs/Observable');
 var breadcrumbs_component_1 = require('../utils/breadcrumbs.component');
-var lastfm_service_new_1 = require('../services/lastfm.service.new');
+var lastfm_service_1 = require('../services/lastfm.service');
 var artist_1 = require('./artist');
 var album_1 = require('../album/album');
 var results_pipe_1 = require('../pipes/results-pipe');
@@ -64,7 +64,7 @@ var ArtistComponent = (function () {
             //   }`],
             templateUrl: 'app/js/artist/artist.component.html'
         }), 
-        __metadata('design:paramtypes', [lastfm_service_new_1.LastFM, router_deprecated_1.RouteParams])
+        __metadata('design:paramtypes', [lastfm_service_1.LastFM, router_deprecated_1.RouteParams])
     ], ArtistComponent);
     return ArtistComponent;
 }());
