@@ -1,5 +1,4 @@
 import {Component, OnInit}                 from '@angular/core';
-import {ROUTER_DIRECTIVES, RouteParams}    from '@angular/router-deprecated';
 import {Observable}                        from 'rxjs/Observable';
 
 import {BreadcrumbsComponent}              from '../utils/breadcrumbs.component';
@@ -11,7 +10,7 @@ import {MethodsService}                    from './methods.service';
 @Component({
     selector: 'explore',
     providers: [MethodsService],
-    directives: [ROUTER_DIRECTIVES, BreadcrumbsComponent, ServiceInputComponent],
+    directives: [BreadcrumbsComponent, ServiceInputComponent],
     templateUrl: 'app/js/explore/explore.component.html'
 })
 
