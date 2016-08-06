@@ -1,6 +1,6 @@
 import {Component, OnInit}     from '@angular/core';
 import {ROUTER_DIRECTIVES,
-        RouteParams}           from '@angular/router-deprecated';
+        ActivatedRoute}        from '@angular/router';
 import {Observable}            from 'rxjs/Observable';
 
 import {BreadcrumbsComponent}  from '../utils/breadcrumbs.component';
@@ -32,26 +32,33 @@ export class ArtistComponent implements OnInit {
     error: ErrorMessage;
     maxAlbums: number = 12;
 
-    constructor(private _lastFM: LastFM, private _routeParams: RouteParams) {
+
+    constructor(private _lastFM: LastFM, private route: ActivatedRoute) {
 
     }
 
     ngOnInit(){
 
-        this.artistName = decodeURI(this._routeParams.get('name')); // necc?
-        if(!this.artistName)
-        {
-            this.error = new ErrorMessage('Error', 'Artist not specified');
-            return;
-        }
+        this.route.params.subscribe(params => {
+            this.artistName = decodeURI(params['name']);
+            this.links.push({ title: this.artistName });
+            if(!this.artistName)
+            {
+                this.error = new ErrorMessage('Error', 'Artist not specified');
+                return;
+            }
+            this.getArtist(this.artistName, this.maxAlbums)
+        });
 
         this.error = null;
-        this.links.push({ title: this.artistName });
 
+    }
+
+    getArtist(artistName, maxAlbums){
         Observable
             .forkJoin(
-                this._lastFM.Artist.getInfo(this.artistName),
-                this._lastFM.Artist.getTopAlbums(this.artistName, { limit: this.maxAlbums })
+                this._lastFM.Artist.getInfo(artistName),
+                this._lastFM.Artist.getTopAlbums(artistName, { limit: maxAlbums })
             )
             .subscribe(data => {
                 const artist = data[0],
@@ -65,6 +72,6 @@ export class ArtistComponent implements OnInit {
             },
             error => {
                 this.error = new ErrorMessage('Error', <string>error);
-            });
+            });  
     }
 }

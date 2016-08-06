@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var router_deprecated_1 = require('@angular/router-deprecated');
+var router_1 = require('@angular/router');
 var lastfm_service_1 = require('../services/lastfm.service');
 var artist_1 = require('../artist/artist');
 var limit_pipe_1 = require('../pipes/limit-pipe');
@@ -49,7 +49,7 @@ var HomeComponent = (function () {
         core_1.Component({
             selector: 'home',
             pipes: [results_pipe_1.ResultsPipe, limit_pipe_1.LimitPipe],
-            directives: [router_deprecated_1.ROUTER_DIRECTIVES],
+            directives: [router_1.ROUTER_DIRECTIVES],
             templateUrl: 'app/js/home/home.component.html'
         }), 
         __metadata('design:paramtypes', [lastfm_service_1.LastFM])

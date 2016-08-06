@@ -9,28 +9,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var router_deprecated_1 = require('@angular/router-deprecated');
+var router_1 = require('@angular/router');
 var breadcrumbs_component_1 = require('../utils/breadcrumbs.component');
 var lastfm_service_1 = require('../services/lastfm.service');
 var album_1 = require('./album');
 var duration_pipe_1 = require('../pipes/duration-pipe');
 var error_message_1 = require('../utils/error-message');
 var AlbumComponent = (function () {
-    function AlbumComponent(_lastFM, _routeParams) {
+    function AlbumComponent(_lastFM, route) {
         this._lastFM = _lastFM;
-        this._routeParams = _routeParams;
+        this.route = route;
         this.links = [];
     }
     AlbumComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.artistName = this._routeParams.get('name');
-        var mbid = this._routeParams.get('mbid');
-        this.links.push({ title: decodeURI(this.artistName), url: "artist/" + this.artistName });
-        if (!this.artistName || !mbid) {
-            this.error = new error_message_1.ErrorMessage('Error', 'Did not find an album to look for...');
-            return;
-        }
+        this.route.params
+            .subscribe(function (params) {
+            _this.artistName = params['name'];
+            var mbid = params['mbid'];
+            if (!_this.artistName || !mbid) {
+                _this.error = new error_message_1.ErrorMessage('Error', 'Did not find an album to look for...');
+                return;
+            }
+            _this.links.push({ title: decodeURI(_this.artistName), url: "artist/" + _this.artistName });
+            _this.getAlbum(mbid);
+        });
         this.error = null;
+    };
+    AlbumComponent.prototype.getAlbum = function (mbid) {
+        var _this = this;
         var album$ = this._lastFM
             .Album.getInfo(mbid)
             .share();
@@ -56,10 +63,10 @@ var AlbumComponent = (function () {
         core_1.Component({
             selector: 'album',
             pipes: [duration_pipe_1.TrackDurationPipe],
-            directives: [router_deprecated_1.ROUTER_DIRECTIVES, breadcrumbs_component_1.BreadcrumbsComponent],
+            directives: [router_1.ROUTER_DIRECTIVES, breadcrumbs_component_1.BreadcrumbsComponent],
             templateUrl: 'app/js/album/album.component.html'
         }), 
-        __metadata('design:paramtypes', [lastfm_service_1.LastFM, router_deprecated_1.RouteParams])
+        __metadata('design:paramtypes', [lastfm_service_1.LastFM, router_1.ActivatedRoute])
     ], AlbumComponent);
     return AlbumComponent;
 }());

@@ -18,7 +18,7 @@ import {Component, Input} from '@angular/core';
                 </nav>
             </div>  
         </div>  
-        `
+    `
 })
 
 export class BreadcrumbsComponent { 

@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var router_deprecated_1 = require('@angular/router-deprecated');
+var router_1 = require('@angular/router');
 var Observable_1 = require('rxjs/Observable');
 var breadcrumbs_component_1 = require('../utils/breadcrumbs.component');
 var lastfm_service_1 = require('../services/lastfm.service');
@@ -20,24 +20,30 @@ var limit_pipe_1 = require('../pipes/limit-pipe');
 var external_href_pipe_1 = require('../pipes/external-href-pipe');
 var error_message_1 = require('../utils/error-message');
 var ArtistComponent = (function () {
-    function ArtistComponent(_lastFM, _routeParams) {
+    function ArtistComponent(_lastFM, route) {
         this._lastFM = _lastFM;
-        this._routeParams = _routeParams;
+        this.route = route;
         this.albums = [];
         this.links = [];
         this.maxAlbums = 12;
     }
     ArtistComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.artistName = decodeURI(this._routeParams.get('name')); // necc?
-        if (!this.artistName) {
-            this.error = new error_message_1.ErrorMessage('Error', 'Artist not specified');
-            return;
-        }
+        this.route.params.subscribe(function (params) {
+            _this.artistName = decodeURI(params['name']);
+            _this.links.push({ title: _this.artistName });
+            if (!_this.artistName) {
+                _this.error = new error_message_1.ErrorMessage('Error', 'Artist not specified');
+                return;
+            }
+            _this.getArtist(_this.artistName, _this.maxAlbums);
+        });
         this.error = null;
-        this.links.push({ title: this.artistName });
+    };
+    ArtistComponent.prototype.getArtist = function (artistName, maxAlbums) {
+        var _this = this;
         Observable_1.Observable
-            .forkJoin(this._lastFM.Artist.getInfo(this.artistName), this._lastFM.Artist.getTopAlbums(this.artistName, { limit: this.maxAlbums }))
+            .forkJoin(this._lastFM.Artist.getInfo(artistName), this._lastFM.Artist.getTopAlbums(artistName, { limit: maxAlbums }))
             .subscribe(function (data) {
             var artist = data[0], albums = data[1];
             if (artist.error || albums.error) {
@@ -54,14 +60,14 @@ var ArtistComponent = (function () {
         core_1.Component({
             selector: 'artist',
             pipes: [results_pipe_1.ResultsPipe, limit_pipe_1.LimitPipe, external_href_pipe_1.ExternalHrefPipe],
-            directives: [router_deprecated_1.ROUTER_DIRECTIVES, breadcrumbs_component_1.BreadcrumbsComponent],
+            directives: [router_1.ROUTER_DIRECTIVES, breadcrumbs_component_1.BreadcrumbsComponent],
             // styles: [`
             //   .foo {
             //     background-image: {{artist.images.extralarge}}; // this would be nice!
             //   }`],
             templateUrl: 'app/js/artist/artist.component.html'
         }), 
-        __metadata('design:paramtypes', [lastfm_service_1.LastFM, router_deprecated_1.RouteParams])
+        __metadata('design:paramtypes', [lastfm_service_1.LastFM, router_1.ActivatedRoute])
     ], ArtistComponent);
     return ArtistComponent;
 }());

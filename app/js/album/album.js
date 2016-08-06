@@ -1,14 +1,5 @@
 "use strict";
 var Album = (function () {
-    // constructor(artist: any,
-    //             image: Array<any>,
-    //             mbid: string,
-    //             name: string,
-    //             playcount: Number = 0,
-    //             url: string = '',
-    //             listeners:string = '',
-    //             tracks: any = {}
-    // )
     function Album(album) {
         this.artist = album.artist;
         this.image = album.image;

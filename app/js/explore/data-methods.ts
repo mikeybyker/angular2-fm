@@ -1,3 +1,5 @@
+// All available methods in the lastfm service
+// with a few default values left in...
 export const METHODS:any = {
     Album : [
             {

@@ -1,12 +1,13 @@
-import {Component, OnInit}              from '@angular/core';
-import {ROUTER_DIRECTIVES, RouteParams} from '@angular/router-deprecated';
-import {Observable}                     from 'rxjs/Observable';
+import {Component, OnInit}         from '@angular/core';
+import {ROUTER_DIRECTIVES,
+        ActivatedRoute}            from '@angular/router';
+import {Observable}                from 'rxjs/Observable';
 
-import {BreadcrumbsComponent}           from '../utils/breadcrumbs.component';
-import {LastFM}                         from '../services/lastfm.service';
-import {Album}                          from './album';
-import {TrackDurationPipe}              from '../pipes/duration-pipe';
-import {ErrorMessage}                   from '../utils/error-message';
+import {BreadcrumbsComponent}      from '../utils/breadcrumbs.component';
+import {LastFM}                    from '../services/lastfm.service';
+import {Album}                     from './album';
+import {TrackDurationPipe}         from '../pipes/duration-pipe';
+import {ErrorMessage}              from '../utils/error-message';
 
 @Component({
     selector: 'album',
@@ -14,26 +15,35 @@ import {ErrorMessage}                   from '../utils/error-message';
     directives: [ROUTER_DIRECTIVES, BreadcrumbsComponent],
     templateUrl: 'app/js/album/album.component.html'
 })
-export class AlbumComponent implements OnInit{ 
+export class AlbumComponent implements OnInit { 
     artistName: string;
     album:Observable<Album>;
     links: Array<any> = [];
     error: ErrorMessage;
 
-    constructor(private _lastFM: LastFM, private _routeParams: RouteParams) {
+    constructor(private _lastFM: LastFM, private route: ActivatedRoute) {
         
     }
 
     ngOnInit(){
-        this.artistName = this._routeParams.get('name');
-        const mbid = this._routeParams.get('mbid');
-        this.links.push({title: decodeURI(this.artistName), url: `artist/${this.artistName}` });
 
-        if (!this.artistName || !mbid) {
-            this.error = new ErrorMessage('Error', 'Did not find an album to look for...');
-            return;
-        }
+        this.route.params
+            .subscribe(params => {
+                this.artistName = params['name'];
+                const mbid = params['mbid'];
+                if (!this.artistName || !mbid) {
+                    this.error = new ErrorMessage('Error', 'Did not find an album to look for...');
+                    return;
+                }
+                this.links.push({title: decodeURI(this.artistName), url: `artist/${this.artistName}` });
+                this.getAlbum(mbid);
+            });
+
         this.error = null;
+
+    }
+
+    getAlbum(mbid){
 
         const album$:Observable<any> = this._lastFM
             .Album.getInfo(mbid)

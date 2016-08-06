@@ -23,7 +23,7 @@ export class ServiceInputComponent implements OnInit{
     apiForm: FormGroup;
     valid$:Observable<string>;
     invalid$:Observable<string>;
-    field1:FormControl; // Very tired to this use case
+    field1:FormControl; // Very tied to this use case
     field2:FormControl;
 
     @Output() callService = new EventEmitter();
@@ -49,7 +49,7 @@ export class ServiceInputComponent implements OnInit{
             })
             .debounceTime(500)
             .map(newValue => {
-                // console.log('!Validation...', newValue);
+                // Validate...
                 return this.mbidPattern.test(newValue) ? newValue : '';
             })
             .share(); // only validate once per value...
@@ -79,7 +79,6 @@ export class ServiceInputComponent implements OnInit{
             }
         }
         // Reset required on hidden fields
-        // for(;i<this.maxFields;i++){ // could just do this...but upsets tsc
         for(let i=option.params.length;i<this.maxFields;i++){
             this.updateRequired(this[`field${i+1}`], false);
         }
@@ -110,7 +109,6 @@ export class ServiceInputComponent implements OnInit{
         // To show is valid
         this.valid$
             .subscribe(newValue => {
-                // console.log('Valid : newValue ::: ', newValue);
                 this.validMbid = true;
             });
 
@@ -118,7 +116,6 @@ export class ServiceInputComponent implements OnInit{
         this.valid$
             .filter(() => this.selectedOption && this.selectedOption.params.length === 2)
             .subscribe(newValue => {
-                // console.log('There IS a validator - REMOVE IT', newValue);
                 this.updateRequired(this.field2, false);
             });
 
@@ -127,14 +124,12 @@ export class ServiceInputComponent implements OnInit{
         // To show invalid
         this.invalid$
             .subscribe(newValue => {
-                // console.log('Invalid : newValue ::: ', newValue);
                 this.validMbid = false;
               });
         // To add validators
         this.invalid$
             .filter(() => this.selectedOption && this.selectedOption.params.length === 2)
             .subscribe(newValue => {
-                // console.log('There IS *NOT* a validator - ADD IT');
                 this.updateRequired(this.field2, true);
               });
 

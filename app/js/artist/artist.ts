@@ -24,7 +24,7 @@ export class Artist {
         //     extralarge,
         //     mega,
         // }
-        let o: any = {};
+        let o: any = {};    
         image
             .filter(o => o['#text'])
             .forEach((element, index, array) => o[element.size] = element['#text']);
@@ -40,6 +40,7 @@ export class Artist {
         });
     }
 
+    // spread? but...some need changing...
     constructor(artist)
     {
         this.name = artist.name || ''; 

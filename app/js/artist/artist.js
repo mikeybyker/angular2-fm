@@ -1,5 +1,6 @@
 "use strict";
 var Artist = (function () {
+    // spread? but...some need changing...
     function Artist(artist) {
         this.name = artist.name || '';
         this.mbid = artist.mbid || '';

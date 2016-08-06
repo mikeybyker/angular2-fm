@@ -11,7 +11,7 @@
 </div>
 <div class="row">
     <div class="small-12 columns">
-        <h3><a [routerLink]="['Artist', {name: artistName}]">{{(album | async)?.artist}}</a></h3>
+        <h3><a [routerLink]="['/artist', artistName]">{{(album | async)?.artist}}</a></h3>
     </div>
     <div class="small-12 medium-6 columns">
         <a [href]="(album | async)?.url" target="_blank"><img class="thumbnail main-artist" [src]="(album | async)?.images?.mega || ''"></a>

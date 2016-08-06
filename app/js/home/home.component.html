@@ -15,7 +15,6 @@
                 </p>
             </div>
         </form>
-        <a [routerLink]="['Explore']">Explore API</a>
     </div>
 </div>
 <div class="row align-center" *ngIf="error">
@@ -34,7 +33,7 @@
         <div class="callout">
             <p>{{ artist.name }}</p>
             <p>
-                <a [routerLink]="['Artist', {name: artist.name}]" >
+                <a [routerLink]="['/artist', artist.name]" >
                     <!-- The elvis operator... not helping here -->
                     <img class="thumbnail" [src] = "artist?.images?.extralarge">
                 </a>
@@ -48,7 +47,7 @@
         <div class="callout">
             <p>{{ artist.name }}</p>
             <p>
-                <a [routerLink]="['Artist', {name: artist.name}]" >
+                <a [routerLink]="['/artist', artist.name]" >
                     <img class="thumbnail" [src] = "artist.images.extralarge">
                 </a>
             </p>

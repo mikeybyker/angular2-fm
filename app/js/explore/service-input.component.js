@@ -36,7 +36,7 @@ var ServiceInputComponent = (function () {
         })
             .debounceTime(500)
             .map(function (newValue) {
-            // console.log('!Validation...', newValue);
+            // Validate...
             return _this.mbidPattern.test(newValue) ? newValue : '';
         })
             .share(); // only validate once per value...
@@ -60,7 +60,6 @@ var ServiceInputComponent = (function () {
             }
         }
         // Reset required on hidden fields
-        // for(;i<this.maxFields;i++){ // could just do this...but upsets tsc
         for (var i = option.params.length; i < this.maxFields; i++) {
             this.updateRequired(this[("field" + (i + 1))], false);
         }
@@ -88,28 +87,24 @@ var ServiceInputComponent = (function () {
         // To show is valid
         this.valid$
             .subscribe(function (newValue) {
-            // console.log('Valid : newValue ::: ', newValue);
             _this.validMbid = true;
         });
         // To remove validators
         this.valid$
             .filter(function () { return _this.selectedOption && _this.selectedOption.params.length === 2; })
             .subscribe(function (newValue) {
-            // console.log('There IS a validator - REMOVE IT', newValue);
             _this.updateRequired(_this.field2, false);
         });
         // Not mbid...
         // To show invalid
         this.invalid$
             .subscribe(function (newValue) {
-            // console.log('Invalid : newValue ::: ', newValue);
             _this.validMbid = false;
         });
         // To add validators
         this.invalid$
             .filter(function () { return _this.selectedOption && _this.selectedOption.params.length === 2; })
             .subscribe(function (newValue) {
-            // console.log('There IS *NOT* a validator - ADD IT');
             _this.updateRequired(_this.field2, true);
         });
     };

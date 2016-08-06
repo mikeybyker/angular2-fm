@@ -1,4 +1,6 @@
 "use strict";
+// All available methods in the lastfm service
+// with a few default values left in...
 exports.METHODS = {
     Album: [
         {

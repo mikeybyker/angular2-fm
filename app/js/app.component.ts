@@ -1,8 +1,5 @@
 import {Component, provide}    from '@angular/core';
-import {RouteConfig,
-        RouterOutlet,
-        ROUTER_DIRECTIVES,
-        ROUTER_PROVIDERS}      from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES}     from '@angular/router';
 
 import {HomeComponent}         from './home/home.component';
 import {AboutComponent}        from './about/about.component';
@@ -12,31 +9,26 @@ import {ExploreComponent}      from './explore/explore.component';
 import {LastFM}                from './services/lastfm.service';
 import {LastFMConfig}          from './lastfm.config';
 
-@RouteConfig([
-    { path: '/', name: 'Home', component: HomeComponent, useAsDefault: true },
-    { path: '/about', name: 'About', component: AboutComponent },
-    { path: '/explore', name: 'Explore', component: ExploreComponent },
-    { path: '/artist/:name', name: 'Artist', component: ArtistComponent },
-    { path: '/artist/:name/album/:mbid', name: 'Album', component: AlbumComponent }
-])
-
 @Component({
     selector: 'lastfm-app',
-    directives: [RouterOutlet, ROUTER_DIRECTIVES],
+    directives: [ROUTER_DIRECTIVES],
+    precompile: [HomeComponent, AboutComponent, ArtistComponent, AlbumComponent, ExploreComponent],
     providers:[LastFM, LastFMConfig], // *
     template: `
         <div class="top-bar">
-            <div class="row">
-                <div class="top-bar-left">
-                    <ul class="dropdown menu" data-dropdown-menu>
-                        <li class="menu-text">{{title}}</li>
-                        <li><a [routerLink]="['Home']">Home</a></li>
-                        <li><a [routerLink]="['About']">About</a></li>
-                    </ul>
-                </div>
+            <div class="top-bar-left">
+                <ul class="menu">
+                    <li class="menu-text">{{title}}</li>
+                    <li><a [routerLink]="['']">Home</a></li>
+                    <li><a [routerLink]="['/about']">About</a></li>
+                </ul>
+            </div>
+            <div class="top-bar-right">
+                <ul class="menu">
+                    <li><a [routerLink]="['/explore']">Explore API</a></li>
+                </ul>
             </div>
         </div>
-
         <router-outlet></router-outlet>
     `
 })

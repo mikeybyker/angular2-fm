@@ -21,15 +21,6 @@ export class Album {
         return o;
     }
 
-    // constructor(artist: any,
-    //             image: Array<any>,
-    //             mbid: string,
-    //             name: string,
-    //             playcount: Number = 0,
-    //             url: string = '',
-    //             listeners:string = '',
-    //             tracks: any = {}
-    // )
     constructor(album: any)
     {
         this.artist = album.artist;
