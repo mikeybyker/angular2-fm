@@ -86,7 +86,7 @@ var LastFM = (function () {
     };
     LastFM.prototype.getSearchParams = function (params) {
         var search = new http_1.URLSearchParams();
-        // Really?!
+        // Really?! No method to accept object?!
         for (var key in params) {
             search.set(key, params[key]);
         }
@@ -96,7 +96,6 @@ var LastFM = (function () {
         if (settings === void 0) { settings = {}; }
         if (options === void 0) { options = {}; }
         var params = this.assignParams(options, settings);
-        // console.log('params ::: ', params);
         return this.getSearchParams(params);
     };
     /*
@@ -113,8 +112,12 @@ var LastFM = (function () {
     LastFM.prototype.updateSettings = function (settings, fieldName) {
         fieldName = fieldName || 'artist';
         if (this.isMbid(settings[fieldName])) {
-            settings.mbid = settings[fieldName];
-            settings[fieldName] = '';
+            var newValues = { mbid: settings[fieldName] };
+            newValues[fieldName] = '';
+            var updated = Object.assign({}, settings, newValues);
+            // or... mbid takes precedence, regardless
+            // delete updated[fieldName];
+            return updated;
         }
         return settings;
     };

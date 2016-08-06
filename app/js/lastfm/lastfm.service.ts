@@ -11,6 +11,19 @@ export interface LastFMConfig {
     format?: string
 }
 
+export interface LastFMOptions {
+    autocorrect?: number,
+    lang?: string,
+    limit?: number,
+    location?: string,
+    mbid ?: string,
+    page?: number,
+    album?: string,
+    artist?: string,
+    method?: string,
+    track?: string
+}
+
 @Injectable()
 export class LastFM {
 
@@ -28,19 +41,17 @@ export class LastFM {
     curry(fn, ...args1) {
         return (...args2) => fn(...args1, ...args2);
     }
-    getSearchParams(params: any): URLSearchParams{
+    getSearchParams(params: LastFMOptions): URLSearchParams{
         const search: URLSearchParams = new URLSearchParams();
-        // Really?!
+        // Really?! No method to accept object?!
         for (const key in params) {
             search.set(key, params[key]);
         }
         return search;
     }
 
-    private createParams(settings: any = {}, options: any = {}): URLSearchParams {
-
-        let params: any = this.assignParams(options, settings);
-        // console.log('params ::: ', params);
+    private createParams(settings: LastFMOptions = {}, options: LastFMOptions = {}): URLSearchParams {
+        let params: LastFMOptions = this.assignParams(options, settings);
         return this.getSearchParams(params);
     }
 
@@ -48,7 +59,7 @@ export class LastFM {
         json() : any
         Attempts to return body as parsed JSON object, or raises an exception.
     */
-    private handleError(error: Response) {
+    private handleError(error: Response):Observable<any> {
         let o:any = error.json(),
             msg:string = o.message || error.statusText;
         return Observable.throw(msg || 'Server Error');
@@ -56,13 +67,15 @@ export class LastFM {
     isMbid(str){
         return this.mbidPattern.test(str);
     }
-    updateSettings(settings:any, fieldName?:string){
+    updateSettings(settings:LastFMOptions, fieldName?:string):LastFMOptions{
         fieldName = fieldName || 'artist';
         if(this.isMbid(settings[fieldName])){
-            settings.mbid = settings[fieldName];
-            settings[fieldName] = '';
+            const newValues:any = {mbid:settings[fieldName]};
+            newValues[fieldName] = '';
+            const updated:LastFMOptions = Object.assign({}, settings, newValues);
             // or... mbid takes precedence, regardless
-            // delete settings[fieldName];
+            // delete updated[fieldName];
+            return updated;
         }
         return settings;
     }
@@ -79,16 +92,16 @@ export class LastFM {
     /*
         Check there's an mbid and at least an extralarge image source
     */
-    checkUsableImage(result:any){
+    checkUsableImage(result:any):boolean{
         if (result.mbid && result.image && result.image[3] && result.image[3]['#text'] !== '') {
             return true;
         }
         return false;
     }
 
-    private _http(settings:any = {}, options:any = {}){
-        const updated = this.updateSettings(settings),
-            params: any = this.createParams(options, updated);
+    private _http(settings:LastFMOptions = {}, options:LastFMOptions = {}):Observable<any>{
+        const updated:LastFMOptions = this.updateSettings(settings),
+            params:URLSearchParams = this.createParams(options, updated);
         return this.http.get(this.config.endPoint, { search: params })
                 .map(res => res.json())
                 .catch(this.handleError);
@@ -170,7 +183,7 @@ export class LastFM {
     // Album
 
         // Docs: http://www.last.fm/api/show/album.getInfo
-        _getAlbumInfo(artistOrMbid: string, album: string = '', options:any = {}):Observable<any> {
+        _getAlbumInfo(artistOrMbid: string, album: string = '', options:LastFMOptions = {}):Observable<any> {
             let settings = {
                                 artist: artistOrMbid,
                                 album: album,
@@ -181,7 +194,7 @@ export class LastFM {
                         };
             return this._http(settings, options);
         }
-        getAlbumInfo(artistOrMbid: string, album: string = '', options:any = {}):Observable<any> {
+        getAlbumInfo(artistOrMbid: string, album: string = '', options:LastFMOptions = {}):Observable<any> {
             return this._getAlbumInfo.apply(this, arguments)
                     .map(data => {
                         return this.validateData(data, 'album', {});
@@ -440,7 +453,7 @@ export class LastFM {
     // Track
 
         // Docs: http://www.last.fm/api/show/track.getInfo
-        _getTrackInfo(artistOrMbid: string, track: string = '', options:any = {}):Observable<any> {
+        _getTrackInfo(artistOrMbid: string, track: string = '', options:LastFMOptions = {}):Observable<any> {
             let settings = {
                                 artist: artistOrMbid,
                                 track: track,
@@ -450,7 +463,7 @@ export class LastFM {
                         };
             return this._http(settings, options);
         }
-        getTrackInfo(artistOrMbid: string, track: string = '', options:any = {}):Observable<any> {
+        getTrackInfo(artistOrMbid: string, track: string = '', options:LastFMOptions = {}):Observable<any> {
             return this._getTrackInfo.apply(this, arguments)
                     .map(data => {
                         return this.validateData(data, 'track', {});
@@ -459,7 +472,7 @@ export class LastFM {
 
 
         // Docs: http://www.last.fm/api/show/track.getSimilar
-        _getSimilarTrack(artistOrMbid: string, track: string = '', options:any = {}):Observable<Array<any>> {
+        _getSimilarTrack(artistOrMbid: string, track: string = '', options:LastFMOptions = {}):Observable<Array<any>> {
             let settings = {
                                 artist: artistOrMbid,
                                 track: track,
@@ -470,7 +483,7 @@ export class LastFM {
                         };
             return this._http(settings, options);
         }
-        getSimilarTrack(artistOrMbid: string, track: string = '', options:any = {}):Observable<Array<any>> {
+        getSimilarTrack(artistOrMbid: string, track: string = '', options:LastFMOptions = {}):Observable<Array<any>> {
             return this._getSimilarTrack.apply(this, arguments)
                     .map(data => {
                         return this.validateData(data, 'similartracks.track');
@@ -479,7 +492,7 @@ export class LastFM {
 
 
         // Docs: http://www.last.fm/api/show/track.getTopTags
-        _getTrackTopTags(artistOrMbid: string, track: string = '', options:any = {}):Observable<Array<any>> {
+        _getTrackTopTags(artistOrMbid: string, track: string = '', options:LastFMOptions = {}):Observable<Array<any>> {
             let settings = {
                                 artist: artistOrMbid,
                                 track: track,
@@ -490,7 +503,7 @@ export class LastFM {
                         };
             return this._http(settings, options);
         }
-        getTrackTopTags(artistOrMbid: string, track: string = '', options:any = {}):Observable<Array<any>> {
+        getTrackTopTags(artistOrMbid: string, track: string = '', options:LastFMOptions = {}):Observable<Array<any>> {
             return this._getTrackTopTags.apply(this, arguments)
                     .map(data => {
                         return this.validateData(data, 'toptags.tag');
@@ -499,7 +512,7 @@ export class LastFM {
 
 
         // Docs: http://www.last.fm/api/show/track.search
-        _searchTrack(track: string = '', options:any = {}):Observable<Array<any>> {
+        _searchTrack(track: string = '', options:LastFMOptions = {}):Observable<Array<any>> {
             let settings = {
                                 track: track,
                                 method: 'track.search'
@@ -508,7 +521,7 @@ export class LastFM {
                         };
             return this._http(settings, options);
         }
-        searchTrack(track: string = '', options:any = {}):Observable<Array<any>> {
+        searchTrack(track: string = '', options:LastFMOptions = {}):Observable<Array<any>> {
             return this._searchTrack.apply(this, arguments)
                     .map(data => {
                         return this.validateData(data, 'results.trackmatches.track');
