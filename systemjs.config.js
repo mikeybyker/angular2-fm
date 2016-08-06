@@ -1,5 +1,5 @@
 /**
- * System configuration ffrom Angular2 QuickStart
+ * System configuration from Angular2 QuickStart
  *
  */
 (function(global) {
