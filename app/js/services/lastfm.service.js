@@ -67,18 +67,37 @@ var LastFM = (function () {
         };
         config.endPoint || (config.endPoint = 'http://ws.audioscrobbler.com/2.0/');
         config.format || (config.format = 'json');
+        // {...options, common}; // not part of es6... :-|
+        var assign = function (common, options, settings) { return Object.assign({}, common, options, settings); };
+        this.assignParams = this.curry(assign, { format: config.format, api_key: config.api_key });
     }
-    LastFM.prototype.createParams = function (settings, options) {
-        if (settings === void 0) { settings = {}; }
-        if (options === void 0) { options = {}; }
-        // let params = {...options, method: 'artist.getTopAlbums', artist: artistName }; // not part of es6... :-|
-        var params = Object.assign({ format: this.config.format, api_key: this.config.api_key }, options, settings), search = new http_1.URLSearchParams();
-        // console.log('params ::: ', params);
+    LastFM.prototype.curry = function (fn) {
+        var args1 = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args1[_i - 1] = arguments[_i];
+        }
+        return function () {
+            var args2 = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args2[_i - 0] = arguments[_i];
+            }
+            return fn.apply(void 0, args1.concat(args2));
+        };
+    };
+    LastFM.prototype.getSearchParams = function (params) {
+        var search = new http_1.URLSearchParams();
         // Really?!
         for (var key in params) {
             search.set(key, params[key]);
         }
         return search;
+    };
+    LastFM.prototype.createParams = function (settings, options) {
+        if (settings === void 0) { settings = {}; }
+        if (options === void 0) { options = {}; }
+        var params = this.assignParams(options, settings);
+        // console.log('params ::: ', params);
+        return this.getSearchParams(params);
     };
     /*
         json() : any

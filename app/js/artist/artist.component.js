@@ -35,7 +35,7 @@ var ArtistComponent = (function () {
             return;
         }
         this.error = null;
-        this.links.push({ title: this.artistName, url: "artist/" + this.artistName });
+        this.links.push({ title: this.artistName });
         Observable_1.Observable
             .forkJoin(this._lastFM.Artist.getInfo(this.artistName), this._lastFM.Artist.getTopAlbums(this.artistName, { limit: this.maxAlbums }))
             .subscribe(function (data) {

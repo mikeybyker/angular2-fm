@@ -130,7 +130,6 @@ var ServiceInputComponent = (function () {
         this.fields = {};
         this.validMbid = false;
         this.initFields(this.selectedOption);
-        console.log(this.selectedOption, this.selectedOption.fn);
         this.changeMethod.emit({
             fn: this.selectedOption.fn,
             group: this.selectedOption.group

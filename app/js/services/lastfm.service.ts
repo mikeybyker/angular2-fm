@@ -18,23 +18,33 @@ export interface LastFMConfig {
 export class LastFM {
 
     mbidPattern = /^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$/;
+    assignParams:Function;
 
     constructor(@Inject('LastFMConfig') private config: LastFMConfig, public http: Http) {
         config.endPoint || (config.endPoint =  'http://ws.audioscrobbler.com/2.0/');
         config.format || (config.format =  'json');
+        // {...options, common}; // not part of es6... :-|
+        const assign = (common, options, settings) =>  Object.assign({}, common, options, settings);
+        this.assignParams = this.curry(assign, { format: config.format, api_key: config.api_key });
     }
 
-    private createParams(settings: any = {}, options: any = {}): URLSearchParams {
-        // let params = {...options, method: 'artist.getTopAlbums', artist: artistName }; // not part of es6... :-|
-        let params: any = Object.assign({ format: this.config.format, api_key: this.config.api_key }, options, settings),
-            search: URLSearchParams = new URLSearchParams();
-
-        // console.log('params ::: ', params);
+    curry(fn, ...args1) {
+        return (...args2) => fn(...args1, ...args2);
+    }
+    getSearchParams(params: any): URLSearchParams{
+        const search: URLSearchParams = new URLSearchParams();
         // Really?!
-        for (let key in params) {
+        for (const key in params) {
             search.set(key, params[key]);
         }
         return search;
+    }
+
+    private createParams(settings: any = {}, options: any = {}): URLSearchParams {
+
+        let params: any = this.assignParams(options, settings);
+        // console.log('params ::: ', params);
+        return this.getSearchParams(params);
     }
 
     /*

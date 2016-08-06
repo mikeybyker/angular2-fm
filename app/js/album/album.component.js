@@ -38,6 +38,11 @@ var AlbumComponent = (function () {
         this.album = album$
             .filter(function (album) { return !!album.artist; }) // make sure is album data (note before subscribe!)
             .map(function (album) { return new album_1.Album(album); });
+        // Update the breadcrumbs with the album name
+        this.album
+            .subscribe(function (album) {
+            _this.links.push({ title: album.name });
+        });
         // Display error (if any)
         album$
             .subscribe(function (data) {
@@ -61,7 +66,7 @@ var AlbumComponent = (function () {
 exports.AlbumComponent = AlbumComponent;
 // Alt.
 // album$
-//     .filter(album => !!album.artist) // make sure is album data (note before subscribe!)
+//     .filter(album => !!album.artist)
 //     .map(album => new Album(album))
 //     .subscribe(album => {
 //          this.album = album;

@@ -46,7 +46,7 @@ export class ArtistComponent implements OnInit {
         }
 
         this.error = null;
-        this.links.push({ title: this.artistName, url: `artist/${this.artistName}` });
+        this.links.push({ title: this.artistName });
 
         Observable
             .forkJoin(

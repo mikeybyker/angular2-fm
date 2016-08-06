@@ -28,6 +28,7 @@ export class AlbumComponent implements OnInit{
         this.artistName = this._routeParams.get('name');
         const mbid = this._routeParams.get('mbid');
         this.links.push({title: decodeURI(this.artistName), url: `artist/${this.artistName}` });
+
         if (!this.artistName || !mbid) {
             this.error = new ErrorMessage('Error', 'Did not find an album to look for...');
             return;
@@ -43,6 +44,12 @@ export class AlbumComponent implements OnInit{
                 .filter(album => !!album.artist) // make sure is album data (note before subscribe!)
                 .map(album => new Album(album));
 
+            // Update the breadcrumbs with the album name
+            this.album
+                .subscribe((album) => {
+                    this.links.push({ title: album.name });
+                });
+
             // Display error (if any)
             album$
                 .subscribe(data => {
@@ -55,7 +62,7 @@ export class AlbumComponent implements OnInit{
 }
 // Alt.
 // album$
-//     .filter(album => !!album.artist) // make sure is album data (note before subscribe!)
+//     .filter(album => !!album.artist)
 //     .map(album => new Album(album))
 //     .subscribe(album => {
 //          this.album = album;
