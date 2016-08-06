@@ -9,7 +9,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var router_deprecated_1 = require('@angular/router-deprecated');
 var breadcrumbs_component_1 = require('../utils/breadcrumbs.component');
 var lastfm_service_1 = require('../lastfm/lastfm.service');
 var service_input_component_1 = require('./service-input.component');
@@ -47,7 +46,7 @@ var ExploreComponent = (function () {
         core_1.Component({
             selector: 'explore',
             providers: [methods_service_1.MethodsService],
-            directives: [router_deprecated_1.ROUTER_DIRECTIVES, breadcrumbs_component_1.BreadcrumbsComponent, service_input_component_1.ServiceInputComponent],
+            directives: [breadcrumbs_component_1.BreadcrumbsComponent, service_input_component_1.ServiceInputComponent],
             templateUrl: 'app/js/explore/explore.component.html'
         }), 
         __metadata('design:paramtypes', [lastfm_service_1.LastFM, methods_service_1.MethodsService])

@@ -5,9 +5,6 @@ import {Http,
 import {Injectable, Inject}       from '@angular/core';
 import {Observable}               from 'rxjs/Observable';
 
-import {Artist}                   from '../artist/artist';
-import {Album}                    from '../album/album';
-
 export interface LastFMConfig {
     api_key: string,
     endPoint?: string,
@@ -200,8 +197,8 @@ export class LastFM {
         _getAlbumTopTags(artistOrMbid: string, album: string = '', options: any = {}):Observable<Array<any>> {
             let settings = {
                                 method: 'album.gettoptags',
-                                album :album,
-                                artist :artistOrMbid
+                                album: album,
+                                artist: artistOrMbid
                                 // mbid :mbid,
                                 // autocorrect: 1
                         };
