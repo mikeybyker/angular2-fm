@@ -4,7 +4,7 @@ import {ROUTER_DIRECTIVES,
 import {Observable}                from 'rxjs/Observable';
 
 import {BreadcrumbsComponent}      from '../utils/breadcrumbs.component';
-import {LastFM}                    from '../services/lastfm.service';
+import {LastFM}                    from '../lastfm/lastfm.service';
 import {Album}                     from './album';
 import {TrackDurationPipe}         from '../pipes/duration-pipe';
 import {ErrorMessage}              from '../utils/error-message';

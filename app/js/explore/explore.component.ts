@@ -3,9 +3,9 @@ import {ROUTER_DIRECTIVES, RouteParams}    from '@angular/router-deprecated';
 import {Observable}                        from 'rxjs/Observable';
 
 import {BreadcrumbsComponent}              from '../utils/breadcrumbs.component';
-import {LastFM}                            from '../services/lastfm.service';
+import {LastFM}                            from '../lastfm/lastfm.service';
 import {ServiceInputComponent}             from './service-input.component';
-import { MethodsService }                  from './methods.service';
+import {MethodsService}                    from './methods.service';
 
 
 @Component({

@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
-var lastfm_service_1 = require('../services/lastfm.service');
+var lastfm_service_1 = require('../lastfm/lastfm.service');
 var artist_1 = require('../artist/artist');
 var limit_pipe_1 = require('../pipes/limit-pipe');
 var results_pipe_1 = require('../pipes/results-pipe');

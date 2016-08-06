@@ -6,7 +6,7 @@ import {AboutComponent}        from './about/about.component';
 import {ArtistComponent}       from './artist/artist.component';
 import {AlbumComponent}        from './album/album.component';
 import {ExploreComponent}      from './explore/explore.component';
-import {LastFM}                from './services/lastfm.service';
+import {LastFM}                from './lastfm/lastfm.service';
 import {LastFMConfig}          from './lastfm.config';
 
 @Component({

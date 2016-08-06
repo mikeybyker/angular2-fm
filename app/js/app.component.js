@@ -15,7 +15,7 @@ var about_component_1 = require('./about/about.component');
 var artist_component_1 = require('./artist/artist.component');
 var album_component_1 = require('./album/album.component');
 var explore_component_1 = require('./explore/explore.component');
-var lastfm_service_1 = require('./services/lastfm.service');
+var lastfm_service_1 = require('./lastfm/lastfm.service');
 var lastfm_config_1 = require('./lastfm.config');
 var AppComponent = (function () {
     function AppComponent() {

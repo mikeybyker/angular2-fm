@@ -3,7 +3,7 @@ import {ROUTER_DIRECTIVES} from '@angular/router';
 import {NgForm}            from '@angular/forms';
 import {Observable}        from 'rxjs/Observable';
 
-import {LastFM}            from '../services/lastfm.service';
+import {LastFM}            from '../lastfm/lastfm.service';
 import {Artist}            from '../artist/artist';
 import {LimitPipe}         from '../pipes/limit-pipe';
 import {ResultsPipe}       from '../pipes/results-pipe';
