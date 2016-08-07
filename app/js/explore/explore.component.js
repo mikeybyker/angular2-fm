@@ -12,16 +12,16 @@ var core_1 = require('@angular/core');
 var breadcrumbs_component_1 = require('../utils/breadcrumbs.component');
 var lastfm_service_1 = require('../lastfm/lastfm.service');
 var service_input_component_1 = require('./service-input.component');
-var methods_service_1 = require('./methods.service');
+var api_methods_service_1 = require('./api-methods.service');
 var ExploreComponent = (function () {
-    function ExploreComponent(_lastFM, methodsService) {
+    function ExploreComponent(_lastFM, ApiService) {
         this._lastFM = _lastFM;
-        this.methodsService = methodsService;
+        this.ApiService = ApiService;
         this.links = [{ title: 'Explore', url: '' }];
         this.methods = [];
     }
     ExploreComponent.prototype.ngOnInit = function () {
-        this.methods = this.methodsService.getMethods();
+        this.methods = this.ApiService.getApiMethods();
         this.clearView();
     };
     ExploreComponent.prototype.apiCall = function (o) {
@@ -45,11 +45,11 @@ var ExploreComponent = (function () {
     ExploreComponent = __decorate([
         core_1.Component({
             selector: 'explore',
-            providers: [methods_service_1.MethodsService],
+            providers: [api_methods_service_1.ApiService],
             directives: [breadcrumbs_component_1.BreadcrumbsComponent, service_input_component_1.ServiceInputComponent],
             templateUrl: 'app/js/explore/explore.component.html'
         }), 
-        __metadata('design:paramtypes', [lastfm_service_1.LastFM, methods_service_1.MethodsService])
+        __metadata('design:paramtypes', [lastfm_service_1.LastFM, api_methods_service_1.ApiService])
     ], ExploreComponent);
     return ExploreComponent;
 }());

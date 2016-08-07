@@ -27,7 +27,7 @@ export interface LastFMOptions {
 @Injectable()
 export class LastFM {
 
-    mbidPattern = /^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$/;
+    mbidPattern:RegExp = /^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$/;
     assignParams:Function;
 
     constructor(@Inject('LastFMConfig') private config: LastFMConfig, public http: Http) {
@@ -41,6 +41,7 @@ export class LastFM {
     curry(fn, ...args1) {
         return (...args2) => fn(...args1, ...args2);
     }
+
     getSearchParams(params: LastFMOptions): URLSearchParams{
         const search: URLSearchParams = new URLSearchParams();
         // Really?! No method to accept object?!
@@ -70,10 +71,10 @@ export class LastFM {
     updateSettings(settings:LastFMOptions, fieldName?:string):LastFMOptions{
         fieldName = fieldName || 'artist';
         if(this.isMbid(settings[fieldName])){
-            const newValues:any = {mbid:settings[fieldName]};
+            const newValues:LastFMOptions = {mbid:settings[fieldName]};
             newValues[fieldName] = '';
             const updated:LastFMOptions = Object.assign({}, settings, newValues);
-            // or... mbid takes precedence, regardless
+            // or...delete the property. mbid takes precedence, regardless
             // delete updated[fieldName];
             return updated;
         }
@@ -87,13 +88,14 @@ export class LastFM {
         function hasImage(element, index, array):boolean {
             return !!element['#text'];
         }
-        return results.artistmatches.artist.some((element, index, array) => element.mbid && element.image.some(hasImage));
+        return results.artistmatches.artist
+            .some((element, index, array) => element.mbid && element.image.some(hasImage));
     }
     /*
-        Check there's an mbid and at least an extralarge image source
+        Check there's an mbid and an image of specified size (default extralarge image source)
     */
-    checkUsableImage(result:any):boolean{
-        if (result.mbid && result.image && result.image[3] && result.image[3]['#text'] !== '') {
+    checkUsableImage(result:any, size:number = 3):boolean{
+        if (result.mbid && result.image && result.image[size] && result.image[size]['#text'] !== '') {
             return true;
         }
         return false;
@@ -101,7 +103,7 @@ export class LastFM {
 
     private _http(settings:LastFMOptions = {}, options:LastFMOptions = {}):Observable<any>{
         const updated:LastFMOptions = this.updateSettings(settings),
-            params:URLSearchParams = this.createParams(options, updated);
+              params:URLSearchParams = this.createParams(options, updated);
         return this.http.get(this.config.endPoint, { search: params })
                 .map(res => res.json())
                 .catch(this.handleError);
@@ -529,6 +531,5 @@ export class LastFM {
         }
 
     // End Track
-
 
 }

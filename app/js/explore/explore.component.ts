@@ -4,12 +4,12 @@ import {Observable}                        from 'rxjs/Observable';
 import {BreadcrumbsComponent}              from '../utils/breadcrumbs.component';
 import {LastFM}                            from '../lastfm/lastfm.service';
 import {ServiceInputComponent}             from './service-input.component';
-import {MethodsService}                    from './methods.service';
+import {ApiService}                        from './api-methods.service';
 
 
 @Component({
     selector: 'explore',
-    providers: [MethodsService],
+    providers: [ApiService],
     directives: [BreadcrumbsComponent, ServiceInputComponent],
     templateUrl: 'app/js/explore/explore.component.html'
 })
@@ -20,12 +20,12 @@ export class ExploreComponent implements OnInit {
     methods:any[] = [];
     output:string; // = '[Waiting...]';
 
-    constructor(private _lastFM: LastFM, private methodsService: MethodsService) {
+    constructor(private _lastFM: LastFM, private ApiService: ApiService) {
 
     }
 
     ngOnInit(){
-        this.methods = this.methodsService.getMethods();
+        this.methods = this.ApiService.getApiMethods();
         this.clearView();
     }
 

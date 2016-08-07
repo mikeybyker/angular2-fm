@@ -10,17 +10,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var data_methods_1 = require('./data-methods');
-var MethodsService = (function () {
-    function MethodsService() {
+var ApiService = (function () {
+    function ApiService() {
     }
-    MethodsService.prototype.getMethods = function () {
+    ApiService.prototype.getApiMethods = function () {
         return data_methods_1.METHODS;
     };
-    MethodsService = __decorate([
+    ApiService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [])
-    ], MethodsService);
-    return MethodsService;
+    ], ApiService);
+    return ApiService;
 }());
-exports.MethodsService = MethodsService;
-//# sourceMappingURL=methods.service.js.map
+exports.ApiService = ApiService;
+//# sourceMappingURL=api-methods.service.js.map

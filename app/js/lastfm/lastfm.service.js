@@ -115,7 +115,7 @@ var LastFM = (function () {
             var newValues = { mbid: settings[fieldName] };
             newValues[fieldName] = '';
             var updated = Object.assign({}, settings, newValues);
-            // or... mbid takes precedence, regardless
+            // or...delete the property. mbid takes precedence, regardless
             // delete updated[fieldName];
             return updated;
         }
@@ -129,13 +129,15 @@ var LastFM = (function () {
         function hasImage(element, index, array) {
             return !!element['#text'];
         }
-        return results.artistmatches.artist.some(function (element, index, array) { return element.mbid && element.image.some(hasImage); });
+        return results.artistmatches.artist
+            .some(function (element, index, array) { return element.mbid && element.image.some(hasImage); });
     };
     /*
-        Check there's an mbid and at least an extralarge image source
+        Check there's an mbid and an image of specified size (default extralarge image source)
     */
-    LastFM.prototype.checkUsableImage = function (result) {
-        if (result.mbid && result.image && result.image[3] && result.image[3]['#text'] !== '') {
+    LastFM.prototype.checkUsableImage = function (result, size) {
+        if (size === void 0) { size = 3; }
+        if (result.mbid && result.image && result.image[size] && result.image[size]['#text'] !== '') {
             return true;
         }
         return false;
