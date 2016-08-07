@@ -223,4 +223,4 @@ exports.METHODS = {
             ]
         }],
 };
-//# sourceMappingURL=data-methods.js.map
+//# sourceMappingURL=api-methods.js.map
