@@ -33,7 +33,6 @@ export class LastFM {
     constructor(@Inject('LastFMConfig') private config: LastFMConfig, public http: Http) {
         config.endPoint || (config.endPoint =  'http://ws.audioscrobbler.com/2.0/');
         config.format || (config.format =  'json');
-        // {...options, common}; // not part of es6... :-|
         const assign = (common, options, settings) =>  Object.assign({}, common, options, settings);
         this.assignParams = this.curry(assign, { format: config.format, api_key: config.api_key });
     }
@@ -56,9 +55,9 @@ export class LastFM {
         return this.getSearchParams(params);
     }
 
-    /*
-        json() : any
-        Attempts to return body as parsed JSON object, or raises an exception.
+    /**
+    *   error.json() : any
+    *   Attempts to return body as parsed JSON object, or raises an exception.
     */
     private handleError(error: Response):Observable<any> {
         let o:any = error.json(),

@@ -67,7 +67,6 @@ var LastFM = (function () {
         };
         config.endPoint || (config.endPoint = 'http://ws.audioscrobbler.com/2.0/');
         config.format || (config.format = 'json');
-        // {...options, common}; // not part of es6... :-|
         var assign = function (common, options, settings) { return Object.assign({}, common, options, settings); };
         this.assignParams = this.curry(assign, { format: config.format, api_key: config.api_key });
     }
@@ -98,9 +97,9 @@ var LastFM = (function () {
         var params = this.assignParams(options, settings);
         return this.getSearchParams(params);
     };
-    /*
-        json() : any
-        Attempts to return body as parsed JSON object, or raises an exception.
+    /**
+    *   error.json() : any
+    *   Attempts to return body as parsed JSON object, or raises an exception.
     */
     LastFM.prototype.handleError = function (error) {
         var o = error.json(), msg = o.message || error.statusText;
