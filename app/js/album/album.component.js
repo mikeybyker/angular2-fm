@@ -62,9 +62,10 @@ var AlbumComponent = (function () {
     AlbumComponent = __decorate([
         core_1.Component({
             selector: 'album',
+            moduleId: module.id,
             pipes: [duration_pipe_1.TrackDurationPipe],
             directives: [router_1.ROUTER_DIRECTIVES, breadcrumbs_component_1.BreadcrumbsComponent],
-            templateUrl: 'app/js/album/album.component.html'
+            templateUrl: 'album.component.html'
         }), 
         __metadata('design:paramtypes', [lastfm_service_1.LastFM, router_1.ActivatedRoute])
     ], AlbumComponent);

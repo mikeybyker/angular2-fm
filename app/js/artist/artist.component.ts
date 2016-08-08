@@ -14,13 +14,14 @@ import {ErrorMessage}          from '../utils/error-message';
 
 @Component({
     selector: 'artist',
+    moduleId: module.id,
     pipes: [ResultsPipe, LimitPipe, ExternalHrefPipe],
     directives: [ROUTER_DIRECTIVES, BreadcrumbsComponent],
     // styles: [`
     //   .foo {
     //     background-image: {{artist.images.extralarge}}; // this would be nice!
     //   }`],
-    templateUrl: 'app/js/artist/artist.component.html'
+    templateUrl: 'artist.component.html'
 })
 
 export class ArtistComponent implements OnInit {

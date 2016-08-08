@@ -11,9 +11,10 @@ import {ErrorMessage}              from '../utils/error-message';
 
 @Component({
     selector: 'album',
+    moduleId: module.id,
     pipes: [TrackDurationPipe],
     directives: [ROUTER_DIRECTIVES, BreadcrumbsComponent],
-    templateUrl: 'app/js/album/album.component.html'
+    templateUrl: 'album.component.html'
 })
 export class AlbumComponent implements OnInit { 
     artistName: string;

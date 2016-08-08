@@ -2,7 +2,8 @@ import {Component} from '@angular/core';
 
 @Component({
     selector: 'about',
-    templateUrl: 'app/js/about/about.component.html'
+    moduleId: module.id,
+    templateUrl: 'about.component.html'
 })
 
 export class AboutComponent {

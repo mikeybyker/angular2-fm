@@ -59,13 +59,14 @@ var ArtistComponent = (function () {
     ArtistComponent = __decorate([
         core_1.Component({
             selector: 'artist',
+            moduleId: module.id,
             pipes: [results_pipe_1.ResultsPipe, limit_pipe_1.LimitPipe, external_href_pipe_1.ExternalHrefPipe],
             directives: [router_1.ROUTER_DIRECTIVES, breadcrumbs_component_1.BreadcrumbsComponent],
             // styles: [`
             //   .foo {
             //     background-image: {{artist.images.extralarge}}; // this would be nice!
             //   }`],
-            templateUrl: 'app/js/artist/artist.component.html'
+            templateUrl: 'artist.component.html'
         }), 
         __metadata('design:paramtypes', [lastfm_service_1.LastFM, router_1.ActivatedRoute])
     ], ArtistComponent);

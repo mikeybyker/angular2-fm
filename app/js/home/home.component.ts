@@ -11,9 +11,10 @@ import {ErrorMessage}      from '../utils/error-message';
 
 @Component({
     selector: 'home',
+    moduleId: module.id,
     pipes: [ResultsPipe, LimitPipe],
     directives: [ROUTER_DIRECTIVES],
-    templateUrl: 'app/js/home/home.component.html'
+    templateUrl: 'home.component.html'
 })
 
 export class HomeComponent {

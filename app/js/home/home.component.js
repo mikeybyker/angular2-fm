@@ -48,9 +48,10 @@ var HomeComponent = (function () {
     HomeComponent = __decorate([
         core_1.Component({
             selector: 'home',
+            moduleId: module.id,
             pipes: [results_pipe_1.ResultsPipe, limit_pipe_1.LimitPipe],
             directives: [router_1.ROUTER_DIRECTIVES],
-            templateUrl: 'app/js/home/home.component.html'
+            templateUrl: 'home.component.html'
         }), 
         __metadata('design:paramtypes', [lastfm_service_1.LastFM])
     ], HomeComponent);
