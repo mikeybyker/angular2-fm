@@ -20,7 +20,7 @@ export interface LastFMOptions {
     lang?: string,
     limit?: number,
     location?: string,
-    mbid ?: string,
+    mbid?: string,
     page?: number,
     album?: string,
     artist?: string,
