@@ -9,9 +9,10 @@ import {ApiService}                        from './api-methods.service';
 
 @Component({
     selector: 'explore',
+    moduleId: module.id,
     providers: [ApiService],
     directives: [BreadcrumbsComponent, ServiceInputComponent],
-    templateUrl: 'app/js/explore/explore.component.html'
+    templateUrl: 'explore.component.html'
 })
 
 export class ExploreComponent implements OnInit {

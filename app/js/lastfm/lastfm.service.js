@@ -14,6 +14,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var http_1 = require('@angular/http');
 var core_1 = require('@angular/core');
 var Observable_1 = require('rxjs/Observable');
+require('rxjs/add/operator/map');
+require('rxjs/add/observable/throw');
+require('rxjs/add/operator/catch');
 var LastFM = (function () {
     function LastFM(config, http) {
         this.config = config;
@@ -82,6 +85,9 @@ var LastFM = (function () {
             }
             return fn.apply(void 0, args1.concat(args2));
         };
+    };
+    LastFM.prototype.getApiKey = function () {
+        return this.config.api_key;
     };
     LastFM.prototype.getSearchParams = function (params) {
         var search = new http_1.URLSearchParams();

@@ -6,11 +6,8 @@ import {disableDeprecatedForms,
 import {AppComponent}              from './app.component';
 import {appRouterProviders}        from './app.routes';
 
-import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/from';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/share';

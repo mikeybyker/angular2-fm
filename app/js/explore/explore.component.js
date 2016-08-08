@@ -45,9 +45,10 @@ var ExploreComponent = (function () {
     ExploreComponent = __decorate([
         core_1.Component({
             selector: 'explore',
+            moduleId: module.id,
             providers: [api_methods_service_1.ApiService],
             directives: [breadcrumbs_component_1.BreadcrumbsComponent, service_input_component_1.ServiceInputComponent],
-            templateUrl: 'app/js/explore/explore.component.html'
+            templateUrl: 'explore.component.html'
         }), 
         __metadata('design:paramtypes', [lastfm_service_1.LastFM, api_methods_service_1.ApiService])
     ], ExploreComponent);

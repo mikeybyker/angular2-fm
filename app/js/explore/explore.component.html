@@ -1,14 +1,4 @@
 <breadcrumbs [links]="links"></breadcrumbs>
-<div class="row align-center" *ngIf="error">
-    <div class="medium-6 large-4 column">
-        <div class="callout alert">
-            <h5>{{error.title}}</h5>
-            <p>
-                {{error.message}}
-            </p>
-        </div>
-    </div>
-</div>
 <div class="row" >
     <div class="medium-4 columns">
         <service-input [serviceMethods]='methods' (callService)="apiCall($event)" (changeMethod)="clearView($event)"></service-input>

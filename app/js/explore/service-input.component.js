@@ -141,9 +141,11 @@ var ServiceInputComponent = (function () {
     ServiceInputComponent = __decorate([
         core_1.Component({
             selector: 'service-input',
+            moduleId: module.id,
             inputs: ['serviceMethods'],
             directives: [forms_1.REACTIVE_FORM_DIRECTIVES],
-            templateUrl: 'app/js/explore/service-input.component.html'
+            styleUrls: ['service-input.component.css'],
+            templateUrl: 'service-input.component.html'
         }), 
         __metadata('design:paramtypes', [forms_1.FormBuilder])
     ], ServiceInputComponent);

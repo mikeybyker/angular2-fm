@@ -5,9 +5,11 @@ import {Observable}                                       from 'rxjs/Observable'
 
 @Component({
     selector: 'service-input',
+    moduleId: module.id,
     inputs: ['serviceMethods'],
     directives:[REACTIVE_FORM_DIRECTIVES],
-    templateUrl: 'app/js/explore/service-input.component.html'
+    styleUrls: ['service-input.component.css'],
+    templateUrl: 'service-input.component.html'
 })
 
 export class ServiceInputComponent implements OnInit{
