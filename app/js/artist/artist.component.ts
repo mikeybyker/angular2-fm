@@ -62,8 +62,11 @@ export class ArtistComponent implements OnInit {
                 this._lastFM.Artist.getTopAlbums(artistName, { limit: maxAlbums })
             )
             .subscribe(data => {
-                const artist = data[0],
-                    albums = data[1];
+                // const artist = data[0],
+                //     albums = data[1];
+                const [artist, albums] = data; // this works/compiles : sublime doesn't like it mind you...
+                console.log('artist : ', artist);
+                console.log('albums : ', albums);
                 if (artist.error || albums.error) {
                     this.error = new ErrorMessage('Error', artist.error ? artist.message : albums.message);
                     return;

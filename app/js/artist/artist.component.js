@@ -45,7 +45,11 @@ var ArtistComponent = (function () {
         Observable_1.Observable
             .forkJoin(this._lastFM.Artist.getInfo(artistName), this._lastFM.Artist.getTopAlbums(artistName, { limit: maxAlbums }))
             .subscribe(function (data) {
-            var artist = data[0], albums = data[1];
+            // const artist = data[0],
+            //     albums = data[1];
+            var artist = data[0], albums = data[1]; // this works/compiles : sublime doesn't like it mind you...
+            console.log('artist : ', artist);
+            console.log('albums : ', albums);
             if (artist.error || albums.error) {
                 _this.error = new error_message_1.ErrorMessage('Error', artist.error ? artist.message : albums.message);
                 return;

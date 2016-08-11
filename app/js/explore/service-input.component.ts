@@ -75,7 +75,7 @@ export class ServiceInputComponent implements OnInit{
         {
             p = option.params[i];
             id = p.id;
-            this.fields[`field${i+1}`] = p.default || '';
+            this.fields[i+1] = p.default || '';
             if(i>0){
                 this.updateRequired(this[`field${i+1}`], p.required);
             }
@@ -141,11 +141,7 @@ export class ServiceInputComponent implements OnInit{
         if(!data || !data.params){
             return [];
         }
-        let params:Array<string> = [],
-            len = data.params.length;
-        for(let i=0;i<len;i++){
-            params.push(fields[`field${i+1}`] || '');
-        }
+        let params:Array<string> = Object.keys(fields).map((k) => fields[k] || '');
         return params;
     }
     

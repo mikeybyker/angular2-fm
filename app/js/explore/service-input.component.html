@@ -16,7 +16,7 @@
             <div class="small-12 columns">
                 <div>
                     <label [hidden]="selectedOption.params.length <1">
-                        <input type="text" formControlName="field1" [attr.placeholder]="selectedOption?.params[0]?.label || ''" [(ngModel)]="fields.field1">
+                        <input type="text" formControlName="field1" [attr.placeholder]="selectedOption?.params[0]?.label || ''" [(ngModel)]="fields[1]">
                     </label>
                     <div class="help-holder">
                         <p class="help-text" *ngIf="canBeMbid && validMbid">Valid mbid format entered</p>
@@ -26,7 +26,7 @@
 
                 <div>
                     <label [hidden]="selectedOption.params.length <2">
-                        <input type="text" formControlName="field2" [attr.placeholder]="selectedOption?.params[1]?.label || ''" [(ngModel)]="fields.field2">
+                        <input type="text" formControlName="field2" [attr.placeholder]="selectedOption?.params[1]?.label || ''" [(ngModel)]="fields[2]">
                     </label>
                 </div>
             </div>
