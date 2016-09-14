@@ -1,0 +1,15 @@
+<div class="top-bar">
+    <div class="top-bar-left">
+        <ul class="menu">
+            <li class="menu-text">{{title}}</li>
+            <li><a [routerLink]="['']">Home</a></li>
+            <li><a [routerLink]="['/about']">About</a></li>
+        </ul>
+    </div>
+    <div class="top-bar-right">
+        <ul class="menu">
+            <li><a [routerLink]="['/explore']">Explore API</a></li>
+        </ul>
+    </div>
+</div>
+<router-outlet></router-outlet>

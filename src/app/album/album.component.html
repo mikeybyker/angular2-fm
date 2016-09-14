@@ -1,0 +1,28 @@
+<breadcrumbs [links]="links"></breadcrumbs>
+<div class="row align-center" *ngIf="error">
+    <div class="medium-6 large-4 column">
+        <div class="callout alert">
+            <h5>{{error.title}}</h5>
+            <p>
+                {{error.message}}
+            </p>
+        </div>
+    </div>
+</div>
+<!-- @todo Waiting for fr5 fix: async with Elvic on Observable doesn't guard against null : Error til then... -->
+<div class="row">
+    <div class="small-12 columns">
+        <h3><a [routerLink]="['/artist', artistName]">{{(album | async)?.artist}}</a></h3>
+    </div>
+    <div class="small-12 medium-6 columns">
+        <a [href]="(album | async)?.url" target="_blank"><img class="thumbnail main-artist" [src]="(album | async)?.images?.mega || ''"></a>
+    </div>
+    <div class="small-12 medium-6 columns">
+        <h4>{{(album | async)?.name}}</h4>
+        <ol class="track-list">
+            <li *ngFor="let track of (album | async)?.tracks?.track">
+                <a [href]="track.url" target="_blank">{{track.name}}</a> ({{track.duration | trackduration}})
+            </li>
+        </ol>
+    </div>
+</div>

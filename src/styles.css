@@ -1,0 +1,25 @@
+/* You can add global styles to this file, and also import other style files */
+.top-bar
+{
+    margin-bottom: 1rem;
+}
+.thumbnail.main-artist
+{
+    width: 100%;
+}
+.loading-container
+{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+    .loading-container .loading
+    {
+        width: 50%;
+        height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
