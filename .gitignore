@@ -1,5 +1,7 @@
 node_modules
 typings
+/dist
+/tmp
 .tmp
 app/js/lastfm.config.ts
 app/js/lastfm.config.js
