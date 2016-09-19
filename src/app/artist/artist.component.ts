@@ -40,7 +40,7 @@ export class ArtistComponent implements OnInit {
                     this.error = new ErrorMessage('Error', 'Artist not specified');
                     return;
                 }
-                this.getArtist(this.artistName, this.maxAlbums)
+                this.getArtist(this.artistName, this.maxAlbums);
             });
 
         this.error = null;
