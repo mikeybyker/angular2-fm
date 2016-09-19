@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input }    from '@angular/core';
 
 @Component({
     selector: 'breadcrumbs',
@@ -10,7 +10,7 @@ import { Component, Input } from '@angular/core';
                         <li *ngFor="let link of links; let first = first; let last = last;" [class.disabled]='last'>
                             <span [ngSwitch]="last && !first">
                                 <span *ngSwitchCase="true">{{link.title}}</span>
-                                <a [href]="link.url" *ngSwitchDefault >{{link.title}}</a>
+                                <a [routerLink]="[link.url]" *ngSwitchDefault >{{link.title}}</a>
                             </span>
                         </li>
                     </ul>
@@ -19,11 +19,25 @@ import { Component, Input } from '@angular/core';
         </div>  
     `
 })
-
+// [routerLink]="['../']">
+// [href]="link.url"
 export class BreadcrumbsComponent { 
     @Input() links: Array<any> = [];
 
     ngOnInit(){
-        this.links.unshift({ title: 'HOME', url: '' });
+
+        let str:string = '../',
+            popped = this.links.length > 1 ? this.links.pop() : null;
+        if(!this.links.length){
+            return;
+        }
+        this.links.reverse();
+        for(const link of this.links){
+            link.url = str;
+            str += str;
+        }
+
+        this.links.reverse().unshift({ title: 'HOME', url: '' });
+        popped && this.links.push(popped);
     }
 }

@@ -34,7 +34,6 @@
             <p>{{ artist.name }}</p>
             <p>
                 <a [routerLink]="['/artist', artist.name]" >
-                    <!-- The elvis operator... not helping here -->
                     <img class="thumbnail" [src] = "artist?.images?.extralarge">
                 </a>
             </p>

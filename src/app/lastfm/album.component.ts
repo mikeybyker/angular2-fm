@@ -1,11 +1,11 @@
-import { Component, OnInit }         from '@angular/core';
-import { ActivatedRoute }            from '@angular/router';
-import { Observable }                from 'rxjs/Observable';
+import { Component, OnInit }       from '@angular/core';
+import { ActivatedRoute }          from '@angular/router';
+import { Observable }              from 'rxjs/Observable';
 
-import { BreadcrumbsComponent }      from '../utils/breadcrumbs.component';
-import { LastFM }                    from '../lastfm/lastfm.service';
-import { Album }                     from './album';
-import { ErrorMessage }              from '../utils/error-message';
+import { BreadcrumbsComponent }    from '../shared/breadcrumbs.component';
+import { LastFM }                  from '../lastfm/lastfm.service';
+import { ErrorMessage }            from '../shared/error-message';
+import { Album }                   from './album';
 
 @Component({
     selector: 'album',
@@ -32,7 +32,8 @@ export class AlbumComponent implements OnInit {
                     this.error = new ErrorMessage('Error', 'Did not find an album to look for...');
                     return;
                 }
-                this.links.push({title: decodeURI(this.artistName), url: `artist/${this.artistName}` });
+                // this.links.push({title: decodeURI(this.artistName), url: `artist/${this.artistName}` });
+                this.links.push({title: decodeURI(this.artistName)});
                 this.getAlbum(mbid);
             });
 
@@ -48,7 +49,7 @@ export class AlbumComponent implements OnInit {
 
             // Display album (if any) - async pipe
             this.album = album$
-                .filter(album => !!album.artist) // make sure is album data (note before subscribe!)
+                .filter(album => !!album.artist) // make sure is album data
                 .map(album => new Album(album));
 
             // Update the breadcrumbs with the album name

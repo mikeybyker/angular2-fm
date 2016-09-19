@@ -1,13 +1,12 @@
-import { Component, OnInit }     from '@angular/core';
-import { ActivatedRoute }        from '@angular/router';
-import { Observable }            from 'rxjs/Observable';
+import { Component, OnInit }       from '@angular/core';
+import { ActivatedRoute }          from '@angular/router';
+import { Observable }              from 'rxjs/Observable';
 
-import { BreadcrumbsComponent }  from '../utils/breadcrumbs.component';
-import { LastFM }                from '../lastfm/lastfm.service';
-import { Artist }                from './artist';
-import { Album }                 from '../album/album';
-import { ErrorMessage }          from '../utils/error-message';
-
+import { BreadcrumbsComponent }    from '../shared/breadcrumbs.component';
+import { LastFM }                  from '../lastfm/lastfm.service';
+import { ErrorMessage }            from '../shared/error-message';
+import { Artist }                  from './artist';
+import { Album }                   from './album';
 
 @Component({
     selector: 'artist',

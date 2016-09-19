@@ -15,8 +15,6 @@
     </div>
     <div class="small-12 medium-6 columns">
         <h3>{{artist?.name}}</h3>
-        <!-- ang2 version of bind-as-html... -->
-        <!-- Will get a message: WARNING: sanitizing HTML stripped some content -->
         <p [innerHTML]="artist?.bio?.summary | externalhref"></p>
         <dl *ngIf="artist">
             <dt>Listeners</dt>
