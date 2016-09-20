@@ -12,7 +12,7 @@ import { Artist }          from './artist';
 })
 
 export class HomeComponent {
-    // potentials:Array<Artist>;  When *not* using the angular async pipe...
+
     potentials:Observable<Array<Artist>>;
     error: ErrorMessage;
     model:any = {artist:'The Cure'};
@@ -21,9 +21,9 @@ export class HomeComponent {
     constructor(private _lastFM: LastFM) {
 
     }
+    
     onSubmit(){
 
-        console.log(this.model.artist);
         this.error = null;
 
         const search$:Observable<any> = this._lastFM
@@ -51,24 +51,3 @@ export class HomeComponent {
     }
 
 }
-
-/*
-When *not* using the angular async pipe...
-onSubmit() {
-    console.log(this.model.artist);
-    this.error = null;
-    this.lastFmService
-        .searchArtists(this.model.artist, { limit: this.maxResults })
-        .subscribe(data => {
-            if (data.error || !data.length) {
-                this.error = new ErrorMessage('Error', data.message || 'Nothing found...');
-                this.potentials = [];
-                return;
-            }
-            this.potentials = data;
-        },
-        error => {
-            this.error = new ErrorMessage('Error', <any>error);
-        });
-}
-*/

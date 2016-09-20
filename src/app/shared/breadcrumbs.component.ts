@@ -21,7 +21,8 @@ import { Component, Input }    from '@angular/core';
 })
 // [routerLink]="['../']">
 // [href]="link.url"
-export class BreadcrumbsComponent { 
+export class BreadcrumbsComponent {
+    
     @Input() links: Array<any> = [];
 
     ngOnInit(){

@@ -11,7 +11,7 @@
 </div>
 <div class="row" *ngIf="artist">
     <div class="small-12 medium-6 columns">
-        <img class="thumbnail main-artist" [src]="artist.images.mega">
+        <img class="thumbnail main-artist" [src]="artist?.images?.mega">
     </div>
     <div class="small-12 medium-6 columns">
         <h3>{{artist?.name}}</h3>
