@@ -2,9 +2,9 @@
 
 A [Last.fm](http://www.last.fm/) app using [Angular2-LastFM](https://github.com/mikeybyker/angular2-lastfm) service to search/browse artists and albums.
 
-Made with [Angular 2](https://angular.io/) (version 2.0.0).
+Made with [Angular 2](https://angular.io/) (version 2.1.0).
 
-This project was generated with [angular-cli](https://cli.angular.io/) (version 1.0.0-beta.14).
+This project was generated with [angular-cli](https://cli.angular.io/) (version 1.0.0-beta.17).
 
 ### Features Used
   - Modules
@@ -26,6 +26,8 @@ npm install -g angular-cli
 #### Install Dependencies
 ```javascript
 npm install
+// or
+yarn install
 ```
 
 #### Development server
@@ -41,7 +43,7 @@ ng build
 Run 'ng build' to build the project - stored in the 'dist/' directory. Use the '-prod' flag for a production build.
 
 ### Version
-1.0.0
+1.0.1
 
 #### Add your [Last.fm](http://www.last.fm/api/account/create) API key to app/js/lastfm.config.ts
 
