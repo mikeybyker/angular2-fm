@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  apiKey: '636d81e5364ebc98a99d202c57268f18', // YOUR_API_KEY
+  apiKey: 'YOUR_API_KEY', // YOUR_API_KEY
   endPoint: 'http://ws.audioscrobbler.com/2.0/',
-  format:  'json'
+  format: 'json'
 };
