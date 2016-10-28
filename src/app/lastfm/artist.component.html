@@ -1,61 +1,42 @@
 <breadcrumbs [links]="links"></breadcrumbs>
 <div class="row align-center" *ngIf="error">
-    <div class="medium-6 large-4 column">
-        <div class="callout alert">
-            <h5>{{error.title}}</h5>
-            <p>
-                {{error.message}}
-            </p>
-        </div>
-    </div>
+	<div class="medium-6 large-4 column">
+		<div class="callout alert">
+			<h5>{{error.title}}</h5>
+			<p>
+				{{error.message}}
+			</p>
+		</div>
+	</div>
 </div>
 <div class="row" *ngIf="artist">
-    <div class="small-12 medium-6 columns">
-        <img class="thumbnail main-artist" [src]="artist?.images?.mega">
-    </div>
-    <div class="small-12 medium-6 columns">
-        <h3>{{artist?.name}}</h3>
-        <p [innerHTML]="artist?.bio?.summary | externalhref"></p>
-        <dl *ngIf="artist">
-            <dt>Listeners</dt>
-            <dd>{{artist.stats.listeners}}</dd>
-            <dt>Play Count</dt>
-            <dd>{{artist.stats.playcount}}</dd>
-        </dl>
-    </div>
+	<div class="small-12 medium-6 columns">
+		<img class="thumbnail main-artist" [src]="artist.image?.mega">
+	</div>
+	<div class="small-12 medium-6 columns">
+		<h3>{{artist?.name}}</h3>
+		<p [innerHTML]="artist.bio?.summary | externalhref"></p>
+		<dl *ngIf="artist">
+			<dt>Listeners</dt>
+			<dd>{{artist?.stats?.listeners}}</dd>
+			<dt>Play Count</dt>
+			<dd>{{artist?.stats?.playcount}}</dd>
+		</dl>
+	</div>
+</div>
+<div *ngIf="albums">
+	<div class="row">
+		<div class="columns">
+			<h3>Popular Albums</h3>
+		</div>
+	</div>
+	<album-list [albums]="albums"></album-list>
 </div>
 <div *ngIf="artist">
-    <div class="row">
-        <div class="columns">
-            <h3>Popular Albums</h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="columns small-6 medium-4 large-2" *ngFor="let album of albums | results : 'extralarge'">
-            <a [routerLink]="['/artist', album.artist.name, album.mbid]">
-                <img class="thumbnail" [src]="album.images.extralarge">
-            </a>
-        </div>
-    </div>
-    <div *ngIf="artist.similar.length">
-        <div class="row">
-            <div class="columns">
-                <h3>Similar Artists</h3>
-            </div>
-        </div>
-        <div class="row align-spaced">
-            <div class="column small-5 medium-4" *ngFor="let similar of artist.similar | limit:4">
-               <div class="artist" >
-                    <a [routerLink]="['/artist', similar.name]">
-                        <img class="thumbnail" [src]="similar.images.large">
-                    </a>
-                    <div class="artist-caption">
-                        <div class="artist-name">
-                            <h4>{{ similar.name }}</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="row">
+		<div class="columns">
+			<h3>Similar Artists</h3>
+		</div>
+	</div>
+	<similar-list [similar]="artist?.similar"></similar-list>
 </div>

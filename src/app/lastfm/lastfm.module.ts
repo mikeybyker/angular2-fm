@@ -1,18 +1,22 @@
-import { NgModule }                from '@angular/core';
-import { CommonModule }            from '@angular/common';
-import { FormsModule }             from '@angular/forms';
-import { HttpModule }              from '@angular/http';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 
-import { LastFMComponent }         from './lastfm.component';
-import { ArtistComponent }         from './artist.component';
-import { AlbumComponent }          from './album.component';
-import { HomeComponent }           from './home.component';
+import { LastFMComponent } from './lastfm.component';
+import { ArtistComponent } from './artist.component';
+import { AlbumComponent } from './album.component';
+import { HomeComponent } from './home.component';
+import { TrackList } from './track-list.component';
+import { AlbumList } from './album-list.component';
+import { SimilarList } from './similar-list.component';
+import { Potentials } from './potentials.component';
 
-import { BreadcrumbsComponent }    from '../shared/breadcrumbs.component';
-import { LastFM }                  from './lastfm.service';
-import { LastFMConfig }            from '../lastfm.config';
-import { pipes }                   from '../shared/';
-import { lastfmRouting }           from './lastfm.routing';
+import { BreadcrumbsComponent } from '../shared/breadcrumbs.component';
+import { LastFM } from './lastfm.service';
+
+import { pipes } from '../shared/';
+import { lastfmRouting } from './lastfm.routing';
 
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/from';
@@ -24,23 +28,26 @@ import 'rxjs/add/operator/startWith';
 
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        HttpModule,
-        lastfmRouting
-    ],
-    declarations: [
-        ArtistComponent,
-        AlbumComponent,
-        HomeComponent,
-        LastFMComponent,
-        BreadcrumbsComponent,
-        pipes
-    ],
-    providers: [
-        LastFM,
-        LastFMConfig
-    ]
+  imports: [
+    CommonModule,
+    FormsModule,
+    HttpModule,
+    lastfmRouting
+  ],
+  declarations: [
+    ArtistComponent,
+    AlbumComponent,
+    HomeComponent,
+    LastFMComponent,
+    TrackList,
+    AlbumList,
+    SimilarList,
+    Potentials,
+    BreadcrumbsComponent,
+    pipes
+  ],
+  providers: [
+    LastFM
+  ]
 })
-export class LastFMModule {}
+export class LastFMModule { }

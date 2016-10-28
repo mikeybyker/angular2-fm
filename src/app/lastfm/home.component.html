@@ -1,45 +1,35 @@
 <div class="row align-center">
-    <div class="medium-6 large-4 column">
-        <form #searchForm="ngForm">
-            <h4 class="text-center">Search Last.fm</h4>
-            <label>
+	<div class="medium-6 large-4 column">
+		<form #searchForm="ngForm">
+			<h4 class="text-center">Search Last.fm</h4>
+			<label>
                 <input type="text" placeholder="Artist" value="The Cure" required
                 [(ngModel)]="model.artist" ngControl="artist"  name="artist" #artist="ngModel">
             </label>
-            <p>
-                <button type="button" [disabled]="!searchForm.form.valid" class="button expanded" (click)="onSubmit()">Search</button>
-            </p>
-            <div [hidden]="artist.valid" class="alert callout">
-                <p>
-                    <i class="fi-alert"></i> Please enter an artist to search for...
-                </p>
-            </div>
-        </form>
-    </div>
+			<p>
+				<button type="button" [disabled]="!searchForm.form.valid" class="button expanded" (click)="onSubmit()">Search</button>
+			</p>
+			<div [hidden]="artist.valid" class="alert callout">
+				<p>
+					<i class="fi-alert"></i> Please enter an artist to search for...
+				</p>
+			</div>
+		</form>
+	</div>
 </div>
 <div class="row align-center" *ngIf="error">
-    <div class="medium-6 large-4 column">
-        <div class="callout alert">
-            <h5>{{error.title}}</h5>
-            <p>
-                {{error.message}}
-            </p>
-        </div>
-    </div>
+	<div class="medium-6 large-4 column">
+		<div class="callout alert">
+			<h5>{{error.title}}</h5>
+			<p>
+				{{error.message}}
+			</p>
+		</div>
+	</div>
 </div>
 
-<div class="row align-center" *ngIf="potentials">
-    <div class="column small-6 medium-4" *ngFor="let artist of potentials | async | limit: 6">
-        <div class="callout">
-            <p>{{ artist.name }}</p>
-            <p>
-                <a [routerLink]="['/artist', artist.name]" >
-                    <img class="thumbnail" [src] = "artist?.images?.extralarge">
-                </a>
-            </p>
-        </div>
-    </div>
-</div>
+<potentials [potentials]="(potentials | async)"></potentials>
+
 <!-- When *not* using the angular async pipe... -->
 <!-- <div class="row align-center" *ngIf="potentials && potentials.length">
     <div class="column small-6 medium-4" *ngFor="let artist of potentials | results : 'extralarge'  | limit: 6">
@@ -47,7 +37,7 @@
             <p>{{ artist.name }}</p>
             <p>
                 <a [routerLink]="['/artist', artist.name]" >
-                    <img class="thumbnail" [src] = "artist.images.extralarge">
+                    <img class="thumbnail" [src] = "artist.image.extralarge">
                 </a>
             </p>
         </div>
@@ -55,9 +45,9 @@
 </div> -->
 
 <div class="row align-center" *ngIf="error">
-    <div class="column small-12">
-        <div class="callout">
-            No results
-        </div>
-    </div>
+	<div class="column small-12">
+		<div class="callout">
+			No results
+		</div>
+	</div>
 </div>

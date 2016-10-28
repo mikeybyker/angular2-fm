@@ -4,7 +4,7 @@ A [Last.fm](http://www.last.fm/) app using [Angular2-LastFM](https://github.com/
 
 Made with [Angular 2](https://angular.io/) (version 2.1.0).
 
-This project was generated with [angular-cli](https://cli.angular.io/) (version 1.0.0-beta.17).
+This project was generated with [angular-cli](https://cli.angular.io/) (version 1.0.0-beta.18).
 
 ### Features Used
   - Modules
@@ -43,8 +43,8 @@ ng build
 Run 'ng build' to build the project - stored in the 'dist/' directory. Use the '-prod' flag for a production build.
 
 ### Version
-1.0.1
+1.1.0
 
-#### Add your [Last.fm](http://www.last.fm/api/account/create) API key to app/js/lastfm.config.ts
+#### Add your [Last.fm](http://www.last.fm/api/account/create) API key to environments/environment.ts
 
 Mike

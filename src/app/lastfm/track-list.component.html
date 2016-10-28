@@ -1,0 +1,5 @@
+<ol class="track-list">
+	<li *ngFor="let track of tracks">
+		<a [href]="track.url" target="_blank">{{track.name}}</a> ({{track.duration | trackduration}})
+	</li>
+</ol>
