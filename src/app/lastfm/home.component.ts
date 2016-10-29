@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 
-import { LastFM } from './lastfm.service';
+import { LastFM, Artist } from './lastfm.service';
 import { ErrorMessage } from '../shared/error-message';
-import { Artist } from './index';
 
 @Component({
   selector: 'home',

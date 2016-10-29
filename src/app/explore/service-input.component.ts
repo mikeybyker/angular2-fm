@@ -77,7 +77,6 @@ export class ServiceInputComponent implements OnInit {
 
   initFields(option) {
     let id, p;
-
     if (!option || !option.params) {
       return false;
     }
@@ -85,6 +84,11 @@ export class ServiceInputComponent implements OnInit {
       p = option.params[i];
       id = p.id;
       this.fields[i + 1] = p.default || '';
+      // Always required : just update the validity
+      if (i === 0) {
+        this[`field${i + 1}`].updateValueAndValidity();
+      }
+      // For the rest of the fields
       if (i > 0) {
         this.updateRequired(this[`field${i + 1}`], p.required);
       }

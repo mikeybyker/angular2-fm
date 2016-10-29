@@ -10,7 +10,7 @@
       </select>
     </label>
 
-	<form #sForm="ngForm" [formGroup]="apiForm" novalidate>
+	<form #sForm="ngForm" [formGroup]="apiForm" (submit)="callApi()" novalidate>
 		<div class="row">
 			<div class="small-12 columns">
 				<div>
@@ -33,7 +33,7 @@
 
 		<div class="row">
 			<div class="small-12 columns">
-				<button type="button" class="expanded button" [disabled]="!sForm.form.valid" (click)="callApi()">{{selectedOption.name}}</button>
+				<button type="submit" class="expanded button" [disabled]="!sForm.form.valid">{{selectedOption.name}}</button>
 			</div>
 		</div>
 

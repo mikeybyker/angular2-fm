@@ -16,6 +16,7 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 
 import { Album, Artist } from './index';
+export { Album, Artist };
 
 export interface LastFMOptions {
   autocorrect?: number,
@@ -100,9 +101,9 @@ export class LastFM {
     return results.artistmatches.artist
       .some((element, index, array) => element.mbid && element.image.some(hasImage));
   }
-  /*
-      Check there's an mbid and an image of specified size (default extralarge image source)
-  */
+  /**
+   * Check there's an mbid and an image of specified size (default extralarge image source)
+   */
   checkUsableImage(result: any, size: number = 3): boolean {
     if (result.mbid && result.image && result.image[size] && result.image[size]['#text'] !== '') {
       return true;
@@ -113,17 +114,16 @@ export class LastFM {
   private _http(settings: LastFMOptions = {}, options: LastFMOptions = {}): Observable<any> {
     const updated: LastFMOptions = this.updateSettings(settings),
       params: URLSearchParams = this.createParams(options, updated);
-    // return this.http.get(this.config.endPoint, { search: params })
     return this.http.get(environment.endPoint, { search: params })
       .map(res => res.json())
       .catch(this.handleError);
   }
 
   /**
-  *    @data : received from lastfm
-  *    @path : the path to the required data eg. 'results.artistmatches.artist'
-  *    @empty: what to return if there were no results
-  */
+   * @data : received from lastfm
+   * @path : the path to the required data eg. 'results.artistmatches.artist'
+   * @empty: what to return if there were no results
+   */
   private validateData(data: any = {}, path: string = '', empty: any = []) {
     if (data && data.error) {
       return data;
@@ -209,11 +209,11 @@ export class LastFM {
   getAlbumInfo(artistOrMbid: string, album: string = '', options: LastFMOptions = {}): Observable<Album> {
     return this._getAlbumInfo.apply(this, arguments)
       .map(data => {
-        let valid = this.validateData(data, 'album', null);
-        if (!valid) {
+        let validated = this.validateData(data, 'album', null);
+        if (!validated) {
           return Observable.throw('Album not found');
         }
-        return valid;
+        return validated;
       })
       .filter(album => !!album.artist) // make sure there is album data
       .map(album => Album.fromJSON(album));
@@ -279,11 +279,11 @@ export class LastFM {
   getArtistInfo(artistOrMbid: string, options: any = {}): Observable<Artist> {
     return this._getArtistInfo.apply(this, arguments)
       .map(data => {
-        let valid = this.validateData(data, 'artist', null);
-        if (!valid) {
+        let validated = this.validateData(data, 'artist', null);
+        if (!validated) {
           return Observable.throw('Artist not found');
         }
-        return valid;
+        return validated;
       })
       .map(artist => Artist.fromJSON(artist));
   }
