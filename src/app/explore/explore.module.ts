@@ -6,6 +6,7 @@ import {
 } from '@angular/forms';
 
 import { ExploreComponent } from './explore.component';
+import { LastFM } from '../lastfm/lastfm.service';
 import { ApiService } from './api-methods.service';
 import { routing } from './explore.routing';
 import { ServiceInputComponent } from './service-input.component';
@@ -22,6 +23,8 @@ import { ServiceInputComponent } from './service-input.component';
     ServiceInputComponent
   ],
   exports: [ExploreComponent],
-  providers: [ApiService]
+  providers: [
+    LastFM,
+    ApiService]
 })
 export class ExploreModule { }
