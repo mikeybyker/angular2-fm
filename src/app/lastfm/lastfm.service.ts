@@ -9,7 +9,6 @@ import {
   Inject
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { environment } from '../../environments/environment';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
@@ -31,17 +30,23 @@ export interface LastFMOptions {
   track?: string
 }
 
+export interface LastFMConfig {
+  apiKey: string,
+  endPoint?: string,
+  format?: string
+}
+
 @Injectable()
 export class LastFM {
 
   mbidPattern: RegExp = /^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$/;
   assignParams: Function;
 
-  constructor(public http: Http) {
-    environment.endPoint || (environment.endPoint = 'http://ws.audioscrobbler.com/2.0/');
-    environment.format || (environment.format = 'json');
+  constructor( @Inject('LastFMConfig') private config: LastFMConfig, public http: Http) {
+    config.endPoint || (config.endPoint = 'http://ws.audioscrobbler.com/2.0/');
+    config.format || (config.format = 'json');
     const assign = (common, options, settings) => Object.assign({}, common, options, settings);
-    this.assignParams = this.curry(assign, { format: environment.format, api_key: environment.apiKey });
+    this.assignParams = this.curry(assign, { format: config.format, api_key: config.apiKey });
   }
 
   curry(fn, ...args1) {
@@ -49,7 +54,7 @@ export class LastFM {
   }
 
   getApiKey() {
-    return environment.apiKey;
+    return this.config.apiKey;
   }
 
   getSearchParams(params: LastFMOptions): URLSearchParams {
@@ -114,7 +119,7 @@ export class LastFM {
   private _http(settings: LastFMOptions = {}, options: LastFMOptions = {}): Observable<any> {
     const updated: LastFMOptions = this.updateSettings(settings),
       params: URLSearchParams = this.createParams(options, updated);
-    return this.http.get(environment.endPoint, { search: params })
+    return this.http.get(this.config.endPoint, { search: params })
       .map(res => res.json())
       .catch(this.handleError);
   }

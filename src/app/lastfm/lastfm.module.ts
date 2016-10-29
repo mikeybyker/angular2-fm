@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ValueProvider } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -14,7 +14,7 @@ import { Potentials } from './potentials.component';
 
 import { BreadcrumbsComponent } from '../shared/breadcrumbs.component';
 import { LastFM } from './lastfm.service';
-
+import { LastFMConfig } from '../lastfm.config';
 import { pipes } from '../shared/';
 import { lastfmRouting } from './lastfm.routing';
 
@@ -47,7 +47,8 @@ import 'rxjs/add/operator/startWith';
     pipes
   ],
   providers: [
-    LastFM
+    LastFM,
+    LastFMConfig
   ]
 })
 export class LastFMModule { }

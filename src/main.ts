@@ -10,7 +10,7 @@ if (environment.production) {
 }
 
 if (environment.apiKey === 'YOUR_API_KEY') {
-  alert('You need to add an api_key to environment.ts');
+  alert('You need to add an apiKey to environment.ts');
 } else {
   platformBrowserDynamic().bootstrapModule(AppModule);
 }
