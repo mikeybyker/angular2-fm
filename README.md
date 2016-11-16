@@ -2,9 +2,9 @@
 
 A [Last.fm](http://www.last.fm/) app using [Angular2-LastFM](https://github.com/mikeybyker/angular2-lastfm) service to search/browse artists and albums.
 
-Made with [Angular 2](https://angular.io/) (version 2.1.0).
+Made with [Angular 2](https://angular.io/) (version 2.2.0).
 
-This project was generated with [angular-cli](https://cli.angular.io/) (version 1.0.0-beta.18).
+This project was generated with [angular-cli](https://cli.angular.io/) (version 1.0.0-beta.20-4).
 
 ### Features Used
   - Modules

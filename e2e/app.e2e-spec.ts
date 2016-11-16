@@ -1,10 +1,10 @@
-import { Webpack9Page } from './app.po';
+import { Angular2FmPage } from './app.po';
 
-describe('webpack9 App', function() {
-  let page: Webpack9Page;
+describe('angular2-fm App', function() {
+  let page: Angular2FmPage;
 
   beforeEach(() => {
-    page = new Webpack9Page();
+    page = new Angular2FmPage();
   });
 
   it('should display message saying app works', () => {

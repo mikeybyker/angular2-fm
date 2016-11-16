@@ -1,6 +1,6 @@
-import { browser, element, by } from 'protractor/globals';
+import { browser, element, by } from 'protractor';
 
-export class Webpack9Page {
+export class Angular2FmPage {
   navigateTo() {
     return browser.get('/');
   }
