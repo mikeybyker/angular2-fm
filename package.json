@@ -2,11 +2,10 @@
   "name": "angular2-fm",
   "version": "1.1.0",
   "license": "MIT",
-  "description": "A simple Angular2 app to search/browse artists and albums",
+  "description": "A simple Angular app to search/browse artists and albums",
   "author": "mikeybyker+github@gmail.com",
   "keywords": [
-    "angular2",
-    "angular2js",
+    "angular",
     "last.fm"
   ],
   "repository": {
@@ -15,41 +14,44 @@
   },
   "angular-cli": {},
   "scripts": {
+    "ng": "ng",
     "start": "ng serve",
-    "lint": "tslint \"src/**/*.ts\"",
     "test": "ng test",
-    "pree2e": "webdriver-manager update",
-    "e2e": "protractor"
+    "lint": "ng lint",
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
-    "@angular/common": "~2.2.0",
-    "@angular/compiler": "~2.2.0",
-    "@angular/core": "~2.2.0",
-    "@angular/forms": "~2.2.0",
-    "@angular/http": "~2.2.0",
-    "@angular/platform-browser": "~2.2.0",
-    "@angular/platform-browser-dynamic": "~2.2.0",
-    "@angular/router": "~3.2.0",
+    "@angular/common": "^2.4.0",
+    "@angular/compiler": "^2.4.0",
+    "@angular/core": "^2.4.0",
+    "@angular/forms": "^2.4.0",
+    "@angular/http": "^2.4.0",
+    "@angular/platform-browser": "^2.4.0",
+    "@angular/platform-browser-dynamic": "^2.4.0",
+    "@angular/router": "^3.4.0",
     "core-js": "^2.4.1",
-    "rxjs": "5.0.0-beta.12",
+    "foundation-sites": "^6.3.0",
+    "rxjs": "^5.0.1",
     "ts-helpers": "^1.1.1",
-    "zone.js": "^0.6.25"
+    "zone.js": "^0.7.2"
   },
   "devDependencies": {
-    "@types/node": "^6.0.45",
-    "angular-cli": "^1.0.0-beta.20-4",
-    "codelyzer": "~0.0.26",
-    "jasmine-core": "2.4.1",
+    "@angular/cli": "1.0.0-beta.31",
+    "@angular/compiler-cli": "^2.4.0",
+    "@types/jasmine": "2.5.38",
+    "@types/node": "^6.0.42",
+    "codelyzer": "~2.0.0-beta.1",
+    "jasmine-core": "2.5.2",
     "jasmine-spec-reporter": "2.5.0",
     "karma": "1.2.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-cli": "^1.0.1",
+    "karma-coverage-istanbul-reporter": "^0.2.0",
     "karma-jasmine": "^1.0.2",
-    "karma-remap-istanbul": "^0.2.1",
-    "protractor": "4.0.9",
+    "protractor": "~5.1.0",
     "ts-node": "1.2.1",
-    "tslint": "3.13.0",
-    "typescript": "2.0.3"
+    "tslint": "^4.3.0",
+    "typescript": "~2.0.0"
   }
 }

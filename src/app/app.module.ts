@@ -7,6 +7,10 @@ import { ExploreModule } from './explore/explore.module';
 import { AboutComponent } from './about/about.component';
 import { routing } from './app.routing';
 
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+
 @NgModule({
   declarations: [
     AppComponent,

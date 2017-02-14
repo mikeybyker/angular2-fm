@@ -18,6 +18,7 @@ const lastfmRoutes: Routes = [
   {
     path: 'artist',
     component: LastFMComponent,
+    data: { title: 'Search' },
     children: [
       {
         path: '',
@@ -25,11 +26,13 @@ const lastfmRoutes: Routes = [
       },
       {
         path: ':name/:mbid',
-        component: AlbumComponent
+        component: AlbumComponent,
+        data: { title: 'Album' },
       },
       {
         path: ':name',
-        component: ArtistComponent
+        component: ArtistComponent,
+        data: { title: 'Artist' }
       }
     ]
   }

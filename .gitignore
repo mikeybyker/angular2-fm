@@ -27,6 +27,7 @@ testem.log
 /removed
 cleaner.bat
 keys.txt
+yarn-error.log
 
 # e2e
 /e2e/*.js

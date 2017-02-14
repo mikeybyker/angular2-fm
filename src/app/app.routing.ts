@@ -5,7 +5,7 @@ import {
 import { AboutComponent } from './about/about.component';
 
 const appRoutes: Routes = [
-  { path: 'about', component: AboutComponent }
+  { path: 'about', component: AboutComponent, data: { title: 'About' } }
 ];
 
 export const routing = RouterModule.forRoot(appRoutes);

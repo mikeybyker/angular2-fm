@@ -6,7 +6,7 @@ import {
 import { ExploreComponent } from './explore.component';
 
 const appRoutes: Routes = [
-  { path: 'explore', component: ExploreComponent }
+  { path: 'explore', component: ExploreComponent, data: { title: 'Explore' }, }
 ];
 
 export const routing = RouterModule.forChild(appRoutes);
