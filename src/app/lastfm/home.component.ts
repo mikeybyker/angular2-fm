@@ -32,16 +32,12 @@ export class HomeComponent {
     this.potentials = search$;
 
     search$
-      .subscribe(data => {
-        if (!data.length || data.error) {
-          this.error = new ErrorMessage('Error', data.message || 'Nothing found...');
-          return;
-        }
-      },
-      error => {
-        // http errors
-        this.error = new ErrorMessage('Error', <any>error);
-      });
+      .filter(data => data.error || !data.length)
+      .map(data => new ErrorMessage('No Results', data.message || 'Sorry, nothing found at last.fm...'))
+      .subscribe(
+      (error) => this.error = error,                                 // last.fm problems
+      (error) => this.error = new ErrorMessage('Error', <any>error)  // http errors
+      );
   }
 
 }
