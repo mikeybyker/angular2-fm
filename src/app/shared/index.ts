@@ -9,3 +9,4 @@ export const pipes = [
   LimitPipe,
   ExternalHrefPipe,
 ];
+export * from './breadcrumbs.component';

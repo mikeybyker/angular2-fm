@@ -5,7 +5,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
-import { BreadcrumbsComponent } from '../shared/breadcrumbs.component';
+import { BreadcrumbsComponent } from '../shared';
 import { LastFM, Artist, Album } from '../lastfm/lastfm.service';
 import { ErrorMessage } from '../shared/error-message';
 
@@ -18,7 +18,7 @@ import { ErrorMessage } from '../shared/error-message';
 export class ArtistComponent implements OnInit {
   potentials: Array<Artist>;
   artist: Artist;
-  albums: Array<Album> = [];
+  albums: Array<Album>;
   artistName: string;
   links: Array<any> = [];
   error: ErrorMessage;
@@ -46,23 +46,29 @@ export class ArtistComponent implements OnInit {
   }
 
   getArtist(artistName, maxAlbums) {
-    Observable
+    const artist$ = Observable
       .forkJoin(
       this._lastFM.Artist.getInfo(artistName),
       this._lastFM.Artist.getTopAlbums(artistName, { limit: maxAlbums })
       )
-      .subscribe(data => {
-        const [artist, albums] = <Array<any>>data;
-        if (artist.error || albums.error) {
-          let msg = artist.error ? artist.message || artist.error : albums.message || albums.error;
-          this.error = new ErrorMessage('Error', msg);
-          return;
-        }
+      .share();
+
+    artist$
+      .filter(([artist, albums]: [any, any]) => !artist.error && !albums.error)
+      .subscribe(
+      ([artist, albums]: [any, any]) => {
         this.artist = artist;
         this.albums = albums;
       },
       error => {
-        this.error = new ErrorMessage('Error', <string>error);
+        this.error = new ErrorMessage('Error', <string>error); // http problems
       });
+
+    // Data errors
+    artist$
+      .filter(([artist, albums]: [any, any]) => artist.error || albums.error)
+      .map(([artist, albums]: [any, any]) => artist.error ? artist.message || artist.error : albums.message || albums.error)
+      .map((message) => new ErrorMessage('Sorry', message))
+      .subscribe((error) => this.error = error);
   }
 }

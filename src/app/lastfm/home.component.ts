@@ -35,7 +35,7 @@ export class HomeComponent {
       .filter(data => data.error || !data.length)
       .map(data => new ErrorMessage('No Results', data.message || 'Sorry, nothing found at last.fm...'))
       .subscribe(
-      (error) => this.error = error,                                 // last.fm problems
+      (error) => this.error = error,                                 // data problems
       (error) => this.error = new ErrorMessage('Error', <any>error)  // http errors
       );
   }
