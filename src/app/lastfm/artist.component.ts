@@ -5,9 +5,12 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
-import { BreadcrumbsComponent } from '../shared';
+import {
+  BreadcrumbsComponent,
+  ErrorMessage
+} from '../shared';
 import { LastFM, Artist, Album } from '../lastfm/lastfm.service';
-import { ErrorMessage } from '../shared/error-message';
+
 
 @Component({
   selector: 'artist',

@@ -153,10 +153,10 @@ export class LastFM {
     config.endPoint || (config.endPoint = 'http://ws.audioscrobbler.com/2.0/');
     config.format || (config.format = 'json');
     const assign = (common, options, settings) => Object.assign({}, common, options, settings);
-    this.assignParams = this.curry(assign, { format: config.format, api_key: config.apiKey });
+    this.assignParams = this.partially(assign, { format: config.format, api_key: config.apiKey });
   }
 
-  curry(fn, ...args1) {
+  partially(fn, ...args1) {
     return (...args2) => fn(...args1, ...args2);
   }
 
@@ -185,7 +185,7 @@ export class LastFM {
   private handleError(error: Response): Observable<any> {
     let o: any = error.json(),
       msg: string = o.message || error.statusText;
-    return Observable.throw(msg || 'Server Error');
+    return Observable.throw(new Error(msg || 'Server Error'));
   }
   isMbid(str) {
     return this.mbidPattern.test(str);
@@ -323,13 +323,13 @@ export class LastFM {
       .map(data => {
         let validated = this.validateData(data, 'album', null);
         if (!validated) {
-          return Observable.throw('Album not found');
+          return Observable.throw(new Error('Album not found'));
         }
         return validated;
       })
-      .filter(album => !!album.artist) // make sure there is album data
+      // .filter(album => !!album.artist) // make sure there is album data****
       .map(album => Album.fromJSON(album));
-
+    // *** this would prevent it sending through errors...so we wouldn't be able to handle/show user
   }
 
 
@@ -393,7 +393,7 @@ export class LastFM {
       .map(data => {
         let validated = this.validateData(data, 'artist', null);
         if (!validated) {
-          return Observable.throw('Artist not found');
+          return Observable.throw(new Error('Artist not found'));
         }
         return validated;
       })
@@ -438,9 +438,7 @@ export class LastFM {
   }
   getTopAlbums(artistOrMbid: string, options: any = {}): Observable<Array<Album>> {
     return this._getTopAlbums.apply(this, arguments)
-      .map(data => {
-        return this.validateData(data, 'topalbums.album');
-      })
+      .map(data => this.validateData(data, 'topalbums.album'))
       .map(albums => {
         // albums is an array - *not* of Album objects, just objects...
         return albums
@@ -461,9 +459,7 @@ export class LastFM {
   }
   getArtistTopTags(artistOrMbid: string, options: any = {}): Observable<Array<any>> {
     return this._getArtistTopTags.apply(this, arguments)
-      .map(data => {
-        return this.validateData(data, 'toptags.tag');
-      });
+      .map(data => this.validateData(data, 'toptags.tag'));
   }
 
 
@@ -481,9 +477,7 @@ export class LastFM {
   }
   getTopTracks(artistOrMbid: string, options: any = {}): Observable<Array<any>> {
     return this._getTopTracks.apply(this, arguments)
-      .map(data => {
-        return this.validateData(data, 'toptracks.track');
-      });
+      .map(data => this.validateData(data, 'toptracks.track'));
   }
 
 
@@ -499,9 +493,7 @@ export class LastFM {
   }
   searchArtists(artist: string, options: any = {}): Observable<Array<Artist>> {
     return this._searchArtists.apply(this, arguments)
-      .map(data => {
-        return this.validateData(data, 'results.artistmatches.artist', []);
-      })
+      .map(data => this.validateData(data, 'results.artistmatches.artist', []))
       .map(artists => {
         return artists
           // Remove those with no image
@@ -526,9 +518,7 @@ export class LastFM {
   }
   getTopArtists(options: any = {}): Observable<Array<Artist>> {
     return this._getTopArtists.apply(this, arguments)
-      .map(data => {
-        return this.validateData(data, 'artists.artist');
-      })
+      .map(data => this.validateData(data, 'artists.artist'))
       .map(artists => {
         return artists
           .map((artist) => Artist.fromJSON(artist));
@@ -547,9 +537,7 @@ export class LastFM {
   }
   getChartsTopTags(options: any = {}): Observable<Array<any>> {
     return this._getChartsTopTags.apply(this, arguments)
-      .map(data => {
-        return this.validateData(data, 'tags.tag');
-      });
+      .map(data => this.validateData(data, 'tags.tag'));
   }
 
 
@@ -564,9 +552,7 @@ export class LastFM {
   }
   getChartsTopTracks(options: any = {}): Observable<Array<any>> {
     return this._getChartsTopTracks.apply(this, arguments)
-      .map(data => {
-        return this.validateData(data, 'tracks.track');
-      });
+      .map(data => this.validateData(data, 'tracks.track'));
   }
 
   // End Charts
@@ -585,9 +571,7 @@ export class LastFM {
   }
   getTopGeoArtists(country: string, options: any = {}): Observable<Array<Artist>> {
     return this._getTopGeoArtists.apply(this, arguments)
-      .map(data => {
-        return this.validateData(data, 'topartists.artist');
-      })
+      .map(data => this.validateData(data, 'topartists.artist'))
       .map(artists => {
         return artists
           .map((artist) => Artist.fromJSON(artist));
@@ -608,9 +592,7 @@ export class LastFM {
   }
   getTopGeoTracks(country: string, options: any = {}): Observable<Array<any>> {
     return this._getTopGeoTracks.apply(this, arguments)
-      .map(data => {
-        return this.validateData(data, 'tracks.track');
-      });
+      .map(data => this.validateData(data, 'tracks.track'));
   }
 
   // End Geo
@@ -630,9 +612,7 @@ export class LastFM {
   }
   getTrackInfo(artistOrMbid: string, track: string = '', options: LastFMOptions = {}): Observable<any> {
     return this._getTrackInfo.apply(this, arguments)
-      .map(data => {
-        return this.validateData(data, 'track', {});
-      });
+      .map(data => this.validateData(data, 'track', {}));
   }
 
 
@@ -650,9 +630,7 @@ export class LastFM {
   }
   getSimilarTrack(artistOrMbid: string, track: string = '', options: LastFMOptions = {}): Observable<Array<any>> {
     return this._getSimilarTrack.apply(this, arguments)
-      .map(data => {
-        return this.validateData(data, 'similartracks.track');
-      });
+      .map(data => this.validateData(data, 'similartracks.track'));
   }
 
 
@@ -670,9 +648,7 @@ export class LastFM {
   }
   getTrackTopTags(artistOrMbid: string, track: string = '', options: LastFMOptions = {}): Observable<Array<any>> {
     return this._getTrackTopTags.apply(this, arguments)
-      .map(data => {
-        return this.validateData(data, 'toptags.tag');
-      });
+      .map(data => this.validateData(data, 'toptags.tag'));
   }
 
 
@@ -688,9 +664,7 @@ export class LastFM {
   }
   searchTrack(track: string = '', options: LastFMOptions = {}): Observable<Array<any>> {
     return this._searchTrack.apply(this, arguments)
-      .map(data => {
-        return this.validateData(data, 'results.trackmatches.track');
-      });
+      .map(data => this.validateData(data, 'results.trackmatches.track'));
   }
 
   // End Track

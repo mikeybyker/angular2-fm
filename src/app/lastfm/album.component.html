@@ -1,25 +1,25 @@
 <breadcrumbs [links]="links"></breadcrumbs>
 <div class="row align-center" *ngIf="error">
-	<div class="medium-6 large-4 column">
-		<div class="callout alert">
-			<h5>{{error.title}}</h5>
-			<p>
-				{{error.message}}
-			</p>
-		</div>
-	</div>
+  <div class="medium-6 large-4 column">
+    <div class="callout alert">
+      <h5>{{error.title}}</h5>
+      <p>
+        {{error.message}}
+      </p>
+    </div>
+  </div>
 </div>
 <div class="row">
-	<div class="small-12 columns">
-		<h3><a [routerLink]="['../']">{{(album | async)?.artist}}</a></h3>
-	</div>
+  <div class="small-12 columns">
+    <h3><a [routerLink]="['../']">{{(album | async)?.artist}}</a></h3>
+  </div>
 </div>
-<div class="row">
-	<div class="small-12 medium-6 columns">
-		<a [href]="(album | async)?.url" target="_blank"><img class="thumbnail main-artist" [src]="(album | async)?.image?.mega || ''"></a>
-	</div>
-	<div class="small-12 medium-6 columns">
-		<h4>{{album?.name}}</h4>
-		<track-list [tracks]="(album | async)?.tracks.track"></track-list>
-	</div>
+<div class="row" *ngIf="(album | async)?.tracks">
+  <div class="small-12 medium-6 columns">
+    <a [href]="(album | async)?.url" target="_blank"><img class="thumbnail main-artist" [src]="(album | async)?.image?.mega || ''"></a>
+  </div>
+  <div class="small-12 medium-6 columns">
+    <h4>{{album?.name}}</h4>
+    <track-list [tracks]="(album | async)?.tracks.track"></track-list>
+  </div>
 </div>

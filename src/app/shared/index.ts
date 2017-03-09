@@ -10,3 +10,4 @@ export const pipes = [
   ExternalHrefPipe,
 ];
 export * from './breadcrumbs.component';
+export * from './error-message';
