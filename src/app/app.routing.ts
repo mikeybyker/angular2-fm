@@ -1,4 +1,3 @@
-import { SimpleBreadcrumbsComponent } from './shared/simple-breadcrumbs.component';
 import {
   Routes,
   RouterModule

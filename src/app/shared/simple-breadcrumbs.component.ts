@@ -1,11 +1,31 @@
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, Input } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd, UrlSegment, RouterStateSnapshot, Params, ActivatedRouteSnapshot } from "@angular/router";
+import {
+  Router,
+  ActivatedRoute,
+  NavigationEnd,
+  UrlSegment,
+  ActivatedRouteSnapshot
+} from "@angular/router";
 
 @Component({
   selector: 'simple-breadcrumbs',
-  templateUrl: './simple-breadcrumbs.component.html',
-  styleUrls: ['./simple-breadcrumbs.component.css']
+  template: `
+    <div class="row">
+      <div class="columns">
+        <nav aria-label="You are here:" role="navigation">
+          <ul class="breadcrumbs">
+            <li *ngFor="let link of breadcrumbs; let first = first; let last = last;" [class.disabled]='last'>
+              <span [ngSwitch]="last && !first">
+                <span *ngSwitchCase="true">{{link.name}}</span>
+              <a [routerLink]="[link.path]" *ngSwitchDefault>{{link.name}}</a>
+              </span>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>  
+  `
 })
 export class SimpleBreadcrumbsComponent implements OnInit {
 
@@ -13,7 +33,6 @@ export class SimpleBreadcrumbsComponent implements OnInit {
     name: string;
     path: string
   }[] = [];
-
 
   @Input()
   snapshot: Observable<ActivatedRoute>;
@@ -38,10 +57,11 @@ export class SimpleBreadcrumbsComponent implements OnInit {
 
   // There *really* has to be an easier way to pluck out the path...
   getBreadcrumbs(node: ActivatedRouteSnapshot) {
-    let segments: UrlSegment[] = [];
-    node.pathFromRoot.forEach(routerState => {
-      segments = segments.concat(routerState.url);
-    });
+
+    const segments: UrlSegment[] = node.pathFromRoot.reduce((acc, curr) => {
+      acc = [...acc, ...curr.url];
+      return acc;
+    }, []);
 
     if (segments.length === 1) {
       return [];

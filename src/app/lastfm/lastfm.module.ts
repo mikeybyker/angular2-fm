@@ -1,21 +1,26 @@
-import { NgModule, ValueProvider } from '@angular/core';
+import {
+  NgModule,
+  ValueProvider
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { LastFMComponent } from './lastfm.component';
-import { ArtistComponent } from './artist.component';
-import { AlbumComponent } from './album.component';
-import { HomeComponent } from './home.component';
-import { TrackList } from './track-list.component';
-import { AlbumList } from './album-list.component';
-import { SimilarList } from './similar-list.component';
-import { Potentials } from './potentials.component';
+import {
+  LastFMComponent,
+  ArtistComponent,
+  AlbumComponent,
+  HomeComponent,
+  TrackList,
+  AlbumList,
+  SimilarList,
+  Potentials,
+  LastFM,
+  lastFMRouting
+} from './index';
 
-import { LastFM } from './lastfm.service';
 import { LastFMConfig } from '../lastfm.config';
 import { pipes, SimpleBreadcrumbsComponent } from '../shared/';
-import { lastfmRouting } from './lastfm.routing';
 
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/from';
@@ -31,7 +36,7 @@ import 'rxjs/add/operator/startWith';
     CommonModule,
     FormsModule,
     HttpModule,
-    lastfmRouting
+    lastFMRouting
   ],
   declarations: [
     ArtistComponent,

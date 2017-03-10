@@ -9,7 +9,7 @@ import { ArtistComponent } from './artist.component';
 import { AlbumComponent } from './album.component';
 import { HomeComponent } from './home.component';
 
-const lastfmRoutes: Routes = [
+const lastFMRoutes: Routes = [
   {
     path: '',
     redirectTo: '/artist',
@@ -39,4 +39,4 @@ const lastfmRoutes: Routes = [
   }
 ];
 
-export const lastfmRouting: ModuleWithProviders = RouterModule.forChild(lastfmRoutes);
+export const lastFMRouting: ModuleWithProviders = RouterModule.forChild(lastFMRoutes);
