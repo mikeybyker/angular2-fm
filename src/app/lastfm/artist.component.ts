@@ -6,7 +6,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
 import {
-  BreadcrumbsComponent,
   ErrorMessage
 } from '../shared';
 import { LastFM, Artist, Album } from '../lastfm/lastfm.service';
@@ -23,7 +22,6 @@ export class ArtistComponent implements OnInit {
   artist: Artist;
   albums: Array<Album>;
   artistName: string;
-  links: Array<any> = [];
   error: ErrorMessage;
   maxAlbums: number = 12;
 
@@ -36,7 +34,6 @@ export class ArtistComponent implements OnInit {
     this.route.params
       .subscribe(params => {
         this.artistName = decodeURI(params['name']);
-        this.links.push({ title: this.artistName });
         if (!this.artistName) {
           this.error = new ErrorMessage('Error', 'Artist not specified');
           return;

@@ -9,5 +9,5 @@ export const pipes = [
   LimitPipe,
   ExternalHrefPipe,
 ];
-export * from './breadcrumbs.component';
+export * from './simple-breadcrumbs.component';
 export * from './error-message';

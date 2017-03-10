@@ -25,7 +25,8 @@ const lastfmRoutes: Routes = [
         component: HomeComponent
       },
       {
-        path: ':name/:mbid',
+        //   path: ':name/:mbid', // easier but messier url :-|
+        path: ':name/:albumName',
         component: AlbumComponent,
         data: { title: 'Album' },
       },

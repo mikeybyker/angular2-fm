@@ -22,7 +22,6 @@ import { Observable } from 'rxjs/Observable';
 export class ServiceInputComponent implements OnInit {
 
   mbidPattern = /^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$/;
-  // public serviceMethods:any[] = [];
   selectedOption: any;
   fields: any = {};
   maxFields: number = 2;

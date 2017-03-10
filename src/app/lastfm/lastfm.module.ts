@@ -12,10 +12,9 @@ import { AlbumList } from './album-list.component';
 import { SimilarList } from './similar-list.component';
 import { Potentials } from './potentials.component';
 
-import { BreadcrumbsComponent } from '../shared/breadcrumbs.component';
 import { LastFM } from './lastfm.service';
 import { LastFMConfig } from '../lastfm.config';
-import { pipes } from '../shared/';
+import { pipes, SimpleBreadcrumbsComponent } from '../shared/';
 import { lastfmRouting } from './lastfm.routing';
 
 import 'rxjs/add/observable/forkJoin';
@@ -43,7 +42,7 @@ import 'rxjs/add/operator/startWith';
     AlbumList,
     SimilarList,
     Potentials,
-    BreadcrumbsComponent,
+    SimpleBreadcrumbsComponent,
     pipes
   ],
   providers: [

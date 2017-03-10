@@ -320,16 +320,10 @@ export class LastFM {
 
   getAlbumInfo(artistOrMbid: string, album: string = '', options: LastFMOptions = {}): Observable<Album> {
     return this._getAlbumInfo.apply(this, arguments)
-      .map(data => {
-        let validated = this.validateData(data, 'album', null);
-        if (!validated) {
-          return Observable.throw(new Error('Album not found'));
-        }
-        return validated;
-      })
-      // .filter(album => !!album.artist) // make sure there is album data****
+      .map(data => this.validateData(data, 'album', null))
+      // .filter(album => !!album.artist) // make sure there is album data *
       .map(album => Album.fromJSON(album));
-    // *** this would prevent it sending through errors...so we wouldn't be able to handle/show user
+    // * this would prevent it sending through errors...so we wouldn't be able to handle/show user
   }
 
 
@@ -390,13 +384,7 @@ export class LastFM {
   }
   getArtistInfo(artistOrMbid: string, options: any = {}): Observable<Artist> {
     return this._getArtistInfo.apply(this, arguments)
-      .map(data => {
-        let validated = this.validateData(data, 'artist', null);
-        if (!validated) {
-          return Observable.throw(new Error('Artist not found'));
-        }
-        return validated;
-      })
+      .map(data => this.validateData(data, 'artist', null))
       .map(artist => Artist.fromJSON(artist));
   }
 
@@ -414,9 +402,7 @@ export class LastFM {
   }
   getSimilar(artistOrMbid: string, options: any = {}): Observable<Array<Artist>> {
     return this._getSimilar.apply(this, arguments)
-      .map(data => {
-        return this.validateData(data, 'similarartists.artist');
-      })
+      .map(data => this.validateData(data, 'similarartists.artist'))
       .map(artists => {
         return artists
           .map((artist) => Artist.fromJSON(artist));
