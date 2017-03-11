@@ -1,19 +1,24 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
-import { LastFM, Artist } from './lastfm.service';
-import { ErrorMessage } from '../shared/error-message';
+import {
+  LastFM,
+  Artist
+} from '../lastfm.service';
+import { ErrorMessage } from '../../shared/error-message';
 
 @Component({
   selector: 'home',
-  templateUrl: './home.component.html'
+  templateUrl: './search.component.html'
 })
 
-export class HomeComponent {
+export class SearchComponent {
 
   potentials: Observable<Array<Artist>>;
   error: ErrorMessage;
+  sub: Subscription;
   model: any = { artist: 'The Cure' };
   maxResults: number = 10;
 
@@ -31,13 +36,17 @@ export class HomeComponent {
 
     this.potentials = search$;
 
-    search$
+    this.sub = search$
       .filter(data => data.error || !data.length)
       .map(data => new ErrorMessage('No Results', data.message || 'Sorry, nothing found at last.fm...'))
       .subscribe(
       (error) => this.error = error,                                 // data problems
       (error) => this.error = new ErrorMessage('Error', <any>error)  // http errors
       );
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
 }

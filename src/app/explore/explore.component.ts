@@ -2,7 +2,6 @@ import {
   Component,
   OnInit
 } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 
 import { LastFM } from '../lastfm/lastfm.service';
 import { ApiService } from './api-methods.service';

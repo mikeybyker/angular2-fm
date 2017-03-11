@@ -4,17 +4,17 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 import {
   ErrorMessage
-} from '../shared';
-import { LastFM, Artist, Album } from '../lastfm/lastfm.service';
+} from '../../shared';
+import { LastFM, Artist, Album } from '../../lastfm/lastfm.service';
 
 
 @Component({
   selector: 'artist',
-  templateUrl: './artist.component.html',
-  styleUrls: ['./artist.component.css']
+  templateUrl: './artist.component.html'
 })
 
 export class ArtistComponent implements OnInit {
@@ -24,6 +24,7 @@ export class ArtistComponent implements OnInit {
   artistName: string;
   error: ErrorMessage;
   maxAlbums: number = 12;
+  sub: Subscription;
 
   constructor(private _lastFM: LastFM, private route: ActivatedRoute) {
 
@@ -31,7 +32,7 @@ export class ArtistComponent implements OnInit {
 
   ngOnInit() {
 
-    this.route.params
+    this.sub = this.route.params
       .subscribe(params => {
         this.artistName = decodeURI(params['name']);
         if (!this.artistName) {
@@ -70,5 +71,9 @@ export class ArtistComponent implements OnInit {
       .map(([artist, albums]: [any, any]) => artist.error ? artist.message || artist.error : albums.message || albums.error)
       .map((message) => new ErrorMessage('Sorry', message))
       .subscribe((error) => this.error = error);
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 }

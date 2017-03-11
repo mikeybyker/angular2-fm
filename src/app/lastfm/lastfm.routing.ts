@@ -5,9 +5,10 @@ import {
 } from '@angular/router';
 
 import { LastFMComponent } from './lastfm.component';
-import { ArtistComponent } from './artist.component';
-import { AlbumComponent } from './album.component';
-import { HomeComponent } from './home.component';
+// Doesn't like us importing the following from './index'
+import { ArtistComponent } from './artist/artist.component';
+import { AlbumComponent } from './album/album.component';
+import { SearchComponent } from './search/search.component';
 
 const lastFMRoutes: Routes = [
   {
@@ -22,7 +23,7 @@ const lastFMRoutes: Routes = [
     children: [
       {
         path: '',
-        component: HomeComponent
+        component: SearchComponent
       },
       {
         //   path: ':name/:mbid', // easier but messier url :-|

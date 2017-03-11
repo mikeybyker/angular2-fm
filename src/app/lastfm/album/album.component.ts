@@ -4,12 +4,15 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 import {
   ErrorMessage
-} from '../shared';
-import { LastFM, Album } from '../lastfm/lastfm.service';
-
+} from '../../shared';
+import {
+  LastFM,
+  Album
+} from '../../lastfm/lastfm.service';
 
 @Component({
   selector: 'album',
@@ -20,6 +23,7 @@ export class AlbumComponent implements OnInit {
   artistName: string;
   album: Observable<Album>;
   error: ErrorMessage;
+  sub: Subscription;
 
   constructor(private _lastFM: LastFM, private route: ActivatedRoute) {
 
@@ -27,7 +31,7 @@ export class AlbumComponent implements OnInit {
 
   ngOnInit() {
 
-    this.route.params
+    this.sub = this.route.params
       .subscribe(params => {
         this.artistName = params['name'];
         const albumName = params['albumName'];
@@ -58,6 +62,10 @@ export class AlbumComponent implements OnInit {
       .map(data => data.message || data.error)
       .map((error) => new ErrorMessage('Error', error || 'Nothing found...'))
       .subscribe(error => this.error = error);
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
 }

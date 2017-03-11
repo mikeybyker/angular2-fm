@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs/Observable';
 import {
   Component,
   OnInit
@@ -10,6 +9,7 @@ import {
   ActivatedRouteSnapshot,
   NavigationEnd
 } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   template: `

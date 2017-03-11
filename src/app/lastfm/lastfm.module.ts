@@ -10,7 +10,7 @@ import {
   LastFMComponent,
   ArtistComponent,
   AlbumComponent,
-  HomeComponent,
+  SearchComponent,
   TrackList,
   AlbumList,
   SimilarList,
@@ -41,7 +41,7 @@ import 'rxjs/add/operator/startWith';
   declarations: [
     ArtistComponent,
     AlbumComponent,
-    HomeComponent,
+    SearchComponent,
     LastFMComponent,
     TrackList,
     AlbumList,
