@@ -21,7 +21,7 @@ This project was generated with [angular-cli](https://cli.angular.io/).
 ### Installation
 #### Install Angular CLI
 ```javascript
-npm install -g angular-cli
+npm install -g @angular/cli
 ```
 #### Install Dependencies
 ```javascript
