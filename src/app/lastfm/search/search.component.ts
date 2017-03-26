@@ -46,7 +46,7 @@ export class SearchComponent {
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.sub && this.sub.unsubscribe();
   }
 
 }

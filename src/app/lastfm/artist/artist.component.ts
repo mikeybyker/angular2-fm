@@ -74,6 +74,6 @@ export class ArtistComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.sub && this.sub.unsubscribe();
   }
 }

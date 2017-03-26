@@ -23,8 +23,10 @@ export class ExploreComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this._lastFM.getApiKey() === 'YOUR_API_KEY') {
+    const key = this._lastFM.getApiKey();
+    if (!key || key === 'YOUR_API_KEY') {
       alert(`Please add your Last.fm api key (for the demo, look in index.html)\n...it won't work without one!`);
+      throw new Error('Need an API Key!');
     }
     this.methods = this.apiService.getApiMethods();
     this.clearView();

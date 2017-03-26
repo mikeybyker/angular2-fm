@@ -15,7 +15,7 @@
   <div class="small-12 medium-6 columns">
     <h3>{{artist?.name}}</h3>
     <p [innerHTML]="artist.bio?.summary | externalhref"></p>
-    <dl *ngIf="artist">
+    <dl>
       <dt>Listeners</dt>
       <dd>{{artist?.stats?.listeners}}</dd>
       <dt>Play Count</dt>
