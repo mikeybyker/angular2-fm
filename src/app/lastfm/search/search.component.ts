@@ -9,6 +9,10 @@ import {
 } from '../lastfm.service';
 import { ErrorMessage } from '../../shared/error-message';
 
+interface ArtistSearch {
+  artist: string
+}
+
 @Component({
   selector: 'home',
   templateUrl: './search.component.html'
@@ -16,10 +20,10 @@ import { ErrorMessage } from '../../shared/error-message';
 
 export class SearchComponent {
 
-  potentials: Observable<Array<Artist>>;
+  potentials$: Observable<Artist[] | any>;
   error: ErrorMessage;
-  sub: Subscription;
-  model: any = { artist: 'The Cure' };
+  sub$: Subscription;
+  model: ArtistSearch = { artist: 'The Cure' };
   maxResults: number = 10;
 
   constructor(private _lastFM: LastFM) {
@@ -30,13 +34,11 @@ export class SearchComponent {
 
     this.error = null;
 
-    const search$: Observable<any> = this._lastFM
+    this.potentials$ = this._lastFM
       .Artist.search(this.model.artist, { limit: this.maxResults })
       .share(); // so we don't get 2 network requests with the subscription for error handling (below...)
 
-    this.potentials = search$;
-
-    this.sub = search$
+    this.sub$ = this.potentials$
       .filter(data => data.error || !data.length)
       .map(data => new ErrorMessage('No Results', data.message || 'Sorry, nothing found at last.fm...'))
       .subscribe(
@@ -46,7 +48,7 @@ export class SearchComponent {
   }
 
   ngOnDestroy() {
-    this.sub && this.sub.unsubscribe();
+    this.sub$ && this.sub$.unsubscribe();
   }
 
 }

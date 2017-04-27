@@ -7,6 +7,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 // But saves showing mis-named artists - there's a lot!
 export class ResultsPipe implements PipeTransform {
   transform(value: Array<any>, size: string) {
-    return value && value.filter((item) => item.mbid && item.image && item.image.hasOwnProperty(size));
+    return value && value.filter && value.filter((item) => item.mbid && item.image && item.image.hasOwnProperty(size));
   }
 }

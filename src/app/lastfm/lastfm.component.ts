@@ -13,7 +13,7 @@ import { Observable } from 'rxjs/Observable';
 
 @Component({
   template: `
-    <simple-breadcrumbs [snapshot]="snapshot "></simple-breadcrumbs>
+    <simple-breadcrumbs [snapshot]="snapshot"></simple-breadcrumbs>
     <router-outlet></router-outlet>
   `
 })

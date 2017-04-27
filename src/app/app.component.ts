@@ -14,8 +14,6 @@ import { Title } from '@angular/platform-browser';
 })
 export class AppComponent implements OnInit {
 
-  title = 'Angular LastFM';
-
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private titleService: Title) {

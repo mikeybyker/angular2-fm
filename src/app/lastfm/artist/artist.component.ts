@@ -2,7 +2,7 @@ import {
   Component,
   OnInit
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -18,13 +18,12 @@ import { LastFM, Artist, Album } from '../../lastfm/lastfm.service';
 })
 
 export class ArtistComponent implements OnInit {
-  potentials: Array<Artist>;
-  artist: Artist;
-  albums: Array<Album>;
-  artistName: string;
+
   error: ErrorMessage;
-  maxAlbums: number = 12;
   sub: Subscription;
+
+  albums$: Observable<Album[]>;
+  artist$: Observable<Artist>;
 
   constructor(private _lastFM: LastFM, private route: ActivatedRoute) {
 
@@ -32,14 +31,16 @@ export class ArtistComponent implements OnInit {
 
   ngOnInit() {
 
-    this.sub = this.route.params
-      .subscribe(params => {
-        this.artistName = decodeURI(params['name']);
-        if (!this.artistName) {
+    const maxAlbums = 12;
+
+    this.sub = this.route.paramMap
+      .map((params: ParamMap) => params.get('name'))
+      .subscribe(artist => {
+        if (!artist) {
           this.error = new ErrorMessage('Error', 'Artist not specified');
           return;
         }
-        this.getArtist(this.artistName, this.maxAlbums);
+        this.getArtist(artist, maxAlbums);
       });
 
     this.error = null;
@@ -47,30 +48,35 @@ export class ArtistComponent implements OnInit {
   }
 
   getArtist(artistName, maxAlbums) {
-    const artist$ = Observable
-      .forkJoin(
-      this._lastFM.Artist.getInfo(artistName),
-      this._lastFM.Artist.getTopAlbums(artistName, { limit: maxAlbums })
-      )
+
+    const info$: Observable<Artist> = this._lastFM.Artist
+      .getInfo(artistName)
+      .catch(err => {
+        this.error = new ErrorMessage('Error', <string>err); // Catch 400's
+      })
       .share();
 
-    artist$
-      .filter(([artist, albums]: [any, any]) => !artist.error && !albums.error)
-      .subscribe(
-      ([artist, albums]: [any, any]) => {
-        this.artist = artist;
-        this.albums = albums;
-      },
-      error => {
-        this.error = new ErrorMessage('Error', <string>error); // http problems
-      });
+    const albumData$ = this._lastFM.Artist
+      .getTopAlbums(artistName, { limit: maxAlbums })
+      .catch(err => {
+        this.error = new ErrorMessage('Error', <string>err); // Catch 400's
+      })
+      .share();
 
-    // Data errors
-    artist$
+    // Filter out any data/search errors
+    this.albums$ = albumData$
+      .filter((albums: any) => !albums.error);
+    this.artist$ = info$
+      .filter((artist: any) => !artist.error);
+
+    // Data/Search errors
+    Observable
+      .forkJoin(info$, albumData$)
       .filter(([artist, albums]: [any, any]) => artist.error || albums.error)
       .map(([artist, albums]: [any, any]) => artist.error ? artist.message || artist.error : albums.message || albums.error)
       .map((message) => new ErrorMessage('Sorry', message))
       .subscribe((error) => this.error = error);
+
   }
 
   ngOnDestroy() {

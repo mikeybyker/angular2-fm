@@ -8,17 +8,19 @@
     </div>
   </div>
 </div>
-<div class="row">
-  <div class="small-12 columns">
-    <h3><a [routerLink]="['../']">{{(album | async)?.artist}}</a></h3>
+<div *ngIf="album$ | async as album">
+  <div class="row">
+    <div class="small-12 columns">
+      <h3><a [routerLink]="['../']">{{album.artist}}</a></h3>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="small-12 medium-6 columns">
-    <a [href]="(album | async)?.url" target="_blank"><img class="thumbnail main-artist" [src]="(album | async)?.image?.mega || ''"></a>
-  </div>
-  <div class="small-12 medium-6 columns">
-    <h4>{{album?.name}}</h4>
-    <track-list [tracks]="(album | async)?.tracks?.track"></track-list>
+  <div class="row">
+    <div class="small-12 medium-6 columns">
+      <a [href]="album.url" target="_blank"><img class="thumbnail main-artist" [src]="album.image.mega || ''"></a>
+    </div>
+    <div class="small-12 medium-6 columns">
+      <h4>{{album.name}}</h4>
+      <track-list [tracks]="album.tracks.track"></track-list>
+    </div>
   </div>
 </div>

@@ -2,6 +2,7 @@ import {
   Component,
   OnInit
 } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
 import { LastFM } from '../lastfm/lastfm.service';
 import { ApiService } from './api-methods.service';
@@ -41,14 +42,20 @@ export class ExploreComponent implements OnInit {
       call;
     this.output = '[Loading...]';
     call = group ? this._lastFM[group][fn] : this._lastFM[fn];
-    // console.log('/*call*/ : ', call);
     if (typeof call !== 'function') return;
+
     call.apply(this, params)
+      .catch((error) => {
+        return Observable.of({ error: error.message });
+      })
       .subscribe(data => {
         this.output = data;
       },
       error => {
         this.output = <string>error;
+      },
+      () => {
+        console.log('Completed:', [...data.group, '.', ...data.fn]);
       });
   }
 

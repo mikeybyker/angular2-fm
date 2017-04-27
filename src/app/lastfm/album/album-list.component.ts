@@ -4,13 +4,16 @@ import {
   OnInit
 } from '@angular/core';
 
+import { Album } from './../lastfm.service';
+
 @Component({
   selector: 'album-list',
   templateUrl: './album-list.components.html'
 })
 export class AlbumList implements OnInit {
+
   @Input()
-  albums: Array<any>;
+  albums: Album[];
 
   // Control number of results
   @Input()

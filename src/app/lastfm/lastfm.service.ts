@@ -1,8 +1,8 @@
+import { Track } from './lastfm.service';
 import {
   Http,
   Response,
-  Headers,
-  URLSearchParams
+  Headers
 } from '@angular/http';
 import {
   Injectable,
@@ -13,6 +13,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/of';
 
 interface LastFMOptions {
   autocorrect?: number,
@@ -31,6 +32,13 @@ interface LastFMConfig {
   apiKey: string,
   endPoint?: string,
   format?: string
+}
+
+export interface Track {
+  artist?: any,
+  duration?: string,
+  name?: string,
+  url?: string
 }
 
 interface AlbumJSON {
@@ -75,15 +83,17 @@ export class Album {
   }
 
   constructor(
-    public image: any = [],        // Gets mutated by getImages
+    public image: any = [],        // Populated by getImages
     public listeners: string = '',
     public mbid: string = '',
     public name: string = '',
     public playcount: string = '',
     public tags: any = {},
-    public tracks: any = {},
+    public tracks: Track = {},
     public url: string = '',
-    public wiki: any = {}
+    public wiki: any = {},
+    public error?: any,
+    public message?: any
   ) {
     this.image = this.image ? getImages(this.image) : {};
   }
@@ -126,22 +136,23 @@ export class Artist {
 
   constructor(
     public bio: any = {},
-    public image: any = [],            // Gets mutated by getImages
+    public image: any = [],            // Populated by getImages
     public mbid: string = '',
     public name: string = '',
     public listeners: string = '',
     public ontour: string = '',
-    public similar: any = {},          // Gets mutated by createSimilarArtists
+    public similar: any = {},          // Populated by createSimilarArtists
     public stats: any = {},
     public streamable: string = '',
     public tags: any = {},
-    public url: string = ''
+    public url: string = '',
+    public error?: any,
+    public message?: any
   ) {
     this.image = this.image ? getImages(this.image) : {};
     this.similar = this.similar ? Artist.createSimilarArtists(this.similar) : [];
   }
 }
-
 
 @Injectable()
 export class LastFM {
@@ -162,20 +173,6 @@ export class LastFM {
 
   getApiKey() {
     return this.config.apiKey;
-  }
-
-  getSearchParams(params: LastFMOptions): URLSearchParams {
-    const search: URLSearchParams = new URLSearchParams();
-    // Really?! No method to accept object?!
-    for (const key in params) {
-      search.set(key, params[key]);
-    }
-    return search;
-  }
-
-  private createParams(settings: LastFMOptions = {}, options: LastFMOptions = {}): URLSearchParams {
-    let params: LastFMOptions = this.assignParams(options, settings);
-    return this.getSearchParams(params);
   }
 
   /**
@@ -225,8 +222,8 @@ export class LastFM {
 
   private _http(settings: LastFMOptions = {}, options: LastFMOptions = {}): Observable<any> {
     const updated: LastFMOptions = this.updateSettings(settings),
-      params: URLSearchParams = this.createParams(options, updated);
-    return this.http.get(this.config.endPoint, { search: params })
+      params: LastFMOptions = this.assignParams(options, updated);
+    return this.http.get(this.config.endPoint, { params })
       .map(res => res.json())
       .catch(this.handleError);
   }
@@ -321,9 +318,7 @@ export class LastFM {
   getAlbumInfo(artistOrMbid: string, album: string = '', options: LastFMOptions = {}): Observable<Album> {
     return this._getAlbumInfo.apply(this, arguments)
       .map(data => this.validateData(data, 'album', null))
-      // .filter(album => !!album.artist) // make sure there is album data *
       .map(album => Album.fromJSON(album));
-    // * this would prevent it sending through errors...so we wouldn't be able to handle/show user
   }
 
 
@@ -403,8 +398,8 @@ export class LastFM {
   getSimilar(artistOrMbid: string, options: any = {}): Observable<Array<Artist>> {
     return this._getSimilar.apply(this, arguments)
       .map(data => this.validateData(data, 'similarartists.artist'))
-      .map(artists => {
-        return artists
+      .map(data => {
+        return data.error ? data : data
           .map((artist) => Artist.fromJSON(artist));
       });
   }
@@ -425,9 +420,8 @@ export class LastFM {
   getTopAlbums(artistOrMbid: string, options: any = {}): Observable<Array<Album>> {
     return this._getTopAlbums.apply(this, arguments)
       .map(data => this.validateData(data, 'topalbums.album'))
-      .map(albums => {
-        // albums is an array - *not* of Album objects, just objects...
-        return albums
+      .map(data => {
+        return data.error ? data : data
           .map((album) => Album.fromJSON(album));
       });
   }
@@ -558,8 +552,8 @@ export class LastFM {
   getTopGeoArtists(country: string, options: any = {}): Observable<Array<Artist>> {
     return this._getTopGeoArtists.apply(this, arguments)
       .map(data => this.validateData(data, 'topartists.artist'))
-      .map(artists => {
-        return artists
+      .map(data => {
+        return data.error ? data : data
           .map((artist) => Artist.fromJSON(artist));
       });
   }
@@ -656,3 +650,31 @@ export class LastFM {
   // End Track
 
 }
+
+
+
+  /*
+  // Pre angular@4
+
+    private _http(settings: LastFMOptions = {}, options: LastFMOptions = {}): Observable<any> {
+    const updated: LastFMOptions = this.updateSettings(settings),
+      params: URLSearchParams = this.createParams(options, updated);// pre @4
+    return this.http.get(this.config.endPoint, { search: params }) // pre @4
+      .map(res => res.json())
+      .catch(this.handleError);
+  }
+
+
+  getSearchParams(params: LastFMOptions): URLSearchParams {
+    const search: URLSearchParams = new URLSearchParams();
+    // Really?! No method to accept object?!
+    for (const key in params) {
+      search.set(key, params[key]);
+    }
+    return search;
+  }
+
+  private createParams(settings: LastFMOptions = {}, options: LastFMOptions = {}): URLSearchParams {
+    let params: LastFMOptions = this.assignParams(options, settings);
+    return this.getSearchParams(params);
+  }*/

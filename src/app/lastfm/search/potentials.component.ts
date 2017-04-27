@@ -4,13 +4,15 @@ import {
   OnInit
 } from '@angular/core';
 
+import { Artist } from './../lastfm.service';
+
 @Component({
   selector: 'potentials',
   templateUrl: './potentials.component.html'
 })
 export class Potentials implements OnInit {
   @Input()
-  potentials: Array<any>;
+  potentials: Array<Artist>;
 
   // Control number of results
   @Input()

@@ -29,6 +29,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/merge';
 
 @NgModule({
   imports: [

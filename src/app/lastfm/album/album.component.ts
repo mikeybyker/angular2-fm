@@ -2,7 +2,7 @@ import {
   Component,
   OnInit
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -20,8 +20,8 @@ import {
   styleUrls: ['./album.component.css']
 })
 export class AlbumComponent implements OnInit {
-  artistName: string;
-  album: Observable<Album>;
+
+  album$: Observable<Album>;
   error: ErrorMessage;
   sub: Subscription;
 
@@ -31,36 +31,37 @@ export class AlbumComponent implements OnInit {
 
   ngOnInit() {
 
-    this.sub = this.route.params
-      .subscribe(params => {
-        this.artistName = params['name'];
-        const albumName = params['albumName'];
-        if (!this.artistName || !albumName) {
-          this.error = new ErrorMessage('Error', 'Did not find an album to look for...');
+    this.sub = this.route.paramMap
+      .map((params: ParamMap) => ({ artist: params.get('name'), album: params.get('albumName') }))
+      .subscribe(({ artist, album }) => {
+        if (!artist || !album) {
+          this.error = new ErrorMessage('Error', 'Missing search data');
           return;
         }
-        this.getAlbum(this.artistName, albumName);
+        this.getAlbum(artist, album);
       });
 
     this.error = null;
-
 
   }
 
   getAlbum(...args) {
 
-    const album$ = this._lastFM
+    const data$ = this._lastFM
       .Album.getInfo(...args)
+      .catch(err => {
+        this.error = new ErrorMessage('Error', <string>err);
+      })
       .share();
 
-    // Display album - async pipe
-    this.album = album$;
+    this.album$ = data$
+      .filter(data => !data.error);
 
     // Display last.fm errors
-    album$
+    data$
       .filter(data => data.error)
       .map(data => data.message || data.error)
-      .map((error) => new ErrorMessage('Error', error || 'Nothing found...'))
+      .map((error) => new ErrorMessage('Sorry', error || 'Nothing found...'))
       .subscribe(error => this.error = error);
   }
 

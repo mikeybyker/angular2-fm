@@ -8,22 +8,24 @@
     </div>
   </div>
 </div>
-<div class="row" *ngIf="artist">
+
+<div class="row" *ngIf="artist$ | async as artist">
   <div class="small-12 medium-6 columns">
-    <img class="thumbnail main-artist" [src]="artist.image?.mega">
+    <img class="thumbnail main-artist" [src]="artist.image.mega">
   </div>
   <div class="small-12 medium-6 columns">
-    <h3>{{artist?.name}}</h3>
-    <p [innerHTML]="artist.bio?.summary | externalhref"></p>
+    <h3>{{artist.name}}</h3>
+    <p [innerHTML]="artist.bio.summary | externalhref"></p>
     <dl>
       <dt>Listeners</dt>
-      <dd>{{artist?.stats?.listeners}}</dd>
+      <dd>{{artist.stats.listeners}}</dd>
       <dt>Play Count</dt>
-      <dd>{{artist?.stats?.playcount}}</dd>
+      <dd>{{artist.stats.playcount}}</dd>
     </dl>
   </div>
 </div>
-<div *ngIf="albums">
+
+<div *ngIf="albums$ | async as albums">
   <div class="row">
     <div class="columns">
       <h3>Popular Albums</h3>
@@ -31,11 +33,12 @@
   </div>
   <album-list [albums]="albums"></album-list>
 </div>
-<div *ngIf="artist">
+
+<div *ngIf="artist$ | async as artist">
   <div class="row">
     <div class="columns">
       <h3>Similar Artists</h3>
     </div>
   </div>
-  <similar-list [similar]="artist?.similar"></similar-list>
+  <similar-list [similar]="artist.similar"></similar-list>
 </div>
