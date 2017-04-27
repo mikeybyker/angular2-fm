@@ -42,6 +42,7 @@ export class ExploreComponent implements OnInit {
       call;
     this.output = '[Loading...]';
     call = group ? this._lastFM[group][fn] : this._lastFM[fn];
+    // console.log('/*call*/ : ', call);
     if (typeof call !== 'function') return;
 
     call.apply(this, params)

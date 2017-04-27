@@ -25,6 +25,7 @@ import { ServiceInputComponent } from './service-input.component';
   exports: [ExploreComponent],
   providers: [
     LastFM,
-    ApiService]
+    ApiService
+  ]
 })
 export class ExploreModule { }
