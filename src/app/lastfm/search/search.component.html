@@ -1,11 +1,11 @@
 <div class="row align-center">
   <div class="medium-6 large-4 column">
 
-    <search-form (search)="onSearch($event)" [limit]="3" initial=""></search-form>
+    <search-form (search)="onSearch($event)" [limit]="3" initial="The Cure"></search-form>
 
   </div>
 </div>
 
 <simple-error [error]="error$ | async"></simple-error>
 
-<potentials [potentials]="(potentials$ | async)"></potentials>
+<potentials [potentials]="(potentials$ | async)" [limit]="3"></potentials>

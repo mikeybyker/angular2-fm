@@ -156,9 +156,7 @@ export class ServiceInputComponent implements OnInit {
     }
     let params: Array<string> = Object.keys(fields)
       .sort((a, b) => parseInt(a) - parseInt(b)) // make sure in correct order > parseInt just to shut typescript up
-      .map((k) => {
-        return fields[k] || ''
-      });
+      .map(k => fields[k] || '');
     return params;
   }
 

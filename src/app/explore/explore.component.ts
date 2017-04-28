@@ -3,6 +3,7 @@ import {
   OnInit
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { LastFM } from '../lastfm/lastfm.service';
 import { ApiService } from './api-methods.service';
@@ -15,13 +16,13 @@ import { ApiService } from './api-methods.service';
 
 export class ExploreComponent implements OnInit {
 
-  links: Array<any> = [{ title: 'Explore', url: '' }];
   methods: any[] = [];
-  output: string;
+  waitMessage: string = '[Waiting...]';
+  loadMessage: string = '[Loading...]';
 
-  constructor(private _lastFM: LastFM, private apiService: ApiService) {
+  output$ = new BehaviorSubject(this.waitMessage);
 
-  }
+  constructor(private _lastFM: LastFM, private apiService: ApiService) { }
 
   ngOnInit() {
     const key = this._lastFM.getApiKey();
@@ -40,28 +41,22 @@ export class ExploreComponent implements OnInit {
       fn = data.fn || '',
       group = data.group || '',
       call;
-    this.output = '[Loading...]';
+    this.output$.next(this.loadMessage);
     call = group ? this._lastFM[group][fn] : this._lastFM[fn];
     // console.log('/*call*/ : ', call);
     if (typeof call !== 'function') return;
 
     call.apply(this, params)
-      .catch((error) => {
-        return Observable.of({ error: error.message });
-      })
-      .subscribe(data => {
-        this.output = data;
-      },
-      error => {
-        this.output = <string>error;
-      },
-      () => {
-        console.log('Completed:', [...data.group, '.', ...data.fn]);
-      });
+      .catch((error) => Observable.of({ error: error.message }))
+      .subscribe(
+      response => this.output$.next(response),
+      error => this.output$.next(<string>error),
+      () => console.info('Completed:', [...data.group, '.', ...data.fn])
+      );
   }
 
   clearView() {
-    this.output = '[Waiting...]';
+    this.output$.next(this.waitMessage);
   }
 
 }

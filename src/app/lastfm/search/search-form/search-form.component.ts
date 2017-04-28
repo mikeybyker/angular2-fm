@@ -26,9 +26,7 @@ export class SearchFormComponent implements OnInit {
   @Output()
   search = new EventEmitter();
 
-  constructor() {
-    // this.model.artist = this.initial;
-  }
+  constructor() { }
 
   ngOnInit(): void {
     this.model.artist = this.initial;

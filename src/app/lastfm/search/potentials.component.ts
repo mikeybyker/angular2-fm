@@ -16,7 +16,7 @@ export class Potentials implements OnInit {
 
   // Control number of results
   @Input()
-  resultsLimit: number = 6;
+  limit: number = 6;
 
   // Control layout
   @Input()

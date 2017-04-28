@@ -15,10 +15,6 @@ export class AlbumList implements OnInit {
   @Input()
   albums: Album[];
 
-  // Control number of results
-  @Input()
-  resultsLimit: number = 4;
-
   // Control layout
   @Input()
   large: number = 2;
