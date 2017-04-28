@@ -1,31 +1,11 @@
 <div class="row align-center">
   <div class="medium-6 large-4 column">
-    <form #searchForm="ngForm" (submit)="onSubmit()">
-      <h4 class="text-center">Search Last.fm</h4>
-      <label>
-        <input type="text" placeholder="Artist" value="The Cure" required
-                [(ngModel)]="model.artist" ngControl="artist"  name="artist" #artist="ngModel">
-      </label>
-      <p>
-        <button type="submit" [disabled]="!searchForm.form.valid" class="button expanded">Search</button>
-      </p>
-      <div [hidden]="artist.valid" class="alert callout">
-        <p>
-          <i class="fi-alert"></i> Please enter an artist to search for...
-        </p>
-      </div>
-    </form>
+
+    <search-form (search)="onSearch($event)" [limit]="3" initial=""></search-form>
+
   </div>
 </div>
-<div class="row align-center" *ngIf="error">
-  <div class="medium-6 large-4 column">
-    <div class="callout alert">
-      <h5>{{error.title}}</h5>
-      <p>
-        {{error.message}}
-      </p>
-    </div>
-  </div>
-</div>
+
+<simple-error [error]="error$ | async"></simple-error>
 
 <potentials [potentials]="(potentials$ | async)"></potentials>

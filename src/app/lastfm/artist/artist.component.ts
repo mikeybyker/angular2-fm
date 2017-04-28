@@ -19,15 +19,12 @@ import { LastFM, Artist, Album } from '../../lastfm/lastfm.service';
 
 export class ArtistComponent implements OnInit {
 
-  error: ErrorMessage;
-  sub: Subscription;
-
   albums$: Observable<Album[]>;
   artist$: Observable<Artist>;
+  error$: Observable<ErrorMessage>;
+  sub: Subscription;
 
-  constructor(private _lastFM: LastFM, private route: ActivatedRoute) {
-
-  }
+  constructor(private _lastFM: LastFM, private route: ActivatedRoute) { }
 
   ngOnInit() {
 
@@ -36,15 +33,8 @@ export class ArtistComponent implements OnInit {
     this.sub = this.route.paramMap
       .map((params: ParamMap) => params.get('name'))
       .subscribe(artist => {
-        if (!artist) {
-          this.error = new ErrorMessage('Error', 'Artist not specified');
-          return;
-        }
         this.getArtist(artist, maxAlbums);
       });
-
-    this.error = null;
-
   }
 
   getArtist(artistName, maxAlbums) {
@@ -52,14 +42,14 @@ export class ArtistComponent implements OnInit {
     const info$: Observable<Artist> = this._lastFM.Artist
       .getInfo(artistName)
       .catch(err => {
-        this.error = new ErrorMessage('Error', <string>err); // Catch 400's
+        return Observable.of({ error: 1, message: err.message });
       })
       .share();
 
     const albumData$ = this._lastFM.Artist
       .getTopAlbums(artistName, { limit: maxAlbums })
       .catch(err => {
-        this.error = new ErrorMessage('Error', <string>err); // Catch 400's
+        return Observable.of({ error: 1, message: err.message });
       })
       .share();
 
@@ -69,13 +59,12 @@ export class ArtistComponent implements OnInit {
     this.artist$ = info$
       .filter((artist: any) => !artist.error);
 
-    // Data/Search errors
-    Observable
+    // Handle errors (400's or lastfm data/search errors)
+    this.error$ = Observable
       .forkJoin(info$, albumData$)
       .filter(([artist, albums]: [any, any]) => artist.error || albums.error)
-      .map(([artist, albums]: [any, any]) => artist.error ? artist.message || artist.error : albums.message || albums.error)
-      .map((message) => new ErrorMessage('Sorry', message))
-      .subscribe((error) => this.error = error);
+      .map(([artist, albums]: [any, any]) => artist.error ? artist.message : albums.message)
+      .map((message) => new ErrorMessage('Sorry', message));
 
   }
 

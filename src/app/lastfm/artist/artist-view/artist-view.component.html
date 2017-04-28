@@ -1,0 +1,15 @@
+<div class="row" *ngIf="artist">
+  <div class="small-12 medium-6 columns">
+    <img class="thumbnail main-artist" [src]="artist.image?.mega">
+  </div>
+  <div class="small-12 medium-6 columns">
+    <h3>{{artist.name}}</h3>
+    <p [innerHTML]="artist.bio.summary | externalhref"></p>
+    <dl>
+      <dt>Listeners</dt>
+      <dd>{{artist.stats.listeners}}</dd>
+      <dt>Play Count</dt>
+      <dd>{{artist.stats.playcount}}</dd>
+    </dl>
+  </div>
+</div>

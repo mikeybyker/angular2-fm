@@ -11,3 +11,4 @@ export const pipes = [
 ];
 export * from './simple-breadcrumbs.component';
 export * from './error-message';
+export { SimpleErrorComponent } from './simple-error.component';

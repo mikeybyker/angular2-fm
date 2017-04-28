@@ -22,47 +22,54 @@ import {
 export class AlbumComponent implements OnInit {
 
   album$: Observable<Album>;
-  error: ErrorMessage;
+  error$: Observable<ErrorMessage>;
   sub: Subscription;
 
-  constructor(private _lastFM: LastFM, private route: ActivatedRoute) {
-
-  }
+  constructor(private _lastFM: LastFM, private route: ActivatedRoute) { }
 
   ngOnInit() {
 
     this.sub = this.route.paramMap
       .map((params: ParamMap) => ({ artist: params.get('name'), album: params.get('albumName') }))
       .subscribe(({ artist, album }) => {
-        if (!artist || !album) {
-          this.error = new ErrorMessage('Error', 'Missing search data');
-          return;
-        }
         this.getAlbum(artist, album);
       });
-
-    this.error = null;
 
   }
 
   getAlbum(...args) {
 
+
+    // Method 1: Filter out the errors and have a subscription (following)
+    // to show any errors. i.e. have album$ concerned only with correct data
+
     const data$ = this._lastFM
       .Album.getInfo(...args)
       .catch(err => {
-        this.error = new ErrorMessage('Error', <string>err);
+        return Observable.of({ error: 1, message: err.message });
       })
       .share();
 
     this.album$ = data$
       .filter(data => !data.error);
 
-    // Display last.fm errors
-    data$
+    // Handle errors (400's or lastfm data/search errors)
+    this.error$ = data$
       .filter(data => data.error)
-      .map(data => data.message || data.error)
-      .map((error) => new ErrorMessage('Sorry', error || 'Nothing found...'))
-      .subscribe(error => this.error = error);
+      .map(data => data.message)
+      .map((message) => new ErrorMessage('Sorry', message));
+
+    // Alternative...
+    // Method 2: Let the template handle showing either the album data or the error, whichever comes in.
+    /*
+    this.album$ = this._lastFM
+      .Album.getInfo(...args)
+      .catch(err => {
+        return Observable.of({ error: 1, message: err.message });
+      });
+    */
+
+
   }
 
   ngOnDestroy() {

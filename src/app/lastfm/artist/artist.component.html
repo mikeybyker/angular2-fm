@@ -1,29 +1,6 @@
-<div class="row align-center" *ngIf="error">
-  <div class="medium-6 large-4 column">
-    <div class="callout alert">
-      <h5>{{error.title}}</h5>
-      <p>
-        {{error.message}}
-      </p>
-    </div>
-  </div>
-</div>
+<simple-error [error]="error$ | async"></simple-error>
 
-<div class="row" *ngIf="artist$ | async as artist">
-  <div class="small-12 medium-6 columns">
-    <img class="thumbnail main-artist" [src]="artist.image.mega">
-  </div>
-  <div class="small-12 medium-6 columns">
-    <h3>{{artist.name}}</h3>
-    <p [innerHTML]="artist.bio.summary | externalhref"></p>
-    <dl>
-      <dt>Listeners</dt>
-      <dd>{{artist.stats.listeners}}</dd>
-      <dt>Play Count</dt>
-      <dd>{{artist.stats.playcount}}</dd>
-    </dl>
-  </div>
-</div>
+<artist-view [artist]="artist$ | async"></artist-view>
 
 <div *ngIf="albums$ | async as albums">
   <div class="row">

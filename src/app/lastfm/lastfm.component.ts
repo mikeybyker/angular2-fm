@@ -21,9 +21,9 @@ export class LastFMComponent implements OnInit {
 
   snapshot: Observable<ActivatedRouteSnapshot>;
 
-  constructor(private router: Router,
+  constructor(
+    private router: Router,
     private activatedRoute: ActivatedRoute) {
-
   }
 
   ngOnInit() {

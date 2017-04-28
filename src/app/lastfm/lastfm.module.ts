@@ -20,7 +20,12 @@ import {
 } from './index';
 
 import { LastFMConfig } from '../lastfm.config';
-import { pipes, SimpleBreadcrumbsComponent } from '../shared/';
+import {
+  pipes,
+  SimpleBreadcrumbsComponent,
+  SimpleErrorComponent
+} from '../shared/';
+import { ArtistViewComponent } from './artist';
 
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/from';
@@ -30,6 +35,8 @@ import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/merge';
+import { SearchFormComponent } from './search/search-form/search-form.component';
+
 
 @NgModule({
   imports: [
@@ -48,7 +55,10 @@ import 'rxjs/add/operator/merge';
     SimilarList,
     Potentials,
     SimpleBreadcrumbsComponent,
-    pipes
+    SimpleErrorComponent,
+    pipes,
+    ArtistViewComponent,
+    SearchFormComponent
   ],
   providers: [
     LastFM,
