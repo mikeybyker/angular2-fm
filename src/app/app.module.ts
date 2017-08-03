@@ -22,9 +22,7 @@ import 'rxjs/add/operator/mergeMap';
     routing,
     LastFMModule
   ],
-  providers: [
-
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
