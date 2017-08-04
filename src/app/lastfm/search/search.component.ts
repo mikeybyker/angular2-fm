@@ -7,7 +7,6 @@ import {
   Artist
 } from '../lastfm.service';
 import { ErrorMessage } from '../../shared/error-message';
-import { Subject } from "rxjs/Subject";
 
 @Component({
   selector: 'home',
@@ -31,7 +30,7 @@ export class SearchComponent {
       .share();
 
     this.potentials$ = results$
-      .filter((albums: any) => !albums.error);
+      .filter((artists: any) => !artists.error);
 
     this.error$ = results$
       .filter(data => data.error || !data.length)

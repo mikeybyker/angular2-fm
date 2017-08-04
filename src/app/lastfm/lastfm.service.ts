@@ -1,8 +1,8 @@
 import {
-  Http,
-  Response,
-  Headers
-} from '@angular/http';
+  HttpClient,
+  HttpParams,
+  HttpErrorResponse
+} from '@angular/common/http';
 import {
   Injectable,
   Inject
@@ -14,44 +14,13 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/of';
 
-interface LastFMOptions {
-  autocorrect?: number,
-  lang?: string,
-  limit?: number,
-  location?: string,
-  mbid?: string,
-  page?: number,
-  album?: string,
-  artist?: string,
-  method?: string,
-  track?: string
-}
-
-interface LastFMConfig {
-  apiKey: string,
-  endPoint?: string,
-  format?: string
-}
-
-export interface Track {
-  artist?: any,
-  duration?: string,
-  name?: string,
-  url?: string
-}
-
-interface AlbumJSON {
-  artist: any;
-  image: Array<any>;
-  listeners: string;
-  mbid: string;
-  name: string;
-  playcount: Number;
-  tags: any;
-  tracks: any;
-  url: string;
-  wiki: any;
-}
+import {
+  AlbumFM,
+  ArtistFM,
+  LastFMOptions,
+  LastFMConfig,
+  Track
+} from './lastfm.interface';
 
 // Convert last.fm array for easier use
 const getImages = (image) => {
@@ -68,17 +37,18 @@ const getImages = (image) => {
   let o: any = {};
   image
     .filter(o => o['#text'])
-    .forEach((element, index, array) => o[element.size] = element['#text']);
+    .forEach((element, index) => o[element.size] = element['#text']);
   return o;
 }
 
 export class Album {
 
-  static fromJSON(json: AlbumJSON): Album {
+  static fromJSON(json: AlbumFM): Album {
     let artist = Object.create(Album.prototype);
-    return Object.assign(artist, json, {
-      image: json.image ? getImages(json.image) : {}
-    });
+    return Object.assign(artist, json,
+      {
+        image: json.image ? getImages(json.image) : {}
+      });
   }
 
   constructor(
@@ -88,9 +58,9 @@ export class Album {
     public name: string = '',
     public playcount: string = '',
     public tags: any = {},
-    public tracks: Track = {},
     public url: string = '',
     public wiki: any = {},
+    public tracks: Track,
     public error?: any,
     public message?: any
   ) {
@@ -98,29 +68,17 @@ export class Album {
   }
 
 }
-// The data structure as loaded from last.fm
-interface ArtistJSON {
-  bio: any;
-  image: Array<any>;
-  mbid: string;
-  name: string;
-  listeners: string;
-  ontour: string;
-  similar: any;
-  stats: any;
-  streamable: string;
-  tags: any;
-  url: string;
-}
+
 
 export class Artist {
 
-  static fromJSON(json: ArtistJSON): Artist {
+  static fromJSON(json: ArtistFM): Artist {
     let artist = Object.create(Artist.prototype);
-    return Object.assign(artist, json, {
-      image: json.image ? getImages(json.image) : {},
-      similar: json.similar ? Artist.createSimilarArtists(json.similar) : []
-    });
+    return Object.assign(artist, json,
+      {
+        image: json.image ? getImages(json.image) : {},
+        similar: json.similar ? Artist.createSimilarArtists(json.similar) : []
+      });
   }
 
   static createSimilarArtists(similar): Array<Artist> {
@@ -153,17 +111,31 @@ export class Artist {
   }
 }
 
+
+
+
 @Injectable()
 export class LastFM {
 
   mbidPattern: RegExp = /^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$/;
   assignParams: Function;
 
-  constructor( @Inject('LastFMConfig') private config: LastFMConfig, public http: Http) {
+  constructor( @Inject('LastFMConfig') private config: LastFMConfig, public http: HttpClient) {
     config.endPoint || (config.endPoint = 'http://ws.audioscrobbler.com/2.0/');
     config.format || (config.format = 'json');
-    const assign = (common, options, settings) => Object.assign({}, common, options, settings);
-    this.assignParams = this.partially(assign, { format: config.format, api_key: config.apiKey });
+    this.assignParams = this.partially(this.assign, { format: config.format, api_key: config.apiKey });
+  }
+
+  assign(common, options, settings): HttpParams {
+    const o = Object.assign({}, common, options, settings)
+    let params = new HttpParams();
+    Object.keys(o).forEach(key => {
+      params = params.append(key, o[key]);
+      // params = params.set(key, o[key]); // seems to work as well...
+    });
+    // console.log(params.keys());     // to see each http param name
+    // console.log(params.toString()); // the query string
+    return params;
   }
 
   partially(fn, ...args1) {
@@ -178,9 +150,20 @@ export class LastFM {
   *   error.json() : any
   *   Attempts to return body as parsed JSON object, or raises an exception.
   */
-  private handleError(error: Response): Observable<any> {
-    let o: any = error.json(),
-      msg: string = o.message || error.statusText;
+  private handleError(err: HttpErrorResponse): Observable<any> {
+    let msg = '';
+    if (err.error instanceof Error) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.log('An error occurred:', err.error.message);
+      msg = err.error.message;
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.log(`Backend returned code ${err.status}, body was: ${err.error}`);
+      msg = `Backend returned code ${err.status}, body was: ${err.error}`
+    }
+
+    // let msg: string = err.message || err.statusText;
     return Observable.throw(new Error(msg || 'Server Error'));
   }
   isMbid(str) {
@@ -219,11 +202,18 @@ export class LastFM {
     return false;
   }
 
+  // private _http(settings: LastFMOptions = {}, options: LastFMOptions = {}): Observable<any> {
+  //   const updated: LastFMOptions = this.updateSettings(settings),
+  //     params: LastFMOptions = this.assignParams(options, updated);
+  //   return this.http.get(this.config.endPoint, { params })
+  //     // .map(res => res.json())
+  //     .catch(this.handleError);
+  // }
+
   private _http(settings: LastFMOptions = {}, options: LastFMOptions = {}): Observable<any> {
-    const updated: LastFMOptions = this.updateSettings(settings),
-      params: LastFMOptions = this.assignParams(options, updated);
+    const updated = this.updateSettings(settings),
+      params: HttpParams = this.assignParams(options, updated);
     return this.http.get(this.config.endPoint, { params })
-      .map(res => res.json())
       .catch(this.handleError);
   }
 
@@ -469,6 +459,8 @@ export class LastFM {
       // page: 1
     };
     return this._http(settings, options);
+    // return this.search(settings, options);
+    // return Observable.from([]);//this._http(settings, options);
   }
   searchArtists(artist: string, options: any = {}): Observable<Array<Artist>> {
     return this._searchArtists.apply(this, arguments)
@@ -480,7 +472,6 @@ export class LastFM {
           .map((artist) => Artist.fromJSON(artist));
       });
   }
-
 
   // End Artist
 
@@ -649,31 +640,3 @@ export class LastFM {
   // End Track
 
 }
-
-
-
-  /*
-  // Pre angular@4
-
-    private _http(settings: LastFMOptions = {}, options: LastFMOptions = {}): Observable<any> {
-    const updated: LastFMOptions = this.updateSettings(settings),
-      params: URLSearchParams = this.createParams(options, updated);// pre @4
-    return this.http.get(this.config.endPoint, { search: params }) // pre @4
-      .map(res => res.json())
-      .catch(this.handleError);
-  }
-
-
-  getSearchParams(params: LastFMOptions): URLSearchParams {
-    const search: URLSearchParams = new URLSearchParams();
-    // Really?! No method to accept object?!
-    for (const key in params) {
-      search.set(key, params[key]);
-    }
-    return search;
-  }
-
-  private createParams(settings: LastFMOptions = {}, options: LastFMOptions = {}): URLSearchParams {
-    let params: LastFMOptions = this.assignParams(options, settings);
-    return this.getSearchParams(params);
-  }*/

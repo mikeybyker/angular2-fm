@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { Track } from './../lastfm.service';
+import { Track } from './../lastfm.interface';
 
 @Component({
   selector: 'track-list',

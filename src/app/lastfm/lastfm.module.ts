@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import {
   LastFMComponent,
@@ -42,7 +42,7 @@ import { SearchFormComponent } from './search/search-form/search-form.component'
   imports: [
     CommonModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     lastFMRouting
   ],
   declarations: [

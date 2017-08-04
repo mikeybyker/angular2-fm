@@ -11,6 +11,9 @@ import { Artist } from './../lastfm.service';
   templateUrl: './potentials.component.html'
 })
 export class Potentials implements OnInit {
+
+  _potentials: Array<Artist>;
+
   @Input()
   potentials: Array<Artist>;
 
