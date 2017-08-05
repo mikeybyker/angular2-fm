@@ -110,3 +110,10 @@ interface Stats {
   listeners: string;
   playcount: string;
 }
+
+interface ResponseFM {
+  results?: any;
+  artist?: any;
+  topalbums?: any;
+  album?: any;
+}

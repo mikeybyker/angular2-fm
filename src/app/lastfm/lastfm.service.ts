@@ -146,29 +146,36 @@ export class LastFM {
     return this.config.apiKey;
   }
 
+  private _http(settings: LastFMOptions = {}, options: LastFMOptions = {}): Observable<any> {
+    const updated = this.updateSettings(settings),
+      params: HttpParams = this.assignParams(options, updated);
+    return this.http.get(this.config.endPoint, { params })
+      .catch(this.handleError);
+  }
+
   /**
-  *   error.json() : any
-  *   Attempts to return body as parsed JSON object, or raises an exception.
+  *  Handle errors with loading the data
+  *  Unsuccessful response codes, client-side or network error
   */
   private handleError(err: HttpErrorResponse): Observable<any> {
     let msg = '';
     if (err.error instanceof Error) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.log('An error occurred:', err.error.message);
+      // A client-side or network error occurred.
+      console.error('An error occurred:', err.error.message);
       msg = err.error.message;
     } else {
       // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      console.log(`Backend returned code ${err.status}, body was: ${err.error}`);
-      msg = `Backend returned code ${err.status}, body was: ${err.error}`
+      console.error(`Backend returned code ${err.status}, body was: ${err.error}`);
+      msg = `Server wasn't haapy: ${err.error} - ${err.status}`;
     }
 
-    // let msg: string = err.message || err.statusText;
     return Observable.throw(new Error(msg || 'Server Error'));
   }
+
   isMbid(str) {
     return this.mbidPattern.test(str);
   }
+
   updateSettings(settings: LastFMOptions, fieldName?: string): LastFMOptions {
     fieldName = fieldName || 'artist';
     if (this.isMbid(settings[fieldName])) {
@@ -181,6 +188,7 @@ export class LastFM {
     }
     return settings;
   }
+
   checkCanShow(results: any): boolean {
     if (!results || !results.artistmatches) {
       return false;
@@ -192,6 +200,7 @@ export class LastFM {
     return results.artistmatches.artist
       .some((element, index, array) => element.mbid && element.image.some(hasImage));
   }
+
   /**
    * Check there's an mbid and an image of specified size (default extralarge image source)
    */
@@ -200,21 +209,6 @@ export class LastFM {
       return true;
     }
     return false;
-  }
-
-  // private _http(settings: LastFMOptions = {}, options: LastFMOptions = {}): Observable<any> {
-  //   const updated: LastFMOptions = this.updateSettings(settings),
-  //     params: LastFMOptions = this.assignParams(options, updated);
-  //   return this.http.get(this.config.endPoint, { params })
-  //     // .map(res => res.json())
-  //     .catch(this.handleError);
-  // }
-
-  private _http(settings: LastFMOptions = {}, options: LastFMOptions = {}): Observable<any> {
-    const updated = this.updateSettings(settings),
-      params: HttpParams = this.assignParams(options, updated);
-    return this.http.get(this.config.endPoint, { params })
-      .catch(this.handleError);
   }
 
   /**
