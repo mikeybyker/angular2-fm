@@ -1,26 +1,25 @@
 <simple-error [error]="error$ | async"></simple-error>
 
 <!-- Method 1 -->
-<div *ngIf="album$ | async as album">
-  <div class="row">
-    <div class="small-12 columns">
-      <h3><a [routerLink]="['../']">{{album.artist}}</a></h3>
+<div class="grid-container" *ngIf="album$ | async as album">
+  <div class="grid-x">
+    <div class="small-6 medium-4 cell">
+      <a [href]="album.url" target="_blank">
+        <img class="thumbnail main-artist" [src]="album.image.mega || ''">
+      </a>
     </div>
-  </div>
-  <div class="row">
-    <div class="small-12 medium-6 columns">
-      <a [href]="album.url" target="_blank"><img class="thumbnail main-artist" [src]="album.image.mega || ''"></a>
-    </div>
-    <div class="small-12 medium-6 columns">
-      <h4>{{album.name}}</h4>
-      <track-list [tracks]="album.tracks.track"></track-list>
+    <div class="auto cell">
+      <div class="artist-info">
+        <h4>{{album.name}}</h4>
+        <track-list [tracks]="album.tracks.track"></track-list>
+      </div>
     </div>
   </div>
 </div>
+<!-- Note: Lastfm have changed their images - mega is now only 300x300 - so not very mega at all! -->
 
 
-
-<!-- Method 2 -->
+<!-- Method 2 (old foundation css) -->
 <!--
 <div *ngIf="album$ | async as album">
   <div *ngIf="!album.error else error">

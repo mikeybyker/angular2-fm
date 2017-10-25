@@ -31,6 +31,7 @@ export class Potentials implements OnInit {
   displayClass: string;
 
   ngOnInit() {
-    this.displayClass = `column small-${this.small} medium-${this.medium}`;
+    // this.displayClass = `column small-${this.small} medium-${this.medium}`;
+    this.displayClass = `cell small-${this.small} medium-${this.medium}`;
   }
 }

@@ -1,0 +1,9 @@
+<div class="grid-container">
+  <div class="grid-x grid-padding-x small-up-2 medium-up-3">
+    <div class="cell" *ngFor="let album of albums | results : 'extralarge'">
+      <a [routerLink]="['/artist', album.artist.name, album.name]">
+        <img class="thumbnail" [src]="album.image.extralarge">
+      </a>
+    </div>
+  </div>
+</div>

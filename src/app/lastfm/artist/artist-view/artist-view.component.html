@@ -1,15 +1,17 @@
-<div class="row" *ngIf="artist">
-  <div class="small-12 medium-6 columns">
+<div class="grid-x" *ngIf="artist">
+  <div class="small-6 medium-4 cell">
     <img class="thumbnail main-artist" [src]="artist.image?.mega">
   </div>
-  <div class="small-12 medium-6 columns">
-    <h3>{{artist.name}}</h3>
-    <p [innerHTML]="artist.bio.summary | externalhref"></p>
-    <dl>
-      <dt>Listeners</dt>
-      <dd>{{artist.stats.listeners}}</dd>
-      <dt>Play Count</dt>
-      <dd>{{artist.stats.playcount}}</dd>
-    </dl>
+  <div class="auto cell">
+    <div class="artist-info">
+      <h3>{{artist.name}}</h3>
+      <p [innerHTML]="artist.bio.summary | externalhref"></p>
+      <dl>
+        <dt>Listeners</dt>
+        <dd>{{artist.stats.listeners}}</dd>
+        <dt>Play Count</dt>
+        <dd>{{artist.stats.playcount}}</dd>
+      </dl>
+    </div>
   </div>
 </div>

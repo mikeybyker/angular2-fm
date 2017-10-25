@@ -3,8 +3,8 @@
 <artist-view [artist]="artist$ | async"></artist-view>
 
 <div *ngIf="albums$ | async as albums">
-  <div class="row">
-    <div class="columns">
+  <div class="grid-x grid-padding-x">
+    <div class="large-12 cell">
       <h3>Popular Albums</h3>
     </div>
   </div>
@@ -12,8 +12,8 @@
 </div>
 
 <div *ngIf="artist$ | async as artist">
-  <div class="row">
-    <div class="columns">
+  <div class="grid-x grid-padding-x">
+    <div class="large-12 cell">
       <h3>Similar Artists</h3>
     </div>
   </div>

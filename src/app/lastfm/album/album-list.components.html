@@ -1,7 +1,0 @@
-<div class="row">
-  <div [class]="displayClass" *ngFor="let album of albums | results : 'extralarge'">
-    <a [routerLink]="['/artist', album.artist.name, album.name]">
-      <img class="thumbnail" [src]="album.image.extralarge">
-    </a>
-  </div>
-</div>

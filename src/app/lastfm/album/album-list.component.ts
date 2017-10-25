@@ -8,7 +8,7 @@ import { Album } from './../lastfm.service';
 
 @Component({
   selector: 'album-list',
-  templateUrl: './album-list.components.html'
+  templateUrl: './album-list.component.html'
 })
 export class AlbumList implements OnInit {
 

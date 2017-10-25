@@ -2,28 +2,26 @@
 {
   position: relative;
 }
-  .artist img
+
+
+  .artist-caption
   {
+    position: absolute;
+    bottom: 4px;
     width: 100%;
+    background: rgba(255,255,255,0.8);
+    color: #fff;
   }
-.artist-caption
-{
-  position: absolute;
-  bottom: 5px;
-  width: 100%;
-  background: rgba(255,255,255,0.8);
-  color: #fff;
-}
-.artist-name
-{
-  padding: 10px;
-  margin: 0;
-}
-  .artist-name h4
+  .artist-name
   {
-    font-size: 1rem;
-    color: #000;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    padding: 10px;
+    margin: 0;
   }
+    .artist-name h4
+    {
+      font-size: 1rem;
+      color: #000;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }

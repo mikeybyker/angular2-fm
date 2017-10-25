@@ -19,7 +19,7 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "",
       "styles": [
-        "../node_modules/foundation-sites/dist/css/foundation-flex.min.css",
+        "../node_modules/foundation-sites/dist/css/foundation.min.css",
         "styles.css"
       ],
       "scripts": [],
@@ -56,6 +56,9 @@
   },
   "defaults": {
     "styleExt": "css",
+    "class": {
+      "spec": false
+    },
     "component": {}
   }
 }

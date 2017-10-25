@@ -43,7 +43,7 @@ ng build
 Run 'ng build' to build the project - stored in the 'dist/' directory. Use the '-prod' flag for a production build.
 
 ### Version
-2.0.0
+2.1.0
 
 #### Add your [Last.fm](http://www.last.fm/api/account/create) API key to environments/environment.ts
 
