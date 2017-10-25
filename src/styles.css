@@ -30,7 +30,7 @@
 {
   padding: 0 1rem;
 }
-  .artist-info h3
-  {
-    margin-top: -12px;
-  }
+.header-negative-top
+{
+  margin-top: -12px;
+}

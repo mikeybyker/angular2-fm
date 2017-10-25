@@ -1,33 +1,34 @@
 import {
   Component,
   Input,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { Album } from './../lastfm.service';
 
 @Component({
   selector: 'album-list',
-  templateUrl: './album-list.component.html'
+  templateUrl: './album-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AlbumList implements OnInit {
+
 
   @Input()
   albums: Album[];
 
-  // Control layout
+  // Control layout: How many cells per row for medium and small screens
   @Input()
-  large: number = 2;
+  medium: number = 3;
 
   @Input()
-  medium: number = 4;
+  small: number = 2;
 
-  @Input()
-  small: number = 6;
-
-  displayClass: string;
+  gridClass: string;
 
   ngOnInit() {
-    this.displayClass = `column small-${this.small} medium-${this.medium} large-${this.large}`;
+    this.gridClass = `grid-x grid-padding-x small-up-${this.small} medium-up-${this.medium}`;
   }
+
 }

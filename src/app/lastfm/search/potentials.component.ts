@@ -1,14 +1,16 @@
 import {
   Component,
   Input,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { Artist } from './../lastfm.service';
 
 @Component({
   selector: 'potentials',
-  templateUrl: './potentials.component.html'
+  templateUrl: './potentials.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Potentials implements OnInit {
 
@@ -21,17 +23,16 @@ export class Potentials implements OnInit {
   @Input()
   limit: number = 6;
 
-  // Control layout
+  // Control layout: How many cells per row for medium and small screens
   @Input()
-  medium: number = 4;
+  medium: number = 3;
 
   @Input()
-  small: number = 6;
+  small: number = 2;
 
-  displayClass: string;
+  gridClass: string;
 
   ngOnInit() {
-    // this.displayClass = `column small-${this.small} medium-${this.medium}`;
-    this.displayClass = `cell small-${this.small} medium-${this.medium}`;
+    this.gridClass = `grid-x grid-padding-x small-up-${this.small} medium-up-${this.medium}`;
   }
 }

@@ -20,17 +20,17 @@ export class SimilarList implements OnInit {
   @Input()
   resultsLimit: number = 4;
 
-  // Control layout
+  // Control layout: How many cells per row for medium and small screens
   @Input()
-  medium: number = 4;
+  medium: number = 3;
 
   @Input()
-  small: number = 5;
+  small: number = 2;
 
-  displayClass: string;
+  gridClass: string;
 
   ngOnInit() {
-    this.displayClass = `column small-${this.small} medium-${this.medium}`;
+    this.gridClass = `grid-x grid-padding-x small-up-${this.small} medium-up-${this.medium}`;
   }
 
 }

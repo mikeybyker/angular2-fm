@@ -1,5 +1,5 @@
 <div class="grid-container">
-  <div class="grid-x grid-padding-x small-up-2 medium-up-3">
+  <div [class]="gridClass">
     <div class="cell cell-artist" *ngFor="let artist of potentials | limit: limit">
       <div class="card text-center">
         <div class="card-divider text-center">

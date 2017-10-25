@@ -2,6 +2,14 @@
 
 <!-- Method 1 -->
 <div class="grid-container" *ngIf="album$ | async as album">
+
+  <div class="grid-x grid-padding-x">
+    <div class="large-12 cell">
+      <h3>
+        <a [routerLink]="['../']">{{album.artist}}</a>
+      </h3>
+    </div>
+  </div>
   <div class="grid-x">
     <div class="small-6 medium-4 cell">
       <a [href]="album.url" target="_blank">
@@ -10,7 +18,7 @@
     </div>
     <div class="auto cell">
       <div class="artist-info">
-        <h4>{{album.name}}</h4>
+        <h4 class="header-negative-top">{{album.name}}</h4>
         <track-list [tracks]="album.tracks.track"></track-list>
       </div>
     </div>

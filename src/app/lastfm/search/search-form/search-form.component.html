@@ -1,9 +1,7 @@
 <form #searchForm="ngForm" (submit)="onSubmit()">
   <h4 class="text-center">Search Last.fm</h4>
   <label>
-    <input type="text" placeholder="Artist" required
-      [(ngModel)]="model.artist"
-      name="artist" ngControl="artist" #artist="ngModel">
+    <input type="text" placeholder="Artist" required [(ngModel)]="model.artist" name="artist" ngControl="artist" #artist="ngModel">
   </label>
   <p>
     <button type="submit" [disabled]="!searchForm.valid" class="button expanded">Search</button>
